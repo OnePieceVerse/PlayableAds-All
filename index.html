@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,676 +8,193 @@
     <link rel="stylesheet" href="main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
-    <!-- 导航栏 -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <i class="fas fa-gamepad"></i>
-                <span>PLAYABLE ALL</span>
-            </div>
-            <div class="nav-menu">
-                <a href="#" class="nav-link" onclick="showWorks()" data-translate="works">作品 (demo)</a>
-                <div class="nav-dropdown">
-                    <a href="#" class="nav-link" data-translate="products">产品 (开发中) <i class="fas fa-chevron-down"></i></a>
-                    <div class="dropdown-content">
-                        <a href="#" onclick="showInteractiveGames()" data-translate="gamesMaker">互动游戏制作</a>
-                        <a href="#" onclick="showInteractiveVideos()" data-translate="videoMaker">互动视频制作</a>
-                        <a href="#" onclick="showInteractiveImages()" data-translate="imageMaker">互动图片制作</a>
-                        <a href="#" onclick="showComingSoon('互动创意推荐')" data-translate="creativeMaker">互动创意推荐</a>
-                    </div>
-                </div>
-                <a href="#" class="nav-link" onclick="showLearning()" data-translate="learning">学习</a>
-            </div>
-            <div class="nav-actions">
-                <div class="language-selector">
-                    <select id="languageSelect">
-                        <option value="zh">中文</option>
-                        <option value="en">English</option>
-                    </select>
-                </div>
-                <button class="login-btn" data-translate="login">登录</button>
-            </div>
-        </div>
-    </nav>
+    <!-- Header -->
+    <div id="header"></div>
 
     <!-- 主要内容区域 -->
     <main class="main-content">
         <!-- 首页Hero区域 -->
         <section id="home" class="hero">
             <div class="hero-content">
-                <h1 data-translate="heroTitle">创造无限可能的互动体验</h1>
-                <p data-translate="heroDescription">PLAYABLE ALL 是一个全方位的互动内容创作平台，帮助您轻松制作互动游戏、视频、图片和创意内容</p>
-                <div class="hero-features">
-                    <div class="feature-card">
-                        <i class="fas fa-gamepad"></i>
-                        <h3 data-translate="heroGameTitle">互动游戏</h3>
-                        <p data-translate="heroGameDesc">轻松创建引人入胜的互动游戏体验</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-video"></i>
-                        <h3 data-translate="heroVideoTitle">互动视频</h3>
-                        <p data-translate="heroVideoDesc">制作具有交互元素的动态视频内容</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-image"></i>
-                        <h3 data-translate="heroImageTitle">互动图片</h3>
-                        <p data-translate="heroImageDesc">创建可点击、可交互的图片体验</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-lightbulb"></i>
-                        <h3 data-translate="heroCreativeTitle">互动创意</h3>
-                        <p data-translate="heroCreativeDesc">获得AI驱动的创意推荐和灵感</p>
+                <h1 data-translate="heroTitle" class="gradient-text">让创意自动化，让互动更简单</h1>
+                <p data-translate="heroDescription" class="hero-subtitle">PLAYABLE ALL
+                    是一个创意自动化平台，帮助您轻松制作互动游戏、视频和图片广告，无需编程知识即可创建优质广告素材</p>
+                <div class="hero-cta">
+                    <button class="primary-btn" data-translate="tryNow">立即体验</button>
+                    <button class="secondary-btn" data-translate="contactUs">联系我们</button>
+                </div>
+                <div class="platform-logos">
+                    <h3 class="platform-title">支持主流广告平台</h3>
+                    <div class="logo-scroll-container">
+                        <div class="logo-scroll">
+                            <!-- 第一组 logo -->
+                            <img src="assets/platforms/facebook.png" alt="Facebook" class="platform-logo">
+                            <img src="assets/platforms/google.png" alt="Google" class="platform-logo">
+                            <img src="assets/platforms/tiktok.png" alt="TikTok" class="platform-logo">
+                            <img src="assets/platforms/unity.png" alt="Unity" class="platform-logo">
+                            <img src="assets/platforms/bytedance.png" alt="ByteDance" class="platform-logo">
+                            <img src="assets/platforms/tencent.png" alt="Tencent" class="platform-logo">
+                            <img src="assets/platforms/kuaishou.png" alt="KuaiShou" class="platform-logo">
+                            <!-- 复制第一组用于无缝滚动 -->
+                            <img src="assets/platforms/facebook.png" alt="Facebook" class="platform-logo">
+                            <img src="assets/platforms/google.png" alt="Google" class="platform-logo">
+                            <img src="assets/platforms/tiktok.png" alt="TikTok" class="platform-logo">
+                            <img src="assets/platforms/unity.png" alt="Unity" class="platform-logo">
+                            <img src="assets/platforms/bytedance.png" alt="ByteDance" class="platform-logo">
+                            <img src="assets/platforms/tencent.png" alt="Tencent" class="platform-logo">
+                            <img src="assets/platforms/kuaishou.png" alt="KuaiShou" class="platform-logo">
+                            <!-- 再复制一组确保无缝 -->
+                            <img src="assets/platforms/facebook.png" alt="Facebook" class="platform-logo">
+                            <img src="assets/platforms/google.png" alt="Google" class="platform-logo">
+                            <img src="assets/platforms/tiktok.png" alt="TikTok" class="platform-logo">
+                            <img src="assets/platforms/unity.png" alt="Unity" class="platform-logo">
+                            <img src="assets/platforms/bytedance.png" alt="ByteDance" class="platform-logo">
+                            <img src="assets/platforms/tencent.png" alt="Tencent" class="platform-logo">
+                            <img src="assets/platforms/kuaishou.png" alt="KuaiShou" class="platform-logo">
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 作品展示区域 -->
-        <section id="works" class="works-section" style="display: none;">
+        <!-- 核心优势 -->
+        <section id="features" class="features-section">
             <div class="container">
-                <h2 data-translate="worksTitle">我们的作品</h2>
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="showTab('games')" data-translate="gamesTab">互动游戏</button>
-                    <button class="tab-btn" onclick="showTab('videos')" data-translate="videosTab">互动视频</button>
-                    <button class="tab-btn" onclick="showTab('images')" data-translate="imagesTab">互动图片</button>
-                    <button class="tab-btn" onclick="showTab('creative')" data-translate="creativeTab">互动创意</button>
-                </div>
-                
-                <!-- 互动游戏 -->
-                <div id="games" class="tab-content active">
-                    <div class="works-grid">
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>冒险解谜游戏</h3>
-                            <p>沉浸式的解谜冒险体验</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>策略模拟游戏</h3>
-                            <p>考验智慧的策略挑战</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>角色扮演游戏</h3>
-                            <p>精彩的角色成长故事</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>休闲益智游戏</h3>
-                            <p>轻松愉快的益智体验</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>竞技对战游戏</h3>
-                            <p>刺激的多人对战</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>教育类游戏</h3>
-                            <p>寓教于乐的学习体验</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>模拟经营游戏</h3>
-                            <p>体验经营管理的乐趣</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>音乐节奏游戏</h3>
-                            <p>跟随节拍的音乐体验</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>动作冒险游戏</h3>
-                            <p>激动人心的动作挑战</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>卡牌策略游戏</h3>
-                            <p>智慧与运气的完美结合</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>虚拟现实游戏</h3>
-                            <p>沉浸式VR游戏体验</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>社交互动游戏</h3>
-                            <p>与朋友一起的欢乐时光</p>
-                        </div>
+                <h2 class="section-title">让 AI 助力您的创意</h2>
+                <div class="features-grid">
+                    <div class="feature-box">
+                        <i class="fas fa-code-branch"></i>
+                        <h3>无需编程</h3>
+                        <p>通过直观的界面轻松创建和优化广告</p>
                     </div>
-                </div>
-
-                <!-- 互动视频 -->
-                <div id="videos" class="tab-content">
-                    <div class="works-grid">
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>互动电影</h3>
-                            <p>可选择剧情走向的电影体验</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>教育视频</h3>
-                            <p>互动式学习视频内容</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>产品展示</h3>
-                            <p>360度产品互动展示</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>虚拟导览</h3>
-                            <p>沉浸式场景导览体验</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>品牌故事</h3>
-                            <p>互动式品牌叙事</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>培训视频</h3>
-                            <p>互动式职业培训内容</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>音乐MV</h3>
-                            <p>可互动的音乐视频</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>直播互动</h3>
-                            <p>实时互动直播体验</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>纪录片</h3>
-                            <p>互动式纪录片内容</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>广告创意</h3>
-                            <p>创新的互动广告形式</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>活动直播</h3>
-                            <p>互动式活动直播</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>娱乐节目</h3>
-                            <p>观众参与的娱乐内容</p>
-                        </div>
+                    <div class="feature-box">
+                        <i class="fas fa-robot"></i>
+                        <h3>AI 驱动</h3>
+                        <p>AI 自动完成复杂任务，提升工作效率</p>
                     </div>
-                </div>
-
-                <!-- 互动图片 -->
-                <div id="images" class="tab-content">
-                    <div class="works-grid">
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>热点图片</h3>
-                            <p>可点击探索的热点图片</p>
-                        </div>
+                    <div class="feature-box">
+                        <i class="fas fa-network-wired"></i>
+                        <h3>多平台兼容</h3>
+                        <p>支持批量生产并对接主流广告网络</p>
                     </div>
-                </div>
-
-                <!-- 互动创意 -->
-                <div id="creative" class="tab-content">
-                    <div class="works-grid">
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>创意故事</h3>
-                            <p>AI生成的互动故事创意</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>营销方案</h3>
-                            <p>智能营销创意推荐</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>设计灵感</h3>
-                            <p>创新设计理念推荐</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>内容策划</h3>
-                            <p>智能内容创作建议</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>活动创意</h3>
-                            <p>创新活动策划方案</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>品牌策略</h3>
-                            <p>智能品牌推广建议</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>用户体验</h3>
-                            <p>UX设计创意推荐</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>社交媒体</h3>
-                            <p>社交平台内容创意</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>产品创新</h3>
-                            <p>产品功能创新建议</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>教育内容</h3>
-                            <p>教育创新内容推荐</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>娱乐创意</h3>
-                            <p>娱乐内容创新方案</p>
-                        </div>
-                        <div class="work-card">
-                            <div class="work-image"></div>
-                            <h3>技术应用</h3>
-                            <p>前沿技术应用创意</p>
-                        </div>
+                    <div class="feature-box">
+                        <i class="fas fa-shapes"></i>
+                        <h3>现成模板</h3>
+                        <p>丰富的模板库，快速部署，降低制作成本</p>
+                    </div>
+                    <div class="feature-box">
+                        <i class="fas fa-expand-arrows-alt"></i>
+                        <h3>灵活扩展</h3>
+                        <p>适用于各类机构、DSP和应用开发者</p>
+                    </div>
+                    <div class="feature-box">
+                        <i class="fas fa-hands-helping"></i>
+                        <h3>专业支持</h3>
+                        <p>创意顾问提供活动支持和诊断服务</p>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- 学习页面 -->
-        <section id="learning" class="learning-section" style="display: none;">
+        <!-- 产品展示 -->
+        <section id="products" class="products-section">
             <div class="container">
-                <h2 data-translate="learningTitle">学习</h2>
-                <div class="learning-grid">
-                    <div class="learning-card">
-                        <i class="fas fa-book"></i>
-                        <h3 data-translate="tutorialsTitle">教程指南</h3>
-                        <p data-translate="tutorialsDesc">从基础到高级的完整制作教程</p>
-                        <a href="#" class="learn-more" data-translate="learnMore">了解更多</a>
+                <h2 class="section-title">主流广告形式，一站式解决</h2>
+                <div class="product-grid">
+                    <div class="product-card">
+                        <div class="product-image">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h3>互动游戏广告</h3>
+                        <ul class="product-features">
+                            <li>无代码创建</li>
+                            <li>丰富模板库</li>
+                            <li>主流渠道投放</li>
+                            <li>商业素材支持</li>
+                        </ul>
+                        <button class="learn-more-btn"
+                            onclick="window.location.href='interactive-games.html'">了解更多</button>
                     </div>
-                    <div class="learning-card">
-                        <i class="fas fa-lightbulb"></i>
-                        <h3 data-translate="casesTitle">案例研究</h3>
-                        <p data-translate="casesDesc">优秀作品案例分析和制作心得</p>
-                        <a href="#" class="learn-more" data-translate="learnMore">了解更多</a>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h3>互动视频广告</h3>
+                        <ul class="product-features">
+                            <li>批量剪辑制作</li>
+                            <li>AI配音字幕</li>
+                            <li>多语言翻译</li>
+                            <li>自动尺寸调整</li>
+                        </ul>
+                        <button class="learn-more-btn"
+                            onclick="window.location.href='interactive-videos.html'">了解更多</button>
                     </div>
-                    <div class="learning-card">
-                        <i class="fas fa-users"></i>
-                        <h3 data-translate="communityTitle">社区交流</h3>
-                        <p data-translate="communityDesc">与其他创作者分享经验和灵感</p>
-                        <a href="#" class="learn-more" data-translate="learnMore">了解更多</a>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <h3>互动图片广告</h3>
+                        <ul class="product-features">
+                            <li>无代码创建</li>
+                            <li>丰富模板库</li>
+                            <li>主流渠道投放</li>
+                            <li>商业素材支持</li>
+                        </ul>
+                        <button class="learn-more-btn"
+                            onclick="window.location.href='interactive-videos.html'">了解更多</button>
                     </div>
-                    <div class="learning-card">
-                        <i class="fas fa-graduation-cap"></i>
-                        <h3 data-translate="certificateTitle">认证课程</h3>
-                        <p data-translate="certificateDesc">获得官方认证的专业课程</p>
-                        <a href="#" class="learn-more" data-translate="learnMore">了解更多</a>
+                    <div class="product-card">
+                        <div class="product-image">
+                            <i class="fas fa-magic"></i>
+                        </div>
+                        <h3>自动化创意推荐</h3>
+                        <ul class="product-features">
+                            <li>AI自动生成</li>
+                            <li>丰富模板库</li>
+                            <li>商业素材支持</li>
+                            <li>主流渠道投放</li>
+                        </ul>
+                        <button class="learn-more-btn"
+                            onclick="window.location.href='interactive-videos.html'">了解更多</button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 互动游戏制作页面 -->
-        <section id="interactive-games" class="works-section" style="display: none;">
+        <!-- 客户案例 -->
+        <section id="cases" class="cases-section">
             <div class="container">
-                <h2 data-translate="gamesMakerTitle">互动游戏制作</h2>
-                <div class="hero-content" style="text-align: center; margin-bottom: 3rem;">
-                    <p data-translate="gamesMakerDesc" style="font-size: 1.2rem; color: #4a5568; max-width: 800px; margin: 0 auto;">
-                        创建引人入胜的互动游戏体验，无需编程知识。我们的直观界面让您能够快速原型设计、测试和发布您的游戏创意。
-                    </p>
-                </div>
-                
-                <div class="feature-highlights" style="margin-bottom: 4rem;">
-                    <div class="feature-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎮</div>
-                            <h3 data-translate="easyToUseTitle">易于使用的界面</h3>
-                            <p data-translate="easyToUseDesc">拖拽式设计，无需编程经验</p>
+                <h2 class="section-title">客户成功案例</h2>
+                <div class="case-grid">
+                    <div class="case-card">
+                        <div class="case-logo">
+                            <img src="assets/customers/jcc.png" alt="金铲铲之战">
                         </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">⚡</div>
-                            <h3 data-translate="fastIterationTitle">快速迭代测试</h3>
-                            <p data-translate="fastIterationDesc">实时预览和A/B测试功能</p>
-                        </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎯</div>
-                            <h3 data-translate="highPerformanceTitle">高性能表现</h3>
-                            <p data-translate="highPerformanceDesc">优化的引擎确保流畅体验</p>
-                        </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">📱</div>
-                            <h3 data-translate="crossPlatformTitle">跨平台发布</h3>
-                            <p data-translate="crossPlatformDesc">支持所有主要广告网络</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="what-you-can-do" style="margin-bottom: 4rem;">
-                    <h3 data-translate="whatCanYouDoTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">您能做什么？</h3>
-                    <div class="feature-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                        <div class="feature-column">
-                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
-                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">🎨</div>
-                                <div>
-                                    <h4 data-translate="levelEditorTitle">关卡编辑器</h4>
-                                    <p data-translate="levelEditorDesc">设计复杂的游戏关卡</p>
-                                </div>
+                        <h3>提升游戏下载量</h3>
+                        <div class="case-stats">
+                            <div class="stat">
+                                <span class="stat-number">+125%</span>
+                                <span class="stat-label">IVR</span>
                             </div>
-                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
-                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">🎭</div>
-                                <div>
-                                    <h4 data-translate="visualsTitle">视觉效果</h4>
-                                    <p data-translate="visualsDesc">丰富的视觉和动画效果</p>
-                                </div>
-                            </div>
-                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
-                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">📹</div>
-                                <div>
-                                    <h4 data-translate="cameraTitle">摄像机控制</h4>
-                                    <p data-translate="cameraDesc">灵活的摄像机角度设置</p>
-                                </div>
+                            <div class="stat">
+                                <span class="stat-number">670K</span>
+                                <span class="stat-label">全球下载</span>
                             </div>
                         </div>
-                        <div class="feature-column">
-                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
-                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">📱</div>
-                                <div>
-                                    <h4 data-translate="mockupTitle">设备模拟</h4>
-                                    <p data-translate="mockupDesc">在不同设备上预览效果</p>
-                                </div>
-                            </div>
-                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
-                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">✏️</div>
-                                <div>
-                                    <h4 data-translate="textsTitle">文本编辑</h4>
-                                    <p data-translate="textsDesc">自定义文本和字体样式</p>
-                                </div>
-                            </div>
-                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
-                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">🎨</div>
-                                <div>
-                                    <h4 data-translate="graphicsTitle">图形编辑</h4>
-                                    <p data-translate="graphicsDesc">内置图形编辑工具</p>
-                                </div>
-                            </div>
-                        </div>
+                        <a href="#" class="case-link">查看案例</a>
                     </div>
+                    <!-- 可以添加更多案例卡片 -->
                 </div>
-
-                <div class="benefits-section" style="background: #fefbf3; padding: 3rem; border-radius: 16px; margin-bottom: 3rem;">
-                    <h3 data-translate="benefitsTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">为什么选择我们的互动游戏制作工具？</h3>
-                    <div class="benefits-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
-                        <div class="benefit-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
-                            <h4 data-translate="noCodingTitle">无需编程知识</h4>
-                            <p data-translate="noCodingDesc">简单、快速、易于使用的界面</p>
-                        </div>
-                        <div class="benefit-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
-                            <h4 data-translate="highEngagementTitle">高参与度</h4>
-                            <p data-translate="highEngagementDesc">互动游戏广告具有更强的IPM和ROAS表现</p>
-                        </div>
-                        <div class="benefit-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🔄</div>
-                            <h4 data-translate="unlimitedVersionsTitle">无限版本</h4>
-                            <p data-translate="unlimitedVersionsDesc">创建无限数量的游戏版本</p>
-                        </div>
-                        <div class="benefit-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🌐</div>
-                            <h4 data-translate="allNetworksTitle">全网络支持</h4>
-                            <p data-translate="allNetworksDesc">支持在所有主要广告网络发布</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cta-section" style="text-align: center;">
-                    <button class="login-btn" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="requestDemo">申请演示</button>
-                    <button class="notify-btn" style="background: linear-gradient(135deg, #718096, #4a5568); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="tryNow">立即体验</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 互动视频制作页面 -->
-        <section id="interactive-videos" class="works-section" style="display: none;">
-            <div class="container">
-                <h2 data-translate="videoMakerTitle">互动视频制作</h2>
-                <div class="hero-content" style="text-align: center; margin-bottom: 3rem;">
-                    <p data-translate="videoMakerDesc" style="font-size: 1.2rem; color: #4a5568; max-width: 800px; margin: 0 auto;">
-                        创建具有交互元素的动态视频内容，提供沉浸式观看体验。支持多种交互形式，让观众成为故事的参与者。
-                    </p>
-                </div>
-
-                <div class="feature-highlights" style="margin-bottom: 4rem;">
-                    <div class="feature-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎬</div>
-                            <h3 data-translate="flexibleFormatTitle">灵活格式</h3>
-                            <p data-translate="flexibleFormatDesc">支持多种视频格式和分辨率</p>
-                        </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎯</div>
-                            <h3 data-translate="interactiveElementsTitle">交互元素</h3>
-                            <p data-translate="interactiveElementsDesc">热点、选择分支、表单等丰富交互</p>
-                        </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">📊</div>
-                            <h3 data-translate="analyticsTitle">深度分析</h3>
-                            <p data-translate="analyticsDesc">详细的观看和交互数据分析</p>
-                        </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🚀</div>
-                            <h3 data-translate="instantDeployTitle">即时部署</h3>
-                            <p data-translate="instantDeployDesc">一键发布到各大平台</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="use-cases" style="margin-bottom: 4rem;">
-                    <h3 data-translate="useCasesTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">应用场景</h3>
-                    <div class="cases-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
-                        <div class="case-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2rem; color: #d97706; margin-bottom: 1rem;">🎭</div>
-                            <h4 data-translate="interactiveMovieTitle">互动电影</h4>
-                            <p data-translate="interactiveMovieDesc">观众可以选择剧情走向的电影体验</p>
-                        </div>
-                        <div class="case-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2rem; color: #d97706; margin-bottom: 1rem;">📚</div>
-                            <h4 data-translate="educationalVideoTitle">教育视频</h4>
-                            <p data-translate="educationalVideoDesc">互动式学习内容提高参与度</p>
-                        </div>
-                        <div class="case-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2rem; color: #d97706; margin-bottom: 1rem;">🛍️</div>
-                            <h4 data-translate="productShowcaseTitle">产品展示</h4>
-                            <p data-translate="productShowcaseDesc">360度产品展示和交互演示</p>
-                        </div>
-                        <div class="case-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2rem; color: #d97706; margin-bottom: 1rem;">👥</div>
-                            <h4 data-translate="corporateTrainingTitle">企业培训</h4>
-                            <p data-translate="corporateTrainingDesc">互动式培训视频提升效果</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cta-section" style="text-align: center;">
-                    <button class="login-btn" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="requestDemo">申请演示</button>
-                    <button class="notify-btn" style="background: linear-gradient(135deg, #718096, #4a5568); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="tryNow">立即体验</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 互动图片制作页面 -->
-        <section id="interactive-images" class="works-section" style="display: none;">
-            <div class="container">
-                <h2 data-translate="imageMakerTitle">互动图片制作</h2>
-                <div class="hero-content" style="text-align: center; margin-bottom: 3rem;">
-                    <p data-translate="imageMakerDesc" style="font-size: 1.2rem; color: #4a5568; max-width: 800px; margin: 0 auto;">
-                        将静态图片转化为引人入胜的互动体验。通过热点、动画和交互元素，让每张图片都能讲述独特的故事。
-                    </p>
-                </div>
-
-                <div class="feature-highlights" style="margin-bottom: 4rem;">
-                    <div class="feature-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🖼️</div>
-                            <h3 data-translate="smartHotspotsTitle">智能热点</h3>
-                            <p data-translate="smartHotspotsDesc">自动识别图片重要区域</p>
-                        </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">✨</div>
-                            <h3 data-translate="animationEffectsTitle">动画效果</h3>
-                            <p data-translate="animationEffectsDesc">丰富的过渡和动画效果</p>
-                        </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">📱</div>
-                            <h3 data-translate="responsiveDesignTitle">响应式设计</h3>
-                            <p data-translate="responsiveDesignDesc">自适应各种屏幕尺寸</p>
-                        </div>
-                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
-                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎨</div>
-                            <h3 data-translate="advancedEditingTitle">高级编辑</h3>
-                            <p data-translate="advancedEditingDesc">专业级图片编辑工具</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="interactive-features" style="margin-bottom: 4rem;">
-                    <h3 data-translate="interactiveFeaturesTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">交互功能</h3>
-                    <div class="features-showcase" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
-                        <div class="feature-showcase-item" style="background: #fefbf3; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2;">
-                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                                <div style="font-size: 2rem; color: #d97706; margin-right: 1rem;">🎯</div>
-                                <h4 data-translate="clickableHotspotsTitle">可点击热点</h4>
-                            </div>
-                            <p data-translate="clickableHotspotsDesc">在图片任意位置添加可点击区域，触发弹窗、链接或其他交互</p>
-                            <div class="interactive-image-demo" style="position: relative; margin-top: 1rem;">
-                                <img src="demo-image.jpg" alt="示例图片" style="width: 100%; height: auto;">
-                                <div class="hotspot" 
-                     style="position: absolute; top: 30%; left: 20%; width: 30px; height: 30px; 
-                            background: rgba(217, 119, 6, 0.6); border-radius: 50%; cursor: pointer;"
-                     onclick="navigateWithParams('interactive-games.html', {source: 'demo', id: '123'})">
-                </div>
-                                <div class="hotspot" 
-                     style="position: absolute; top: 50%; left: 60%; width: 30px; height: 30px; 
-                            background: rgba(217, 119, 6, 0.6); border-radius: 50%; cursor: pointer;"
-                     onclick="navigateWithParams('interactive-videos.html', {category: 'education', type: 'tutorial'})">
-                </div>
-                            </div>
-                        </div>
-                        <div class="feature-showcase-item" style="background: #fefbf3; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2;">
-                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                                <div style="font-size: 2rem; color: #d97706; margin-right: 1rem;">🔍</div>
-                                <h4 data-translate="zoomPanTitle">缩放平移</h4>
-                            </div>
-                            <p data-translate="zoomPanDesc">支持图片缩放和平移，让用户探索图片的每个细节</p>
-                        </div>
-                        <div class="feature-showcase-item" style="background: #fefbf3; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2;">
-                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                                <div style="font-size: 2rem; color: #d97706; margin-right: 1rem;">🏷️</div>
-                                <h4 data-translate="smartTagsTitle">智能标签</h4>
-                            </div>
-                            <p data-translate="smartTagsDesc">AI驱动的内容标签，自动识别和标注图片内容</p>
-                        </div>
-                        <div class="feature-showcase-item" style="background: #fefbf3; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2;">
-                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                                <div style="font-size: 2rem; color: #d97706; margin-right: 1rem;">📊</div>
-                                <h4 data-translate="heatmapAnalyticsTitle">热力图分析</h4>
-                            </div>
-                            <p data-translate="heatmapAnalyticsDesc">查看用户在图片上的点击热力图，优化交互设计</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="applications" style="background: white; padding: 3rem; border-radius: 16px; margin-bottom: 3rem; border: 1px solid #fef3e2;">
-                    <h3 data-translate="applicationsTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">应用领域</h3>
-                    <div class="applications-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
-                        <div class="application-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🛍️</div>
-                            <h4 data-translate="ecommerceTitle">电商展示</h4>
-                            <p data-translate="ecommerceDesc">产品详情互动展示</p>
-                        </div>
-                        <div class="application-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🏠</div>
-                            <h4 data-translate="realEstateTitle">房地产</h4>
-                            <p data-translate="realEstateDesc">虚拟看房体验</p>
-                        </div>
-                        <div class="application-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
-                            <h4 data-translate="educationTitle">教育培训</h4>
-                            <p data-translate="educationDesc">互动式教学内容</p>
-                        </div>
-                        <div class="application-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🎨</div>
-                            <h4 data-translate="artGalleryTitle">艺术展览</h4>
-                            <p data-translate="artGalleryDesc">在线艺术品展示</p>
-                        </div>
-                        <div class="application-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🏭</div>
-                            <h4 data-translate="manufacturingTitle">制造业</h4>
-                            <p data-translate="manufacturingDesc">设备操作指南</p>
-                        </div>
-                        <div class="application-item" style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🎪</div>
-                            <h4 data-translate="eventsTitle">活动展示</h4>
-                            <p data-translate="eventsDesc">活动现场互动</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cta-section" style="text-align: center;">
-                    <button class="login-btn" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="requestDemo">申请演示</button>
-                    <button class="notify-btn" style="background: linear-gradient(135deg, #718096, #4a5568); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="tryNow">立即体验</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 开发中页面 (保留为备用) -->
-        <section id="coming-soon" class="coming-soon-section" style="display: none;">
-            <div class="coming-soon-content">
-                <i class="fas fa-cog fa-spin"></i>
-                <h2 id="coming-soon-title" data-translate="comingSoonTitle">功能开发中...</h2>
-                <p data-translate="comingSoonDesc">我们正在努力开发这个功能，敬请期待！</p>
-                <p data-translate="comingSoonNotify">想第一时间了解产品上线信息？</p>
-                
-                <div class="coming-soon-features">
-                    <div class="feature-item">
-                        <i class="fas fa-check"></i>
-                        <span data-translate="feature1">直观易用的设计界面</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fas fa-check"></i>
-                        <span data-translate="feature2">强大的互动功能</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fas fa-check"></i>
-                        <span data-translate="feature3">跨平台兼容性</span>
-                    </div>
-                    <div class="feature-item">
-                        <i class="fas fa-clock"></i>
-                        <span data-translate="feature4">即将推出更多功能</span>
-                    </div>
-                </div>
-                
-                <div class="notify-form">
-                    <input type="email" placeholder="输入您的邮箱地址" data-translate-placeholder="emailPlaceholder">
-                    <button class="notify-btn" onclick="notifyWhenReady()" data-translate="notifyMe">通知我</button>
-                </div>
-                
-                <button class="back-btn" onclick="showHome()" data-translate="backHome">返回首页</button>
             </div>
         </section>
     </main>
 
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="js/components.js"></script>
     <script src="main.js"></script>
 </body>
-</html> 
+
+</html>

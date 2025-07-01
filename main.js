@@ -2,86 +2,35 @@
 let currentPage = 'home';
 
 // 初始化页面
-document.addEventListener('DOMContentLoaded', function() {
-    showHome();
+document.addEventListener('DOMContentLoaded', function () {
+    // showHome();
     initializeLanguageSelector();
     initializeAnimations();
 });
 
-// 显示首页
-function showHome() {
-    hideAllSections();
-    document.getElementById('home').style.display = 'block';
-    currentPage = 'home';
-    updateActiveNavigation();
-}
+// // 显示首页
+// function showHome() {
+//     hideAllSections();
+//     document.getElementById('home').style.display = 'block';
+//     currentPage = 'home';
+//     updateActiveNavigation();
+// }
 
-// 显示作品页面
-function showWorks() {
-    hideAllSections();
-    document.getElementById('works').style.display = 'block';
-    currentPage = 'works';
-    updateActiveNavigation();
-    animateWorksCards();
-}
+// // 显示产品展示区域
+// function showProducts() {
+//     hideAllSections();
+//     document.getElementById('products').style.display = 'block';
+//     currentPage = 'products';
+//     updateActiveNavigation();
 
-// 显示学习页面
-function showLearning() {
-    hideAllSections();
-    document.getElementById('learning').style.display = 'block';
-    currentPage = 'learning';
-    updateActiveNavigation();
-    animateLearningCards();
-}
-
-// 显示互动游戏制作页面
-function showInteractiveGames() {
-    hideAllSections();
-    document.getElementById('interactive-games').style.display = 'block';
-    currentPage = 'interactive-games';
-    updateActiveNavigation();
-    animateProductCards();
-}
-
-// 显示互动视频制作页面
-function showInteractiveVideos() {
-    hideAllSections();
-    document.getElementById('interactive-videos').style.display = 'block';
-    currentPage = 'interactive-videos';
-    updateActiveNavigation();
-    animateProductCards();
-}
-
-// 显示互动图片制作页面
-function showInteractiveImages() {
-    hideAllSections();
-    document.getElementById('interactive-images').style.display = 'block';
-    currentPage = 'interactive-images';
-    updateActiveNavigation();
-    animateProductCards();
-}
-
-// 显示开发中页面
-function showComingSoon(productName) {
-    hideAllSections();
-    document.getElementById('coming-soon').style.display = 'block';
-    const currentLang = document.getElementById('languageSelect').value;
-    const translations = getTranslations();
-    document.getElementById('coming-soon-title').textContent = productName + ' - ' + (currentLang === 'zh' ? '开发中...' : 'Coming Soon...');
-    currentPage = 'coming-soon';
-    updateActiveNavigation();
-}
-
-// 隐藏所有页面
-function hideAllSections() {
-    const sections = ['home', 'works', 'learning', 'interactive-games', 'interactive-videos', 'interactive-images', 'coming-soon'];
-    sections.forEach(section => {
-        const element = document.getElementById(section);
-        if (element) {
-            element.style.display = 'none';
-        }
-    });
-}
+//     // 如果在移动端，关闭菜单
+//     if (window.innerWidth <= 768) {
+//         const navMenu = document.querySelector('.nav-menu');
+//         if (navMenu.classList.contains('active')) {
+//             navMenu.classList.remove('active');
+//         }
+//     }
+// }
 
 // 标签页切换功能
 function showTab(tabName) {
@@ -125,7 +74,7 @@ function updateActiveNavigation() {
 function initializeLanguageSelector() {
     const languageSelect = document.getElementById('languageSelect');
     if (languageSelect) {
-        languageSelect.addEventListener('change', function() {
+        languageSelect.addEventListener('change', function () {
             const selectedLanguage = this.value;
             switchLanguage(selectedLanguage);
         });
@@ -145,7 +94,7 @@ function getTranslations() {
             'videoMaker': '互动视频制作',
             'imageMaker': '互动图片制作',
             'creativeMaker': '互动创意推荐',
-            
+
             // Hero区域
             'heroTitle': '创造无限可能的互动体验',
             'heroDescription': 'PLAYABLE ALL 是一个全方位的互动内容创作平台，帮助您轻松制作互动游戏、视频、图片和创意内容',
@@ -157,14 +106,14 @@ function getTranslations() {
             'heroImageDesc': '创建可点击、可交互的图片体验',
             'heroCreativeTitle': '互动创意',
             'heroCreativeDesc': '获得AI驱动的创意推荐和灵感',
-            
+
             // 作品页面
             'worksTitle': '我们的作品',
             'gamesTab': '互动游戏',
             'videosTab': '互动视频',
             'imagesTab': '互动图片',
             'creativeTab': '互动创意',
-            
+
             // 学习页面
             'learningTitle': '学习',
             'tutorialsTitle': '教程指南',
@@ -176,7 +125,7 @@ function getTranslations() {
             'certificateTitle': '认证课程',
             'certificateDesc': '获得官方认证的专业课程',
             'learnMore': '了解更多',
-            
+
             // 互动游戏制作页面
             'gamesMakerTitle': '互动游戏制作',
             'gamesMakerDesc': '创建引人入胜的互动游戏体验，无需编程知识。我们的直观界面让您能够快速原型设计、测试和发布您的游戏创意。',
@@ -210,7 +159,7 @@ function getTranslations() {
             'unlimitedVersionsDesc': '创建无限数量的游戏版本',
             'allNetworksTitle': '全网络支持',
             'allNetworksDesc': '支持在所有主要广告网络发布',
-            
+
             // 互动视频制作页面
             'videoMakerTitle': '互动视频制作',
             'videoMakerDesc': '创建具有交互元素的动态视频内容，提供沉浸式观看体验。支持多种交互形式，让观众成为故事的参与者。',
@@ -231,7 +180,7 @@ function getTranslations() {
             'productShowcaseDesc': '360度产品展示和交互演示',
             'corporateTrainingTitle': '企业培训',
             'corporateTrainingDesc': '互动式培训视频提升效果',
-            
+
             // 互动图片制作页面
             'imageMakerTitle': '互动图片制作',
             'imageMakerDesc': '将静态图片转化为引人入胜的互动体验。通过热点、动画和交互元素，让每张图片都能讲述独特的故事。',
@@ -265,11 +214,11 @@ function getTranslations() {
             'manufacturingDesc': '设备操作指南',
             'eventsTitle': '活动展示',
             'eventsDesc': '活动现场互动',
-            
+
             // 通用按钮
             'requestDemo': '申请演示',
             'tryNow': '立即体验',
-            
+
             // 开发中页面
             'comingSoonTitle': '功能开发中...',
             'comingSoonDesc': '我们正在努力开发这个功能，敬请期待！',
@@ -292,7 +241,7 @@ function getTranslations() {
             'videoMaker': 'Interactive Video Creator',
             'imageMaker': 'Interactive Image Creator',
             'creativeMaker': 'Creative AI Assistant',
-            
+
             // Hero Section
             'heroTitle': 'Create Infinite Interactive Experiences',
             'heroDescription': 'PLAYABLE ALL is a comprehensive interactive content creation platform that helps you easily create interactive games, videos, images and creative content',
@@ -304,14 +253,14 @@ function getTranslations() {
             'heroImageDesc': 'Create clickable, interactive image experiences',
             'heroCreativeTitle': 'Interactive Creative',
             'heroCreativeDesc': 'Get AI-driven creative recommendations and inspiration',
-            
+
             // Works Page
             'worksTitle': 'Our Works',
             'gamesTab': 'Interactive Games',
             'videosTab': 'Interactive Videos',
             'imagesTab': 'Interactive Images',
             'creativeTab': 'Interactive Creative',
-            
+
             // Learning Page
             'learningTitle': 'Learning',
             'tutorialsTitle': 'Tutorial Guides',
@@ -323,7 +272,7 @@ function getTranslations() {
             'certificateTitle': 'Certification Courses',
             'certificateDesc': 'Get officially certified professional courses',
             'learnMore': 'Learn More',
-            
+
             // Interactive Game Creator Page
             'gamesMakerTitle': 'Interactive Game Creator',
             'gamesMakerDesc': 'Create engaging interactive gaming experiences without programming knowledge. Our intuitive interface allows you to quickly prototype, test, and publish your game ideas.',
@@ -357,7 +306,7 @@ function getTranslations() {
             'unlimitedVersionsDesc': 'Create unlimited number of game versions',
             'allNetworksTitle': 'All Networks Support',
             'allNetworksDesc': 'Support publishing on all major advertising networks',
-            
+
             // Interactive Video Creator Page
             'videoMakerTitle': 'Interactive Video Creator',
             'videoMakerDesc': 'Create dynamic video content with interactive elements, providing immersive viewing experiences. Support multiple forms of interaction, making viewers participants in the story.',
@@ -378,7 +327,7 @@ function getTranslations() {
             'productShowcaseDesc': '360-degree product display and interactive demonstrations',
             'corporateTrainingTitle': 'Corporate Training',
             'corporateTrainingDesc': 'Interactive training videos enhance effectiveness',
-            
+
             // Interactive Image Creator Page
             'imageMakerTitle': 'Interactive Image Creator',
             'imageMakerDesc': 'Transform static images into captivating interactive experiences. Through hotspots, animations, and interactive elements, let every image tell a unique story.',
@@ -412,11 +361,11 @@ function getTranslations() {
             'manufacturingDesc': 'Equipment operation guides',
             'eventsTitle': 'Events',
             'eventsDesc': 'Live event interactions',
-            
+
             // Common Buttons
             'requestDemo': 'Request Demo',
             'tryNow': 'Try Now',
-            
+
             // Coming Soon Page
             'comingSoonTitle': 'Feature Coming Soon...',
             'comingSoonDesc': 'We are working hard to develop this feature, stay tuned!',
@@ -435,7 +384,7 @@ function getTranslations() {
 // 语言切换功能
 function switchLanguage(language) {
     const translations = getTranslations();
-    
+
     if (translations[language]) {
         // 更新所有带有 data-translate 属性的元素
         const elementsToTranslate = document.querySelectorAll('[data-translate]');
@@ -464,7 +413,7 @@ function switchLanguage(language) {
 
         // 更新 HTML lang 属性
         document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
-        
+
         // 更新页面标题
         if (language === 'zh') {
             document.title = 'PLAYABLE ALL - 互动内容创作平台';
@@ -503,7 +452,7 @@ function animateWorksCards() {
     workCards.forEach((card, index) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
-        
+
         setTimeout(() => {
             card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
             card.style.opacity = '1';
@@ -518,7 +467,7 @@ function animateLearningCards() {
     learningCards.forEach((card, index) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
-        
+
         setTimeout(() => {
             card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
             card.style.opacity = '1';
@@ -533,7 +482,7 @@ function animateProductCards() {
     productCards.forEach((card, index) => {
         card.style.opacity = '0';
         card.style.transform = 'translateY(20px)';
-        
+
         setTimeout(() => {
             card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
             card.style.opacity = '1';
@@ -568,12 +517,12 @@ function validateEmail(email) {
 }
 
 // 添加键盘快捷键支持
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     // ESC键返回首页
     if (e.key === 'Escape') {
         showHome();
     }
-    
+
     // 数字键快速切换
     if (e.key >= '1' && e.key <= '4' && currentPage === 'works') {
         const tabs = ['games', 'videos', 'images', 'creative'];
@@ -589,7 +538,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // 添加鼠标右键菜单禁用（可选）
-document.addEventListener('contextmenu', function(e) {
+document.addEventListener('contextmenu', function (e) {
     // 在生产环境中可以取消注释以下行
     // e.preventDefault();
 });
@@ -598,11 +547,11 @@ document.addEventListener('contextmenu', function(e) {
 let touchStartX = 0;
 let touchEndX = 0;
 
-document.addEventListener('touchstart', function(e) {
+document.addEventListener('touchstart', function (e) {
     touchStartX = e.changedTouches[0].screenX;
 });
 
-document.addEventListener('touchend', function(e) {
+document.addEventListener('touchend', function (e) {
     touchEndX = e.changedTouches[0].screenX;
     handleSwipe();
 });
@@ -610,13 +559,13 @@ document.addEventListener('touchend', function(e) {
 function handleSwipe() {
     const swipeThreshold = 50;
     const diff = touchStartX - touchEndX;
-    
+
     if (Math.abs(diff) > swipeThreshold) {
         if (currentPage === 'works') {
             const activeTab = document.querySelector('.tab-content.active');
             const tabs = ['games', 'videos', 'images', 'creative'];
             const currentIndex = tabs.indexOf(activeTab.id);
-            
+
             if (diff > 0 && currentIndex < tabs.length - 1) {
                 // 向左滑动，切换到下一个标签
                 const nextButton = document.querySelectorAll('.tab-btn')[currentIndex + 1];
@@ -631,11 +580,11 @@ function handleSwipe() {
 }
 
 // 添加页面加载完成后的初始化
-window.addEventListener('load', function() {
+window.addEventListener('load', function () {
     // 添加页面加载动画
     document.body.style.opacity = '0';
     document.body.style.transition = 'opacity 0.5s ease';
-    
+
     setTimeout(() => {
         document.body.style.opacity = '1';
     }, 100);
@@ -657,7 +606,7 @@ function debounce(func, wait) {
 // 工具函数：节流
 function throttle(func, limit) {
     let inThrottle;
-    return function() {
+    return function () {
         const args = arguments;
         const context = this;
         if (!inThrottle) {
@@ -668,57 +617,115 @@ function throttle(func, limit) {
     }
 }
 
-// 响应式导航菜单切换（移动端）
+// 移动端菜单切换
 function toggleMobileMenu() {
     const navMenu = document.querySelector('.nav-menu');
-    navMenu.classList.toggle('mobile-active');
+    navMenu.classList.toggle('active');
 }
 
-// 监听窗口大小变化
-window.addEventListener('resize', debounce(function() {
-    if (window.innerWidth > 768) {
-        // 桌面端时确保移动菜单状态正确
-        const navMenu = document.querySelector('.nav-menu');
-        navMenu.classList.remove('mobile-active');
-    }
-}, 250));
-
-/**
- * 带参数导航到指定页面
- * @param {string} url - 目标页面URL
- * @param {Object} params - URL参数对象
- */
-function navigateWithParams(url, params) {
-    // 创建URL对象
-    const targetUrl = new URL(url, window.location.origin);
-    
-    // 添加参数到URL
-    Object.keys(params).forEach(key => {
-        targetUrl.searchParams.append(key, params[key]);
+// 移动端下拉菜单切换
+document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
+    const link = dropdown.querySelector('.nav-link');
+    link.addEventListener('click', (e) => {
+        if (window.innerWidth <= 768) {
+            e.preventDefault();
+            dropdown.classList.toggle('active');
+        }
     });
-    
-    // 导航到目标页面
-    window.location.href = targetUrl.toString();
-}
+});
 
-// 在页面加载时获取URL参数的辅助函数
-function getUrlParams() {
-    const params = {};
-    const searchParams = new URLSearchParams(window.location.search);
-    for (const [key, value] of searchParams) {
-        params[key] = value;
+// 点击页面其他地方关闭移动端菜单
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-menu') && !e.target.closest('.mobile-menu-btn')) {
+        const navMenu = document.querySelector('.nav-menu');
+        if (navMenu.classList.contains('active')) {
+            navMenu.classList.remove('active');
+        }
     }
-    return params;
-}
+});
 
-// 页面加载时处理URL参数
-document.addEventListener('DOMContentLoaded', () => {
-    const params = getUrlParams();
-    // 可以根据参数执行相应的操作
-    if (params.source === 'demo') {
-        console.log('从示例页面跳转而来');
+// 监听窗口大小变化，在大屏幕时重置菜单状态
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 768) {
+        const navMenu = document.querySelector('.nav-menu');
+        const dropdowns = document.querySelectorAll('.nav-dropdown');
+        navMenu.classList.remove('active');
+        dropdowns.forEach(dropdown => dropdown.classList.remove('active'));
     }
-    if (params.category) {
-        console.log('类别:', params.category);
-    }
-}); 
+});
+
+    // 立即体验按钮跳转到产品页面
+    document.querySelectorAll('[data-translate="tryNow"]')
+        .forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                window.location.href = 'products.html';
+            });
+        });
+        
+// /**
+//  * 带参数导航到指定页面
+//  * @param {string} url - 目标页面URL
+//  * @param {Object} params - URL参数对象
+//  */
+// function navigateWithParams(url, params) {
+//     // 创建URL对象
+//     const targetUrl = new URL(url, window.location.origin);
+
+//     // 添加参数到URL
+//     Object.keys(params).forEach(key => {
+//         targetUrl.searchParams.append(key, params[key]);
+//     });
+
+//     // 导航到目标页面
+//     window.location.href = targetUrl.toString();
+// }
+
+// // 在页面加载时获取URL参数的辅助函数
+// function getUrlParams() {
+//     const params = {};
+//     const searchParams = new URLSearchParams(window.location.search);
+//     for (const [key, value] of searchParams) {
+//         params[key] = value;
+//     }
+//     return params;
+// }
+
+// // 页面加载时处理URL参数
+// document.addEventListener('DOMContentLoaded', () => {
+//     const params = getUrlParams();
+//     // 可以根据参数执行相应的操作
+//     if (params.source === 'demo') {
+//         console.log('从示例页面跳转而来');
+//     }
+//     if (params.category) {
+//         console.log('类别:', params.category);
+//     }
+// });
+
+// // 为所有带有导航数据的卡片添加点击事件监听器
+// document.addEventListener('DOMContentLoaded', () => {
+//     // 获取所有带有导航数据的卡片
+//     const cards = document.querySelectorAll('.work-card[data-navigate-url]');
+
+//     // 为每个卡片添加点击事件监听器
+//     cards.forEach(card => {
+//         card.addEventListener('click', () => {
+//             const url = card.getAttribute('data-navigate-url');
+//             const paramsStr = card.getAttribute('data-navigate-params');
+
+//             if (url) {
+//                 try {
+//                     // 尝试解析参数
+//                     const params = paramsStr ? JSON.parse(paramsStr) : {};
+//                     // 调用导航函数
+//                     navigateWithParams(url, params);
+//                 } catch (error) {
+//                     console.error('Error parsing navigation params:', error);
+//                 }
+//             }
+//         });
+
+//         // 添加鼠标悬停效果的类
+//         card.classList.add('clickable');
+//     });
+// }); 
