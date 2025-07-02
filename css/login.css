@@ -1,0 +1,165 @@
+/* 登录页面样式 */
+.login-page {
+    min-height: calc(100vh - 140px); /* 减去header和footer的高度 */
+    background-color: #f5f5f5;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 480px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.login-content {
+    padding: 40px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.logo i {
+    font-size: 32px;
+    color: #1a73e8;
+}
+
+.logo span {
+    font-size: 28px;
+    font-weight: bold;
+    color: #333;
+}
+
+.login-header h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.login-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+/* 社交登录按钮 */
+.social-login {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    height: 48px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    padding: 0 24px;
+    width: 100%;
+}
+
+.social-btn i {
+    font-size: 20px;
+}
+
+.social-btn:hover {
+    background: #f5f5f5;
+}
+
+/* 各平台按钮样式 */
+.social-btn.qq {
+    background: #12B7F5;
+    border-color: #12B7F5;
+    color: #fff;
+}
+
+.social-btn.qq:hover {
+    background: #0EA4DB;
+}
+
+.social-btn.wechat {
+    background: #07C160;
+    border-color: #07C160;
+    color: #fff;
+}
+
+.social-btn.wechat:hover {
+    background: #06AE56;
+}
+
+.social-btn.google {
+    background: #fff;
+    border-color: #ddd;
+    color: #333;
+}
+
+.social-btn.google:hover {
+    background: #f5f5f5;
+}
+
+.social-btn.facebook {
+    background: #1877F2;
+    border-color: #1877F2;
+    color: #fff;
+}
+
+.social-btn.facebook:hover {
+    background: #166FE5;
+}
+
+/* 登录页脚 */
+.login-footer {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.terms-text {
+    color: #666;
+    font-size: 14px;
+}
+
+.terms-text a {
+    color: #1a73e8;
+    text-decoration: none;
+}
+
+.terms-text a:hover {
+    text-decoration: underline;
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .login-container {
+        box-shadow: none;
+        border-radius: 0;
+    }
+
+    .login-content {
+        padding: 24px;
+    }
+}

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="loginPageTitle"></title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <div class="login-page">
+        <div class="login-container">
+            <div class="login-content">
+                <div class="login-header">
+                    <div class="logo">
+                        <i class="fas fa-gamepad"></i>
+                        <span>PLAYABLE ALL</span>
+                    </div>
+                    <h1 data-translate="loginWelcome"></h1>
+                    <p data-translate="loginDescription"></p>
+                </div>
+                <div class="social-login">
+                    <button class="social-btn qq" onclick="handleSocialLogin('qq')">
+                        <i class="fab fa-qq"></i>
+                        <span data-translate="loginWithQQ"></span>
+                    </button>
+                    <button class="social-btn wechat" onclick="handleSocialLogin('wechat')">
+                        <i class="fab fa-weixin"></i>
+                        <span data-translate="loginWithWechat"></span>
+                    </button>
+                    <button class="social-btn google" onclick="handleSocialLogin('google')">
+                        <i class="fab fa-google"></i>
+                        <span data-translate="loginWithGoogle"></span>
+                    </button>
+                    <button class="social-btn facebook" onclick="handleSocialLogin('facebook')">
+                        <i class="fab fa-facebook"></i>
+                        <span data-translate="loginWithFacebook"></span>
+                    </button>
+                </div>
+                <div class="login-footer">
+                    <p class="terms-text">
+                        <span data-translate="loginTermsPrefix"></span>
+                        <a href="#" data-translate="termsOfService"></a>
+                        <span data-translate="and"></span>
+                        <a href="#" data-translate="privacyPolicy"></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <script src="main.js"></script>
+    <script src="js/login.js"></script>
+</body>
+
+</html>
