@@ -51,15 +51,13 @@ function getCurrentLanguage() {
 
 // 更新卡片文本
 function updateCardTexts(language) {
-    const currentLang = language;
-    console.log('currentLang', currentLang);
     document.querySelectorAll('.work-card').forEach(card => {
         const cardData = card._data; // 存储的原始数据
         if (cardData) {
             const title = card.querySelector('h3');
             const desc = card.querySelector('p');
-            title.textContent = cardData.title[currentLang];
-            desc.textContent = cardData.description[currentLang];
+            title.textContent = cardData.title[language];
+            desc.textContent = cardData.description[language];
         }
     });
 }
@@ -200,7 +198,7 @@ function openModal(url, title, params = null) {
     }
 
     modalIframe.src = fullUrl;
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
 
     // 禁止背景滚动
     document.body.style.overflow = 'hidden';
