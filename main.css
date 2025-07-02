@@ -36,9 +36,10 @@ body {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
+    gap: 2rem;
     position: relative;
 }
 
@@ -73,7 +74,7 @@ body {
 
 .nav-menu {
     display: flex;
-    gap: 2rem;
+    justify-content: center;
     align-items: center;
 }
 
@@ -81,6 +82,7 @@ body {
     display: flex;
     gap: 2rem;
     align-items: center;
+    justify-content: center;
 }
 
 .nav-link {
@@ -109,13 +111,16 @@ body {
     background: white;
     border-radius: 12px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    padding: 1rem 0;
-    min-width: 200px;
+    padding: 0.5rem 0;
+    min-width: 100%;
+    width: max-content;
+    white-space: normal;
     opacity: 0;
     visibility: hidden;
     transform: translateY(10px);
     transition: all 0.3s ease;
     border: 1px solid rgba(0, 0, 0, 0.1);
+    z-index: 1001;
 }
 
 .nav-dropdown:hover .dropdown-content {
@@ -130,6 +135,7 @@ body {
     color: #4a5568;
     text-decoration: none;
     transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .dropdown-content a:hover {
@@ -141,6 +147,7 @@ body {
     display: flex;
     align-items: center;
     gap: 1rem;
+    justify-self: end;
 }
 
 .language-selector select {
@@ -591,8 +598,9 @@ body {
 
 .feature-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
+    margin-bottom: 2rem;
 }
 
 .feature-item {
@@ -601,7 +609,9 @@ body {
     border-radius: 16px;
     border: 1px solid #fef3e2;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-    transition: all 0.3s ease;
+    min-width: 0;
+    word-break: break-word;
+    white-space: normal;
 }
 
 .feature-item:hover {
@@ -619,6 +629,8 @@ body {
 .feature-item p {
     color: #4a5568;
     line-height: 1.6;
+    word-break: break-word;
+    white-space: normal;
 }
 
 /* Feature List */
@@ -951,116 +963,99 @@ body {
     margin: 0;
 }
 
-/* Coming Soon Section */
+/* 开发中页面样式 */
 .coming-soon-section {
-    padding: 4rem 2rem;
-    background: #fafafa;
-    min-height: 80vh;
     display: flex;
-    align-items: center;
     justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 2rem;
+    background: #fafafa;
 }
 
 .coming-soon-content {
     text-align: center;
     max-width: 600px;
-    background: white;
+    margin: 0 auto;
     padding: 3rem;
-    border-radius: 20px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-    border: 1px solid rgba(217, 119, 6, 0.1);
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    border: 1px solid #fef3e2;
 }
 
-.coming-soon-content i {
+.coming-soon-content i.fa-cog {
     font-size: 4rem;
     color: #d97706;
     margin-bottom: 2rem;
 }
 
 .coming-soon-content h2 {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #1a202c;
+    font-size: 2rem;
     margin-bottom: 1rem;
+    color: #1f2937;
 }
 
-.coming-soon-content>p {
-    color: #4a5568;
-    font-size: 1.2rem;
+.coming-soon-content p {
+    color: #4b5563;
     margin-bottom: 2rem;
 }
 
 .coming-soon-features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
     margin: 2rem 0;
 }
 
-.coming-soon-features .feature-item {
+.feature-item {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-    padding: 1rem;
+    gap: 1rem;
+    padding: 0.75rem;
     background: #fefbf3;
-    border-radius: 12px;
-    border: 1px solid #fef3e2;
+    border-radius: 8px;
 }
 
-.coming-soon-features .feature-item i {
-    margin-right: 1rem;
-    font-size: 1.5rem;
+.feature-item i {
     color: #d97706;
-}
-
-.coming-soon-features .feature-item span {
-    color: #4a5568;
-    font-weight: 500;
 }
 
 .notify-form {
     display: flex;
     gap: 1rem;
     margin: 2rem 0;
-    justify-content: center;
-    flex-wrap: wrap;
 }
 
 .notify-form input {
     flex: 1;
-    min-width: 250px;
-    padding: 1rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
     font-size: 1rem;
-    outline: none;
-    transition: border-color 0.3s ease;
-}
-
-.notify-form input:focus {
-    border-color: #d97706;
 }
 
 .back-btn {
-    background: transparent;
-    color: #4a5568;
-    border: 2px solid #e2e8f0;
-    padding: 1rem 2rem;
-    border-radius: 10px;
+    background: #f3f4f6;
+    color: #4b5563;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 1rem;
     transition: all 0.3s ease;
 }
 
 .back-btn:hover {
-    background: #f7fafc;
-    border-color: #d97706;
-    color: #d97706;
+    background: #e5e7eb;
 }
 
 /* 响应式导航样式 */
 @media (max-width: 768px) {
     .nav-container {
         padding: 0.75rem 1rem;
+        display: flex;
+        justify-content: space-between;
     }
 
     .mobile-menu-btn {

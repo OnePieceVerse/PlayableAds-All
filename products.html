@@ -15,45 +15,363 @@
 
     <!-- 主要内容区域 -->
     <main class="main-content">
-        <!-- 作品展示区域 -->
-        <section id="works" class="works-section">
+        <!-- 互动游戏制作页面 -->
+        <section id="interactive-games" class="works-section" style="display: none;">
             <div class="container">
-                <h2 data-translate="worksTitle"></h2>
-                <div class="tabs">
-                    <button class="tab-btn active" onclick="showTab('games')" data-translate="gamesTab"></button>
-                    <button class="tab-btn" onclick="showTab('videos')" data-translate="videosTab"></button>
-                    <button class="tab-btn" onclick="showTab('images')" data-translate="imagesTab"></button>
-                    <button class="tab-btn" onclick="showTab('creative')" data-translate="creativeTab"></button>
+                <h2 data-translate="gamesMakerTitle"></h2>
+                <div class="hero-content" style="text-align: center; margin-bottom: 3rem;">
+                    <p data-translate="gamesMakerDesc" style="font-size: 1.2rem; color: #4a5568; max-width: 800px; margin: 0 auto;"></p>
+                </div>
+                
+                <div class="feature-highlights" style="margin-bottom: 4rem;">
+                    <div class="feature-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎮</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="easyToUseTitle"></h3>
+                                <p data-translate="easyToUseDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">⚡</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="fastIterationTitle"></h3>
+                                <p data-translate="fastIterationDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎯</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="highPerformanceTitle"></h3>
+                                <p data-translate="highPerformanceDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">📱</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="crossPlatformTitle"></h3>
+                                <p data-translate="crossPlatformDesc"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- 互动游戏 -->
-                <div id="games" class="tab-content active">
-                    <div class="works-grid" id="games-grid"></div>
+                <div class="what-you-can-do" style="margin-bottom: 4rem;">
+                    <h3 data-translate="whatCanYouDoTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;"></h3>
+                    <div class="feature-list" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div class="feature-column">
+                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
+                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">🎨</div>
+                                <div>
+                                    <h4 data-translate="levelEditorTitle"></h4>
+                                    <p data-translate="levelEditorDesc"></p>
+                                </div>
+                            </div>
+                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
+                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">🎭</div>
+                                <div>
+                                    <h4 data-translate="visualsTitle"></h4>
+                                    <p data-translate="visualsDesc"></p>
+                                </div>
+                            </div>
+                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
+                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">📹</div>
+                                <div>
+                                    <h4 data-translate="cameraTitle"></h4>
+                                    <p data-translate="cameraDesc"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="feature-column">
+                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
+                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">📱</div>
+                                <div>
+                                    <h4 data-translate="mockupTitle"></h4>
+                                    <p data-translate="mockupDesc"></p>
+                                </div>
+                            </div>
+                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
+                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">✏️</div>
+                                <div>
+                                    <h4 data-translate="textsTitle"></h4>
+                                    <p data-translate="textsDesc"></p>
+                                </div>
+                            </div>
+                            <div class="feature-item-text" style="display: flex; align-items: center; margin-bottom: 1rem; padding: 1rem; background: #fefbf3; border-radius: 12px;">
+                                <div style="color: #d97706; margin-right: 1rem; font-size: 1.5rem;">🎨</div>
+                                <div>
+                                    <h4 data-translate="graphicsTitle"></h4>
+                                    <p data-translate="graphicsDesc"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- 互动视频 -->
-                <div id="videos" class="tab-content">
-                    <div class="works-grid" id="videos-grid"></div>
+                <div class="benefits-section" style="background: #fefbf3; padding: 3rem; border-radius: 16px; margin-bottom: 3rem;">
+                    <h3 data-translate="benefitsTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;"></h3>
+                    <div class="benefits-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem;">
+                        <div class="benefit-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+                            <h4 data-translate="noCodingTitle"></h4>
+                            <p data-translate="noCodingDesc"></p>
+                        </div>
+                        <div class="benefit-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+                            <h4 data-translate="highEngagementTitle"></h4>
+                            <p data-translate="highEngagementDesc"></p>
+                        </div>
+                        <div class="benefit-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🔄</div>
+                            <h4 data-translate="unlimitedVersionsTitle"></h4>
+                            <p data-translate="unlimitedVersionsDesc"></p>
+                        </div>
+                        <div class="benefit-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🌐</div>
+                            <h4 data-translate="allNetworksTitle"></h4>
+                            <p data-translate="allNetworksDesc"></p>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- 互动图片 -->
-                <div id="images" class="tab-content">
-                    <div class="works-grid" id="images-grid"></div>
+                <div class="cta-section" style="text-align: center;">
+                    <button class="login-btn" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="requestDemo"></button>
+                    <button class="notify-btn" style="background: linear-gradient(135deg, #718096, #4a5568); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="tryNow"></button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 互动视频制作页面 -->
+        <section id="interactive-videos" class="works-section" style="display: none;">
+            <div class="container">
+                <h2 data-translate="videoMakerTitle"></h2>
+                <div class="hero-content" style="text-align: center; margin-bottom: 3rem;">
+                    <p data-translate="videoMakerDesc" style="font-size: 1.2rem; color: #4a5568; max-width: 800px; margin: 0 auto;"></p>
                 </div>
 
-                <!-- 互动创意 -->
-                <div id="creative" class="tab-content">
-                    <div class="works-grid" id="creative-grid"></div>
+                <div class="feature-highlights" style="margin-bottom: 4rem;">
+                    <div class="feature-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎬</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="flexibleFormatTitle"></h3>
+                                <p data-translate="flexibleFormatDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎯</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="interactiveElementsTitle"></h3>
+                                <p data-translate="interactiveElementsDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">📊</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="analyticsTitle"></h3>
+                                <p data-translate="analyticsDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🚀</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="instantDeployTitle"></h3>
+                                <p data-translate="instantDeployDesc"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                <div class="use-cases" style="margin-bottom: 4rem;">
+                    <h3 data-translate="useCasesTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;"></h3>
+                    <div class="cases-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+                        <div class="case-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2rem; color: #d97706; margin-bottom: 1rem;">🎭</div>
+                            <h4 data-translate="interactiveMovieTitle"></h4>
+                            <p data-translate="interactiveMovieDesc"></p>
+                        </div>
+                        <div class="case-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2rem; color: #d97706; margin-bottom: 1rem;">📚</div>
+                            <h4 data-translate="educationalVideoTitle"></h4>
+                            <p data-translate="educationalVideoDesc"></p>
+                        </div>
+                        <div class="case-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2rem; color: #d97706; margin-bottom: 1rem;">🛍️</div>
+                            <h4 data-translate="productShowcaseTitle"></h4>
+                            <p data-translate="productShowcaseDesc"></p>
+                        </div>
+                        <div class="case-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2rem; color: #d97706; margin-bottom: 1rem;">👥</div>
+                            <h4 data-translate="corporateTrainingTitle"></h4>
+                            <p data-translate="corporateTrainingDesc"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cta-section" style="text-align: center;">
+                    <button class="login-btn" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="requestDemo">申请演示</button>
+                    <button class="notify-btn" style="background: linear-gradient(135deg, #718096, #4a5568); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="tryNow">立即体验</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 互动图片制作页面 -->
+        <section id="interactive-images" class="works-section" style="display: none;">
+            <div class="container">
+                <h2 data-translate="imageMakerTitle"></h2>
+                <div class="hero-content" style="text-align: center; margin-bottom: 3rem;">
+                    <p data-translate="imageMakerDesc" style="font-size: 1.2rem; color: #4a5568; max-width: 800px; margin: 0 auto;"></p>
+                </div>
+
+                <div class="feature-highlights" style="margin-bottom: 4rem;">
+                    <div class="feature-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🖼️</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="smartHotspotsTitle"></h3>
+                                <p data-translate="smartHotspotsDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">✨</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="animationEffectsTitle"></h3>
+                                <p data-translate="animationEffectsDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">📱</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="responsiveDesignTitle"></h3>
+                                <p data-translate="responsiveDesignDesc"></p>
+                            </div>
+                        </div>
+                        <div class="feature-item" style="background: white; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);">
+                            <div style="font-size: 2.5rem; color: #d97706; margin-bottom: 1rem;">🎨</div>
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                <h3 data-translate="advancedEditingTitle"></h3>
+                                <p data-translate="advancedEditingDesc"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="interactive-features" style="margin-bottom: 4rem;">
+                    <h3 data-translate="interactiveFeaturesTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;"></h3>
+                    <div class="features-showcase" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem;">
+                        <div class="feature-showcase-item" style="background: #fefbf3; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <div style="font-size: 2rem; color: #d97706; margin-right: 1rem;">🎯</div>
+                                <h4 data-translate="clickableHotspotsTitle"></h4>
+                            </div>
+                            <p data-translate="clickableHotspotsDesc"></p>
+                        </div>
+                        <div class="feature-showcase-item" style="background: #fefbf3; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <div style="font-size: 2rem; color: #d97706; margin-right: 1rem;">🔍</div>
+                                <h4 data-translate="zoomPanTitle"></h4>
+                            </div>
+                            <p data-translate="zoomPanDesc"></p>
+                        </div>
+                        <div class="feature-showcase-item" style="background: #fefbf3; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <div style="font-size: 2rem; color: #d97706; margin-right: 1rem;">🏷️</div>
+                                <h4 data-translate="smartTagsTitle"></h4>
+                            </div>
+                            <p data-translate="smartTagsDesc"></p>
+                        </div>
+                        <div class="feature-showcase-item" style="background: #fefbf3; padding: 2rem; border-radius: 16px; border: 1px solid #fef3e2;">
+                            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                                <div style="font-size: 2rem; color: #d97706; margin-right: 1rem;">📊</div>
+                                <h4 data-translate="heatmapAnalyticsTitle"></h4>
+                            </div>
+                            <p data-translate="heatmapAnalyticsDesc"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="applications" style="background: white; padding: 3rem; border-radius: 16px; margin-bottom: 3rem; border: 1px solid #fef3e2;">
+                    <h3 data-translate="applicationsTitle" style="text-align: center; margin-bottom: 2rem; font-size: 2rem;"></h3>
+                    <div class="applications-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem;">
+                        <div class="application-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🛍️</div>
+                            <h4 data-translate="ecommerceTitle"></h4>
+                            <p data-translate="ecommerceDesc"></p>
+                        </div>
+                        <div class="application-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🏠</div>
+                            <h4 data-translate="realEstateTitle"></h4>
+                            <p data-translate="realEstateDesc"></p>
+                        </div>
+                        <div class="application-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">📚</div>
+                            <h4 data-translate="educationTitle"></h4>
+                            <p data-translate="educationDesc"></p>
+                        </div>
+                        <div class="application-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🎨</div>
+                            <h4 data-translate="artGalleryTitle"></h4>
+                            <p data-translate="artGalleryDesc"></p>
+                        </div>
+                        <div class="application-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🏭</div>
+                            <h4 data-translate="manufacturingTitle"></h4>
+                            <p data-translate="manufacturingDesc"></p>
+                        </div>
+                        <div class="application-item" style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🎪</div>
+                            <h4 data-translate="eventsTitle"></h4>
+                            <p data-translate="eventsDesc"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cta-section" style="text-align: center;">
+                    <button class="login-btn" style="background: linear-gradient(135deg, #d97706, #b45309); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="requestDemo">申请演示</button>
+                    <button class="notify-btn" style="background: linear-gradient(135deg, #718096, #4a5568); color: white; border: none; padding: 1rem 2rem; border-radius: 10px; font-weight: 600; cursor: pointer; margin: 0.5rem; font-size: 1.1rem;" data-translate="tryNow">立即体验</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 开发中页面 (保留为备用) -->
+        <section id="interactive-creative" class="coming-soon-section" style="display: none;">
+            <div class="coming-soon-content">
+                <i class="fas fa-cog fa-spin"></i>
+                <h2 id="coming-soon-title" data-translate="comingSoonTitle"></h2>
+                <p data-translate="comingSoonDesc"></p>
+                <p data-translate="comingSoonNotify"></p>
+                
+                <div class="coming-soon-features">
+                    <div class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span data-translate="feature1"></span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span data-translate="feature2"></span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-check"></i>
+                        <span data-translate="feature3"></span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-clock"></i>
+                        <span data-translate="feature4"></span>
+                    </div>
+                </div>
+                
+                <div class="notify-form">
+                    <input type="email" data-translate-placeholder="emailPlaceholder">
+                    <button class="notify-btn" onclick="notifyWhenReady()" data-translate="notifyMe"></button>
+                </div>
+                
+                <button class="back-btn" onclick="showHome()" data-translate="backHome"></button>
             </div>
         </section>
     </main>
 
     <!-- Footer -->
     <div id="footer"></div>
-
-    <!-- Modal Container -->
-    <div id="modal-container"></div>
 
     <script src="main.js"></script>
     <script src="products.js"></script>

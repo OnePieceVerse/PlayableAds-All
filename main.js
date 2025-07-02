@@ -266,7 +266,7 @@ window.addEventListener('resize', () => {
 document.querySelectorAll('[data-translate="tryNow"]')
     .forEach(btn => {
         btn.addEventListener('click', function (e) {
-            window.location.href = 'products.html';
+            window.location.href = 'works.html';
         });
     });
 

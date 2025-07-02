@@ -12,17 +12,29 @@
         </button>
         <div class="nav-menu">
             <div class="nav-menu-items">
-                <a href="products.html" class="nav-link" data-translate="products"></a>
-            </div>
-            <div class="nav-actions">
-                <div class="language-selector">
-                    <select id="languageSelect">
-                        <option value="zh" data-translate="chinese"></option>
-                        <option value="en" data-translate="english"></option>
-                    </select>
+                <a href="works.html" class="nav-link" data-translate="works"></a>
+                <!-- <a href="products.html" class="nav-link" data-translate="products"></a> -->
+                <div class="nav-dropdown">
+                    <a href="#" class="nav-link" data-translate="products"><i class="fas fa-chevron-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="products.html?p=interactive-games" data-translate="gamesMaker"></a>
+                        <a href="products.html?p=interactive-videos"  data-translate="videoMaker"></a>
+                        <a href="products.html?p=interactive-images"  data-translate="imageMaker"></a>
+                        <a href="products.html?p=interactive-creative"  data-translate="creativeMaker"></a>
+                    </div>
                 </div>
-                <a href="login.html" class="login-btn" data-translate="login"></a>
+                <a href="learning.html" class="nav-link" data-translate="learning"></a>
             </div>
+            
+        </div>
+        <div class="nav-actions">
+            <div class="language-selector">
+                <select id="languageSelect">
+                    <option value="zh" data-translate="chinese"></option>
+                    <option value="en" data-translate="english"></option>
+                </select>
+            </div>
+            <a href="login.html" class="login-btn" data-translate="login"></a>
         </div>
     </div>
 </nav>

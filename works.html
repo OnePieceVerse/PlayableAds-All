@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate="productsPageTitle"></title>
+    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+        <!-- 作品展示区域 -->
+        <section id="works" class="works-section">
+            <div class="container">
+                <h2 data-translate="worksTitle"></h2>
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="showTab('games')" data-translate="gamesTab"></button>
+                    <button class="tab-btn" onclick="showTab('videos')" data-translate="videosTab"></button>
+                    <button class="tab-btn" onclick="showTab('images')" data-translate="imagesTab"></button>
+                    <button class="tab-btn" onclick="showTab('creative')" data-translate="creativeTab"></button>
+                </div>
+
+                <!-- 互动游戏 -->
+                <div id="games" class="tab-content active">
+                    <div class="works-grid" id="games-grid"></div>
+                </div>
+
+                <!-- 互动视频 -->
+                <div id="videos" class="tab-content">
+                    <div class="works-grid" id="videos-grid"></div>
+                </div>
+
+                <!-- 互动图片 -->
+                <div id="images" class="tab-content">
+                    <div class="works-grid" id="images-grid"></div>
+                </div>
+
+                <!-- 互动创意 -->
+                <div id="creative" class="tab-content">
+                    <div class="works-grid" id="creative-grid"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+
+    <!-- Modal Container -->
+    <div id="modal-container"></div>
+
+    <script src="main.js"></script>
+    <script src="works.js"></script>
+</body>
+
+</html>
