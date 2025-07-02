@@ -1,82 +1,56 @@
-// 页面状态管理
-let currentPage = 'home';
-
-// 初始化页面
-document.addEventListener('DOMContentLoaded', function () {
-    // showHome();
-    initializeLanguageSelector();
-    initializeAnimations();
-});
-
-// // 显示首页
-// function showHome() {
-//     hideAllSections();
-//     document.getElementById('home').style.display = 'block';
-//     currentPage = 'home';
-//     updateActiveNavigation();
-// }
-
-// // 显示产品展示区域
-// function showProducts() {
-//     hideAllSections();
-//     document.getElementById('products').style.display = 'block';
-//     currentPage = 'products';
-//     updateActiveNavigation();
-
-//     // 如果在移动端，关闭菜单
-//     if (window.innerWidth <= 768) {
-//         const navMenu = document.querySelector('.nav-menu');
-//         if (navMenu.classList.contains('active')) {
-//             navMenu.classList.remove('active');
-//         }
-//     }
-// }
-
-// 标签页切换功能
-function showTab(tabName) {
-    // 隐藏所有标签内容
-    const tabContents = document.querySelectorAll('.tab-content');
-    tabContents.forEach(content => {
-        content.classList.remove('active');
-    });
-
-    // 移除所有标签按钮的活跃状态
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    tabButtons.forEach(btn => {
-        btn.classList.remove('active');
-    });
-
-    // 显示选中的标签内容
-    const selectedTab = document.getElementById(tabName);
-    if (selectedTab) {
-        selectedTab.classList.add('active');
+// 加载组件的函数
+async function loadComponent(elementId, componentPath) {
+    try {
+        const response = await fetch(componentPath);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const content = await response.text();
+        document.getElementById(elementId).innerHTML = content;
+        return true;
+    } catch (error) {
+        console.error('Error loading component:', error);
+        return false;
     }
-
-    // 激活选中的标签按钮
-    const selectedButton = event.target;
-    selectedButton.classList.add('active');
-
-    // 重新应用卡片动画
-    setTimeout(() => {
-        animateWorksCards();
-    }, 100);
 }
 
-// 更新导航栏活跃状态
-function updateActiveNavigation() {
-    const navLinks = document.querySelectorAll('.nav-link');
-    navLinks.forEach(link => {
-        link.classList.remove('active');
-    });
+// 初始化页面
+async function initializePage() {
+    try {
+        // 加载header和footer
+        await Promise.all([
+            loadComponent('header', '/components/header.html'),
+            loadComponent('footer', '/components/footer.html')
+        ]);
+
+        // 组件加载完成后初始化语言选择器并应用当前语言
+        const currentLanguage = localStorage.getItem('language') || 'zh';
+        initializeLanguageSelector();
+        switchLanguage(currentLanguage);
+
+        // 如果在产品页面，初始化标签页
+        // if (window.location.pathname.includes('products.html')) {
+        //     initializeTabs();
+        // }
+        initializeAnimations();
+    } catch (error) {
+        console.error('Error initializing page:', error);
+    }
 }
 
 // 初始化语言选择器
 function initializeLanguageSelector() {
     const languageSelect = document.getElementById('languageSelect');
     if (languageSelect) {
+        // 设置初始语言
+        const currentLanguage = localStorage.getItem('language') || 'zh';
+        languageSelect.value = currentLanguage;
+
+        // 添加语言切换事件监听
         languageSelect.addEventListener('change', function () {
             const selectedLanguage = this.value;
             switchLanguage(selectedLanguage);
+            localStorage.setItem('language', selectedLanguage);
         });
     }
 }
@@ -86,297 +60,307 @@ function getTranslations() {
     return {
         'zh': {
             // 导航栏
-            'works': '作品 (demo)',
-            'products': '产品 (开发中)',
-            'learning': '学习',
+            'products': '产品',
             'login': '登录',
-            'gamesMaker': '互动游戏制作',
-            'videoMaker': '互动视频制作',
-            'imageMaker': '互动图片制作',
-            'creativeMaker': '互动创意推荐',
 
             // Hero区域
-            'heroTitle': '创造无限可能的互动体验',
-            'heroDescription': 'PLAYABLE ALL 是一个全方位的互动内容创作平台，帮助您轻松制作互动游戏、视频、图片和创意内容',
-            'heroGameTitle': '互动游戏',
-            'heroGameDesc': '轻松创建引人入胜的互动游戏体验',
-            'heroVideoTitle': '互动视频',
-            'heroVideoDesc': '制作具有交互元素的动态视频内容',
-            'heroImageTitle': '互动图片',
-            'heroImageDesc': '创建可点击、可交互的图片体验',
-            'heroCreativeTitle': '互动创意',
-            'heroCreativeDesc': '获得AI驱动的创意推荐和灵感',
+            'heroTitle': '让创意自动化，让互动更简单',
+            'heroDescription': 'PLAYABLE ALL 是一个创意自动化平台，帮助您轻松制作互动游戏、视频和图片广告，无需编程知识即可创建优质广告素材',
+            'tryNow': '立即体验',
+            'contactUs': '联系我们',
+            'platformTitle': '支持主流广告平台',
 
-            // 作品页面
-            'worksTitle': '我们的作品',
+            // 核心优势区域
+            'featuresTitle': '让 AI 助力您的创意',
+            'noProgramming': '无需编程',
+            'noProgrammingDesc': '通过直观的界面轻松创建和优化广告',
+            'aiDriven': 'AI 驱动',
+            'aiDrivenDesc': 'AI 自动完成复杂任务，提升工作效率',
+            'multiPlatform': '多平台兼容',
+            'multiPlatformDesc': '支持批量生产并对接主流广告网络',
+            'readyTemplates': '现成模板',
+            'readyTemplatesDesc': '丰富的模板库，快速部署，降低制作成本',
+            'flexibleExtension': '灵活扩展',
+            'flexibleExtensionDesc': '适用于各类机构、DSP和应用开发者',
+            'professionalSupport': '专业支持',
+            'professionalSupportDesc': '创意顾问提供活动支持和诊断服务',
+
+            // 产品展示区域
+            'productsTitle': '主流广告形式，一站式解决',
+            'interactiveGames': '互动游戏广告',
+            'interactiveVideos': '互动视频广告',
+            'interactiveImages': '互动图片广告',
+            'creativeRecommendation': '自动化创意推荐',
+            'learnMore': '了解更多',
+
+            // 产品特性
+            'noCodeCreation': '无代码创建',
+            'templateLibrary': '丰富模板库',
+            'mainChannelDelivery': '主流渠道投放',
+            'commercialMaterialSupport': '商业素材支持',
+            'batchEditingProduction': '批量剪辑制作',
+            'aiVoiceSubtitles': 'AI配音字幕',
+            'multiLanguageTranslation': '多语言翻译',
+            'autoSizeAdjustment': '自动尺寸调整',
+            'aiAutoGeneration': 'AI自动生成',
+
+            // 客户案例区域
+            'casesTitle': '客户成功案例',
+            'improveGameDownloads': '提升游戏下载量',
+            'globalDownloads': '全球下载',
+            'viewCase': '查看案例',
+
+            // 页脚区域
+            'footerDescription': '让创意自动化，让互动更简单。我们致力于为广告主提供最佳的互动广告解决方案。',
+            'productsSection': '产品',
+            'resourcesSection': '资源',
+            'companySection': '公司',
+            'contactSection': '联系我们',
+            'tutorialGuides': '教程指南',
+            'caseStudies': '案例研究',
+            'apiDocs': 'API 文档',
+            'helpCenter': '帮助中心',
+            'aboutUs': '关于我们',
+            'joinUs': '加入我们',
+            'news': '新闻动态',
+            'address': '广东省深圳市南山区科兴科学园D1栋',
+            'privacyPolicy': '隐私政策',
+            'termsOfService': '服务条款',
+            'cookiePolicy': 'Cookie 政策',
+
+            // 产品页面
+            'pageTitle': '产品展示 - PLAYABLE ALL',
+            'worksTitle': '各种有趣吸睛的素材应有尽有',
             'gamesTab': '互动游戏',
             'videosTab': '互动视频',
             'imagesTab': '互动图片',
             'creativeTab': '互动创意',
 
-            // 学习页面
-            'learningTitle': '学习',
-            'tutorialsTitle': '教程指南',
-            'tutorialsDesc': '从基础到高级的完整制作教程',
-            'casesTitle': '案例研究',
-            'casesDesc': '优秀作品案例分析和制作心得',
-            'communityTitle': '社区交流',
-            'communityDesc': '与其他创作者分享经验和灵感',
-            'certificateTitle': '认证课程',
-            'certificateDesc': '获得官方认证的专业课程',
-            'learnMore': '了解更多',
+            // 游戏卡片
+            'multiPlayerRacing': '金铲铲之战-多人竞速游戏',
+            'multiPlayerRacingDesc': '紧张刺激的沉浸式多人竞速体验',
+            'dodgeGhost': '躲避幽灵游戏',
+            'dodgeGhostDesc': '考验智慧的躲避挑战',
+            'flappyBird': '飞鸟小游戏',
+            'flappyBirdDesc': '考验智慧的躲避挑战',
+            'jigsawPuzzle': '拼图游戏',
+            'jigsawPuzzleDesc': '考验智慧的拼图挑战',
+            'jumpEscape': '跳跃逃生游戏',
+            'jumpEscapeDesc': '考验智慧的跳跃挑战',
+            'matchRescue': '匹配救援游戏',
+            'matchRescueDesc': '考验智慧的匹配挑战',
+            'memoryPick': '记忆选择游戏',
+            'memoryPickDesc': '考验智慧的记忆挑战',
+            'whackMole': '打地鼠游戏',
+            'whackMoleDesc': '考验智慧的打地鼠挑战',
 
-            // 互动游戏制作页面
-            'gamesMakerTitle': '互动游戏制作',
-            'gamesMakerDesc': '创建引人入胜的互动游戏体验，无需编程知识。我们的直观界面让您能够快速原型设计、测试和发布您的游戏创意。',
-            'easyToUseTitle': '易于使用的界面',
-            'easyToUseDesc': '拖拽式设计，无需编程经验',
-            'fastIterationTitle': '快速迭代测试',
-            'fastIterationDesc': '实时预览和A/B测试功能',
-            'highPerformanceTitle': '高性能表现',
-            'highPerformanceDesc': '优化的引擎确保流畅体验',
-            'crossPlatformTitle': '跨平台发布',
-            'crossPlatformDesc': '支持所有主要广告网络',
-            'whatCanYouDoTitle': '您能做什么？',
-            'levelEditorTitle': '关卡编辑器',
-            'levelEditorDesc': '设计复杂的游戏关卡',
-            'visualsTitle': '视觉效果',
-            'visualsDesc': '丰富的视觉和动画效果',
-            'cameraTitle': '摄像机控制',
-            'cameraDesc': '灵活的摄像机角度设置',
-            'mockupTitle': '设备模拟',
-            'mockupDesc': '在不同设备上预览效果',
-            'textsTitle': '文本编辑',
-            'textsDesc': '自定义文本和字体样式',
-            'graphicsTitle': '图形编辑',
-            'graphicsDesc': '内置图形编辑工具',
-            'benefitsTitle': '为什么选择我们的互动游戏制作工具？',
-            'noCodingTitle': '无需编程知识',
-            'noCodingDesc': '简单、快速、易于使用的界面',
-            'highEngagementTitle': '高参与度',
-            'highEngagementDesc': '互动游戏广告具有更强的IPM和ROAS表现',
-            'unlimitedVersionsTitle': '无限版本',
-            'unlimitedVersionsDesc': '创建无限数量的游戏版本',
-            'allNetworksTitle': '全网络支持',
-            'allNetworksDesc': '支持在所有主要广告网络发布',
+            // 视频卡片
+            'interactiveVideoVertical': '金铲铲之战-互动视频',
+            'interactiveVideoVerticalDesc': '可试玩游戏的视频体验（竖屏）',
+            'interactiveVideoHorizontal': '金铲铲之战-互动视频',
+            'interactiveVideoHorizontalDesc': '可试玩游戏的视频体验',
 
-            // 互动视频制作页面
-            'videoMakerTitle': '互动视频制作',
-            'videoMakerDesc': '创建具有交互元素的动态视频内容，提供沉浸式观看体验。支持多种交互形式，让观众成为故事的参与者。',
-            'flexibleFormatTitle': '灵活格式',
-            'flexibleFormatDesc': '支持多种视频格式和分辨率',
-            'interactiveElementsTitle': '交互元素',
-            'interactiveElementsDesc': '热点、选择分支、表单等丰富交互',
-            'analyticsTitle': '深度分析',
-            'analyticsDesc': '详细的观看和交互数据分析',
-            'instantDeployTitle': '即时部署',
-            'instantDeployDesc': '一键发布到各大平台',
-            'useCasesTitle': '应用场景',
-            'interactiveMovieTitle': '互动电影',
-            'interactiveMovieDesc': '观众可以选择剧情走向的电影体验',
-            'educationalVideoTitle': '教育视频',
-            'educationalVideoDesc': '互动式学习内容提高参与度',
-            'productShowcaseTitle': '产品展示',
-            'productShowcaseDesc': '360度产品展示和交互演示',
-            'corporateTrainingTitle': '企业培训',
-            'corporateTrainingDesc': '互动式培训视频提升效果',
+            // 图片卡片
+            'interactiveImageTitle': '金铲铲之战-互动图片',
+            'interactiveImageDesc': '可点击探索的互动图片',
 
-            // 互动图片制作页面
-            'imageMakerTitle': '互动图片制作',
-            'imageMakerDesc': '将静态图片转化为引人入胜的互动体验。通过热点、动画和交互元素，让每张图片都能讲述独特的故事。',
-            'smartHotspotsTitle': '智能热点',
-            'smartHotspotsDesc': '自动识别图片重要区域',
-            'animationEffectsTitle': '动画效果',
-            'animationEffectsDesc': '丰富的过渡和动画效果',
-            'responsiveDesignTitle': '响应式设计',
-            'responsiveDesignDesc': '自适应各种屏幕尺寸',
-            'advancedEditingTitle': '高级编辑',
-            'advancedEditingDesc': '专业级图片编辑工具',
-            'interactiveFeaturesTitle': '交互功能',
-            'clickableHotspotsTitle': '可点击热点',
-            'clickableHotspotsDesc': '在图片任意位置添加可点击区域，触发弹窗、链接或其他交互',
-            'zoomPanTitle': '缩放平移',
-            'zoomPanDesc': '支持图片缩放和平移，让用户探索图片的每个细节',
-            'smartTagsTitle': '智能标签',
-            'smartTagsDesc': 'AI驱动的内容标签，自动识别和标注图片内容',
-            'heatmapAnalyticsTitle': '热力图分析',
-            'heatmapAnalyticsDesc': '查看用户在图片上的点击热力图，优化交互设计',
-            'applicationsTitle': '应用领域',
-            'ecommerceTitle': '电商展示',
-            'ecommerceDesc': '产品详情互动展示',
-            'realEstateTitle': '房地产',
-            'realEstateDesc': '虚拟看房体验',
-            'educationTitle': '教育培训',
-            'educationDesc': '互动式教学内容',
-            'artGalleryTitle': '艺术展览',
-            'artGalleryDesc': '在线艺术品展示',
-            'manufacturingTitle': '制造业',
-            'manufacturingDesc': '设备操作指南',
-            'eventsTitle': '活动展示',
-            'eventsDesc': '活动现场互动',
+            // Footer translations
+            footerAboutTitle: "关于我们",
+            footerAboutDesc: "PLAYABLE ALL 是一个创意自动化平台，帮助您轻松制作互动游戏、视频和图片广告，无需编程知识即可创建优质广告素材",
+            footerProductsTitle: "产品服务",
+            footerInteractiveGames: "互动游戏广告",
+            footerInteractiveVideos: "互动视频广告",
+            footerInteractiveImages: "互动图片广告",
+            footerCreativeRecommendation: "自动化创意推荐",
+            footerContactTitle: "联系我们",
+            footerAddress: "地址：深圳市南山区科技园科兴科学园",
+            footerEmail: "邮箱：contact@playableall.com",
+            footerPhone: "电话：+86 755-86969696",
+            footerCopyright: "© 2025 PLAYABLE ALL. 保留所有权利",
 
-            // 通用按钮
-            'requestDemo': '申请演示',
-            'tryNow': '立即体验',
+            // Products page translations
+            productsPageTitle: "产品展示 - PLAYABLE ALL",
+            worksTitle: "各种有趣吸睛的素材应有尽有",
+            gamesTab: "互动游戏",
+            videosTab: "互动视频",
+            imagesTab: "互动图片",
+            creativeTab: "互动创意",
 
-            // 开发中页面
-            'comingSoonTitle': '功能开发中...',
-            'comingSoonDesc': '我们正在努力开发这个功能，敬请期待！',
-            'comingSoonNotify': '想第一时间了解产品上线信息？',
-            'feature1': '直观易用的设计界面',
-            'feature2': '强大的互动功能',
-            'feature3': '跨平台兼容性',
-            'feature4': '即将推出更多功能',
-            'emailPlaceholder': '输入您的邮箱地址',
-            'notifyMe': '通知我',
-            'backHome': '返回首页'
+            // Game cards
+            multiPlayerRacing: "金铲铲之战-多人竞速游戏",
+            multiPlayerRacingDesc: "紧张刺激的沉浸式多人竞速体验",
+            dodgeGhost: "躲避幽灵游戏",
+            dodgeGhostDesc: "考验智慧的躲避挑战",
+            flappyBird: "飞鸟小游戏",
+            flappyBirdDesc: "考验智慧的躲避挑战",
+            jigsawPuzzle: "拼图游戏",
+            jigsawPuzzleDesc: "考验智慧的拼图挑战",
+            jumpEscape: "跳跃逃生游戏",
+            jumpEscapeDesc: "考验智慧的跳跃挑战",
+            matchRescue: "匹配救援游戏",
+            matchRescueDesc: "考验智慧的匹配挑战",
+            memoryPick: "记忆选择游戏",
+            memoryPickDesc: "考验智慧的记忆挑战",
+            whackMole: "打地鼠游戏",
+            whackMoleDesc: "考验智慧的打地鼠挑战",
+
+            // Video cards
+            interactiveVideoVertical: "金铲铲之战-互动视频",
+            interactiveVideoVerticalDesc: "可试玩游戏的视频体验（竖屏）",
+            interactiveVideoHorizontal: "金铲铲之战-互动视频",
+            interactiveVideoHorizontalDesc: "可试玩游戏的视频体验"
         },
         'en': {
             // Navigation
-            'works': 'Works (demo)',
-            'products': 'Products (Coming Soon)',
-            'learning': 'Learning',
+            'products': 'Products',
             'login': 'Login',
-            'gamesMaker': 'Interactive Game Creator',
-            'videoMaker': 'Interactive Video Creator',
-            'imageMaker': 'Interactive Image Creator',
-            'creativeMaker': 'Creative AI Assistant',
 
             // Hero Section
-            'heroTitle': 'Create Infinite Interactive Experiences',
-            'heroDescription': 'PLAYABLE ALL is a comprehensive interactive content creation platform that helps you easily create interactive games, videos, images and creative content',
-            'heroGameTitle': 'Interactive Games',
-            'heroGameDesc': 'Easily create engaging interactive gaming experiences',
-            'heroVideoTitle': 'Interactive Videos',
-            'heroVideoDesc': 'Produce dynamic video content with interactive elements',
-            'heroImageTitle': 'Interactive Images',
-            'heroImageDesc': 'Create clickable, interactive image experiences',
-            'heroCreativeTitle': 'Interactive Creative',
-            'heroCreativeDesc': 'Get AI-driven creative recommendations and inspiration',
+            'heroTitle': 'Automate Creativity, Simplify Interaction',
+            'heroDescription': 'PLAYABLE ALL is a creative automation platform that helps you easily create interactive games, videos, and image ads without programming knowledge',
+            'tryNow': 'Try Now',
+            'contactUs': 'Contact Us',
+            'platformTitle': 'Supporting Major Ad Platforms',
 
-            // Works Page
-            'worksTitle': 'Our Works',
+            // Core Features Section
+            'featuresTitle': 'Let AI Power Your Creativity',
+            'noProgramming': 'No Programming',
+            'noProgrammingDesc': 'Create and optimize ads through an intuitive interface',
+            'aiDriven': 'AI-Driven',
+            'aiDrivenDesc': 'AI automatically completes complex tasks, improving efficiency',
+            'multiPlatform': 'Multi-Platform Compatible',
+            'multiPlatformDesc': 'Support batch production and integration with major ad networks',
+            'readyTemplates': 'Ready Templates',
+            'readyTemplatesDesc': 'Rich template library, quick deployment, reduced production costs',
+            'flexibleExtension': 'Flexible Extension',
+            'flexibleExtensionDesc': 'Suitable for various institutions, DSPs, and app developers',
+            'professionalSupport': 'Professional Support',
+            'professionalSupportDesc': 'Creative consultants provide campaign support and diagnostic services',
+
+            // Products Section
+            'productsTitle': 'One-Stop Solution for Mainstream Ad Formats',
+            'interactiveGames': 'Interactive Game Ads',
+            'interactiveVideos': 'Interactive Video Ads',
+            'interactiveImages': 'Interactive Image Ads',
+            'creativeRecommendation': 'Automated Creative Recommendations',
+            'learnMore': 'Learn More',
+
+            // Product Features
+            'noCodeCreation': 'No-Code Creation',
+            'templateLibrary': 'Rich Template Library',
+            'mainChannelDelivery': 'Major Channel Distribution',
+            'commercialMaterialSupport': 'Commercial Material Support',
+            'batchEditingProduction': 'Batch Editing & Production',
+            'aiVoiceSubtitles': 'AI Voice & Subtitles',
+            'multiLanguageTranslation': 'Multi-Language Translation',
+            'autoSizeAdjustment': 'Auto Size Adjustment',
+            'aiAutoGeneration': 'AI Auto Generation',
+
+            // Case Studies Section
+            'casesTitle': 'Customer Success Stories',
+            'improveGameDownloads': 'Improve Game Downloads',
+            'globalDownloads': 'Global Downloads',
+            'viewCase': 'View Case Study',
+
+            // Footer Section
+            'footerDescription': 'Automate creativity, simplify interaction. We are committed to providing advertisers with the best interactive advertising solutions.',
+            'productsSection': 'Products',
+            'resourcesSection': 'Resources',
+            'companySection': 'Company',
+            'contactSection': 'Contact Us',
+            'tutorialGuides': 'Tutorial Guides',
+            'caseStudies': 'Case Studies',
+            'apiDocs': 'API Documentation',
+            'helpCenter': 'Help Center',
+            'aboutUs': 'About Us',
+            'joinUs': 'Join Us',
+            'news': 'News',
+            'address': 'Building D1, Keyuan Science Park, Nanshan District, Shenzhen, Guangdong',
+            'privacyPolicy': 'Privacy Policy',
+            'termsOfService': 'Terms of Service',
+            'cookiePolicy': 'Cookie Policy',
+
+            // Products Page
+            'pageTitle': 'Products - PLAYABLE ALL',
+            'worksTitle': 'Explore Our Engaging Interactive Materials',
             'gamesTab': 'Interactive Games',
             'videosTab': 'Interactive Videos',
             'imagesTab': 'Interactive Images',
             'creativeTab': 'Interactive Creative',
 
-            // Learning Page
-            'learningTitle': 'Learning',
-            'tutorialsTitle': 'Tutorial Guides',
-            'tutorialsDesc': 'Complete tutorials from basic to advanced levels',
-            'casesTitle': 'Case Studies',
-            'casesDesc': 'Analysis of excellent works and creation insights',
-            'communityTitle': 'Community Exchange',
-            'communityDesc': 'Share experiences and inspiration with other creators',
-            'certificateTitle': 'Certification Courses',
-            'certificateDesc': 'Get officially certified professional courses',
-            'learnMore': 'Learn More',
+            // Game Cards
+            'multiPlayerRacing': 'TFT - Multiplayer Racing Game',
+            'multiPlayerRacingDesc': 'Immersive multiplayer racing experience',
+            'dodgeGhost': 'Ghost Dodge Game',
+            'dodgeGhostDesc': 'A challenging dodge adventure',
+            'flappyBird': 'Flappy Bird Game',
+            'flappyBirdDesc': 'Test your reflexes in this classic challenge',
+            'jigsawPuzzle': 'Jigsaw Puzzle Game',
+            'jigsawPuzzleDesc': 'Exercise your mind with puzzles',
+            'jumpEscape': 'Jump Escape Game',
+            'jumpEscapeDesc': 'Exciting jumping challenge',
+            'matchRescue': 'Match Rescue Game',
+            'matchRescueDesc': 'Strategic matching challenge',
+            'memoryPick': 'Memory Pick Game',
+            'memoryPickDesc': 'Test your memory skills',
+            'whackMole': 'Whack-a-Mole Game',
+            'whackMoleDesc': 'Classic arcade challenge',
 
-            // Interactive Game Creator Page
-            'gamesMakerTitle': 'Interactive Game Creator',
-            'gamesMakerDesc': 'Create engaging interactive gaming experiences without programming knowledge. Our intuitive interface allows you to quickly prototype, test, and publish your game ideas.',
-            'easyToUseTitle': 'Easy-to-Use Interface',
-            'easyToUseDesc': 'Drag-and-drop design, no programming experience required',
-            'fastIterationTitle': 'Fast Iteration Testing',
-            'fastIterationDesc': 'Real-time preview and A/B testing features',
-            'highPerformanceTitle': 'High Performance',
-            'highPerformanceDesc': 'Optimized engine ensures smooth experience',
-            'crossPlatformTitle': 'Cross-Platform Publishing',
-            'crossPlatformDesc': 'Support for all major advertising networks',
-            'whatCanYouDoTitle': 'What Can You Do?',
-            'levelEditorTitle': 'Level Editor',
-            'levelEditorDesc': 'Design complex game levels',
-            'visualsTitle': 'Visual Effects',
-            'visualsDesc': 'Rich visual and animation effects',
-            'cameraTitle': 'Camera Control',
-            'cameraDesc': 'Flexible camera angle settings',
-            'mockupTitle': 'Device Mockup',
-            'mockupDesc': 'Preview effects on different devices',
-            'textsTitle': 'Text Editing',
-            'textsDesc': 'Custom text and font styles',
-            'graphicsTitle': 'Graphics Editing',
-            'graphicsDesc': 'Built-in graphics editing tools',
-            'benefitsTitle': 'Why Choose Our Interactive Game Creation Tool?',
-            'noCodingTitle': 'No Programming Knowledge Required',
-            'noCodingDesc': 'Simple, fast, easy-to-use interface',
-            'highEngagementTitle': 'High Engagement',
-            'highEngagementDesc': 'Interactive game ads have stronger IPM and ROAS performance',
-            'unlimitedVersionsTitle': 'Unlimited Versions',
-            'unlimitedVersionsDesc': 'Create unlimited number of game versions',
-            'allNetworksTitle': 'All Networks Support',
-            'allNetworksDesc': 'Support publishing on all major advertising networks',
+            // Video Cards
+            'interactiveVideoVertical': 'TFT - Interactive Video',
+            'interactiveVideoVerticalDesc': 'Playable game experience (vertical)',
+            'interactiveVideoHorizontal': 'TFT - Interactive Video',
+            'interactiveVideoHorizontalDesc': 'Playable game experience',
 
-            // Interactive Video Creator Page
-            'videoMakerTitle': 'Interactive Video Creator',
-            'videoMakerDesc': 'Create dynamic video content with interactive elements, providing immersive viewing experiences. Support multiple forms of interaction, making viewers participants in the story.',
-            'flexibleFormatTitle': 'Flexible Formats',
-            'flexibleFormatDesc': 'Support for multiple video formats and resolutions',
-            'interactiveElementsTitle': 'Interactive Elements',
-            'interactiveElementsDesc': 'Rich interactions including hotspots, branching choices, forms',
-            'analyticsTitle': 'Deep Analytics',
-            'analyticsDesc': 'Detailed viewing and interaction data analysis',
-            'instantDeployTitle': 'Instant Deployment',
-            'instantDeployDesc': 'One-click publishing to major platforms',
-            'useCasesTitle': 'Use Cases',
-            'interactiveMovieTitle': 'Interactive Movies',
-            'interactiveMovieDesc': 'Movie experiences where viewers can choose plot directions',
-            'educationalVideoTitle': 'Educational Videos',
-            'educationalVideoDesc': 'Interactive learning content to improve engagement',
-            'productShowcaseTitle': 'Product Showcase',
-            'productShowcaseDesc': '360-degree product display and interactive demonstrations',
-            'corporateTrainingTitle': 'Corporate Training',
-            'corporateTrainingDesc': 'Interactive training videos enhance effectiveness',
+            // Image Cards
+            'interactiveImageTitle': 'TFT - Interactive Image',
+            'interactiveImageDesc': 'Clickable and explorable interactive image',
 
-            // Interactive Image Creator Page
-            'imageMakerTitle': 'Interactive Image Creator',
-            'imageMakerDesc': 'Transform static images into captivating interactive experiences. Through hotspots, animations, and interactive elements, let every image tell a unique story.',
-            'smartHotspotsTitle': 'Smart Hotspots',
-            'smartHotspotsDesc': 'Automatically identify important areas in images',
-            'animationEffectsTitle': 'Animation Effects',
-            'animationEffectsDesc': 'Rich transition and animation effects',
-            'responsiveDesignTitle': 'Responsive Design',
-            'responsiveDesignDesc': 'Adaptive to various screen sizes',
-            'advancedEditingTitle': 'Advanced Editing',
-            'advancedEditingDesc': 'Professional-grade image editing tools',
-            'interactiveFeaturesTitle': 'Interactive Features',
-            'clickableHotspotsTitle': 'Clickable Hotspots',
-            'clickableHotspotsDesc': 'Add clickable areas anywhere on images, triggering popups, links, or other interactions',
-            'zoomPanTitle': 'Zoom & Pan',
-            'zoomPanDesc': 'Support image zooming and panning for users to explore every detail',
-            'smartTagsTitle': 'Smart Tags',
-            'smartTagsDesc': 'AI-driven content tags, automatically recognize and annotate image content',
-            'heatmapAnalyticsTitle': 'Heatmap Analytics',
-            'heatmapAnalyticsDesc': 'View user click heatmaps on images to optimize interactive design',
-            'applicationsTitle': 'Applications',
-            'ecommerceTitle': 'E-commerce',
-            'ecommerceDesc': 'Interactive product detail display',
-            'realEstateTitle': 'Real Estate',
-            'realEstateDesc': 'Virtual property viewing experiences',
-            'educationTitle': 'Education & Training',
-            'educationDesc': 'Interactive teaching content',
-            'artGalleryTitle': 'Art Gallery',
-            'artGalleryDesc': 'Online artwork exhibitions',
-            'manufacturingTitle': 'Manufacturing',
-            'manufacturingDesc': 'Equipment operation guides',
-            'eventsTitle': 'Events',
-            'eventsDesc': 'Live event interactions',
+            // Footer translations
+            footerAboutTitle: "About Us",
+            footerAboutDesc: "PLAYABLE ALL is a creative automation platform that helps you easily create interactive games, videos, and image ads without programming knowledge",
+            footerProductsTitle: "Products & Services",
+            footerInteractiveGames: "Interactive Game Ads",
+            footerInteractiveVideos: "Interactive Video Ads",
+            footerInteractiveImages: "Interactive Image Ads",
+            footerCreativeRecommendation: "Creative Automation",
+            footerContactTitle: "Contact Us",
+            footerAddress: "Address: Science Park, Nanshan District, Shenzhen",
+            footerEmail: "Email: contact@playableall.com",
+            footerPhone: "Phone: +86 755-86969696",
+            footerCopyright: "© 2025 PLAYABLE ALL. All rights reserved",
 
-            // Common Buttons
-            'requestDemo': 'Request Demo',
-            'tryNow': 'Try Now',
+            // Products page translations
+            productsPageTitle: "Products - PLAYABLE ALL",
+            worksTitle: "Explore Our Engaging Interactive Materials",
+            gamesTab: "Interactive Games",
+            videosTab: "Interactive Videos",
+            imagesTab: "Interactive Images",
+            creativeTab: "Interactive Creative",
 
-            // Coming Soon Page
-            'comingSoonTitle': 'Feature Coming Soon...',
-            'comingSoonDesc': 'We are working hard to develop this feature, stay tuned!',
-            'comingSoonNotify': 'Want to be the first to know when the product launches?',
-            'feature1': 'Intuitive and easy-to-use design interface',
-            'feature2': 'Powerful interactive features',
-            'feature3': 'Cross-platform compatibility',
-            'feature4': 'More features coming soon',
-            'emailPlaceholder': 'Enter your email address',
-            'notifyMe': 'Notify Me',
-            'backHome': 'Back Home'
+            // Game cards
+            multiPlayerRacing: "TFT - Multiplayer Racing Game",
+            multiPlayerRacingDesc: "Immersive multiplayer racing experience",
+            dodgeGhost: "Ghost Dodge Game",
+            dodgeGhostDesc: "A challenging dodge adventure",
+            flappyBird: "Flappy Bird Game",
+            flappyBirdDesc: "Test your reflexes in this classic challenge",
+            jigsawPuzzle: "Jigsaw Puzzle Game",
+            jigsawPuzzleDesc: "Exercise your mind with puzzles",
+            jumpEscape: "Jump Escape Game",
+            jumpEscapeDesc: "Exciting jumping challenge",
+            matchRescue: "Match Rescue Game",
+            matchRescueDesc: "Strategic matching challenge",
+            memoryPick: "Memory Pick Game",
+            memoryPickDesc: "Test your memory skills",
+            whackMole: "Whack-a-Mole Game",
+            whackMoleDesc: "Classic arcade challenge",
+
+            // Video cards
+            interactiveVideoVertical: "TFT - Interactive Video",
+            interactiveVideoVerticalDesc: "Playable game experience (vertical)",
+            interactiveVideoHorizontal: "TFT - Interactive Video",
+            interactiveVideoHorizontalDesc: "Playable game experience"
         }
     };
 }
@@ -393,11 +377,16 @@ function switchLanguage(language) {
             if (translations[language][key]) {
                 if (element.tagName === 'INPUT' && element.type === 'email') {
                     element.placeholder = translations[language][key];
-                } else if (element.innerHTML.includes('<i class="fas fa-chevron-down"></i>')) {
-                    // 特殊处理带有图标的导航项
-                    element.innerHTML = translations[language][key] + ' <i class="fas fa-chevron-down"></i>';
-                } else {
+                } else if (element.tagName === 'TITLE') {
                     element.textContent = translations[language][key];
+                    document.title = translations[language][key];
+                } else {
+                    // 检查是否包含特殊图标
+                    if (element.innerHTML.includes('<i class="fas fa-chevron-down"></i>')) {
+                        element.innerHTML = translations[language][key] + ' <i class="fas fa-chevron-down"></i>';
+                    } else {
+                        element.textContent = translations[language][key];
+                    }
                 }
             }
         });
@@ -410,16 +399,11 @@ function switchLanguage(language) {
                 element.placeholder = translations[language][key];
             }
         });
-
-        // 更新 HTML lang 属性
-        document.documentElement.lang = language === 'zh' ? 'zh-CN' : 'en';
-
-        // 更新页面标题
-        if (language === 'zh') {
-            document.title = 'PLAYABLE ALL - 互动内容创作平台';
-        } else {
-            document.title = 'PLAYABLE ALL - Interactive Content Creation Platform';
-        }
+        document.dispatchEvent(new CustomEvent('myCustomLanguageChangedEvent', {
+            detail: {
+                language: language
+            }
+        }));
     }
 }
 
@@ -440,108 +424,11 @@ function initializeAnimations() {
     }, observerOptions);
 
     // 观察所有需要动画的元素
-    const animatedElements = document.querySelectorAll('.feature-card, .work-card, .learning-card');
+    const animatedElements = document.querySelectorAll('.work-card');
     animatedElements.forEach(el => {
         observer.observe(el);
     });
 }
-
-// 作品卡片动画
-function animateWorksCards() {
-    const workCards = document.querySelectorAll('.work-card');
-    workCards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-}
-
-// 学习卡片动画
-function animateLearningCards() {
-    const learningCards = document.querySelectorAll('.learning-card');
-    learningCards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 150);
-    });
-}
-
-// 产品页面卡片动画
-function animateProductCards() {
-    const productCards = document.querySelectorAll('.feature-item, .case-item, .feature-showcase-item, .application-item');
-    productCards.forEach((card, index) => {
-        card.style.opacity = '0';
-        card.style.transform = 'translateY(20px)';
-
-        setTimeout(() => {
-            card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-            card.style.opacity = '1';
-            card.style.transform = 'translateY(0)';
-        }, index * 100);
-    });
-}
-
-// 平滑滚动到顶部
-function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
-
-// 通知功能（开发中页面）
-function notifyWhenReady() {
-    const email = prompt('请输入您的邮箱地址，我们会在功能上线时通知您：');
-    if (email && validateEmail(email)) {
-        alert('感谢您的关注！我们会在功能上线时第一时间通知您。');
-        // 这里可以添加实际的邮箱收集逻辑
-    } else if (email) {
-        alert('请输入有效的邮箱地址。');
-    }
-}
-
-// 邮箱验证
-function validateEmail(email) {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-}
-
-// 添加键盘快捷键支持
-document.addEventListener('keydown', function (e) {
-    // ESC键返回首页
-    if (e.key === 'Escape') {
-        showHome();
-    }
-
-    // 数字键快速切换
-    if (e.key >= '1' && e.key <= '4' && currentPage === 'works') {
-        const tabs = ['games', 'videos', 'images', 'creative'];
-        const tabIndex = parseInt(e.key) - 1;
-        if (tabs[tabIndex]) {
-            // 模拟点击对应的标签按钮
-            const tabButtons = document.querySelectorAll('.tab-btn');
-            if (tabButtons[tabIndex]) {
-                tabButtons[tabIndex].click();
-            }
-        }
-    }
-});
-
-// 添加鼠标右键菜单禁用（可选）
-document.addEventListener('contextmenu', function (e) {
-    // 在生产环境中可以取消注释以下行
-    // e.preventDefault();
-});
 
 // 添加触摸设备支持
 let touchStartX = 0;
@@ -589,19 +476,6 @@ window.addEventListener('load', function () {
         document.body.style.opacity = '1';
     }, 100);
 });
-
-// 工具函数：防抖
-function debounce(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
 
 // 工具函数：节流
 function throttle(func, limit) {
@@ -654,78 +528,13 @@ window.addEventListener('resize', () => {
     }
 });
 
-    // 立即体验按钮跳转到产品页面
-    document.querySelectorAll('[data-translate="tryNow"]')
-        .forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                window.location.href = 'products.html';
-            });
+// 立即体验按钮跳转到产品页面
+document.querySelectorAll('[data-translate="tryNow"]')
+    .forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            window.location.href = 'products.html';
         });
-        
-// /**
-//  * 带参数导航到指定页面
-//  * @param {string} url - 目标页面URL
-//  * @param {Object} params - URL参数对象
-//  */
-// function navigateWithParams(url, params) {
-//     // 创建URL对象
-//     const targetUrl = new URL(url, window.location.origin);
+    });
 
-//     // 添加参数到URL
-//     Object.keys(params).forEach(key => {
-//         targetUrl.searchParams.append(key, params[key]);
-//     });
-
-//     // 导航到目标页面
-//     window.location.href = targetUrl.toString();
-// }
-
-// // 在页面加载时获取URL参数的辅助函数
-// function getUrlParams() {
-//     const params = {};
-//     const searchParams = new URLSearchParams(window.location.search);
-//     for (const [key, value] of searchParams) {
-//         params[key] = value;
-//     }
-//     return params;
-// }
-
-// // 页面加载时处理URL参数
-// document.addEventListener('DOMContentLoaded', () => {
-//     const params = getUrlParams();
-//     // 可以根据参数执行相应的操作
-//     if (params.source === 'demo') {
-//         console.log('从示例页面跳转而来');
-//     }
-//     if (params.category) {
-//         console.log('类别:', params.category);
-//     }
-// });
-
-// // 为所有带有导航数据的卡片添加点击事件监听器
-// document.addEventListener('DOMContentLoaded', () => {
-//     // 获取所有带有导航数据的卡片
-//     const cards = document.querySelectorAll('.work-card[data-navigate-url]');
-
-//     // 为每个卡片添加点击事件监听器
-//     cards.forEach(card => {
-//         card.addEventListener('click', () => {
-//             const url = card.getAttribute('data-navigate-url');
-//             const paramsStr = card.getAttribute('data-navigate-params');
-
-//             if (url) {
-//                 try {
-//                     // 尝试解析参数
-//                     const params = paramsStr ? JSON.parse(paramsStr) : {};
-//                     // 调用导航函数
-//                     navigateWithParams(url, params);
-//                 } catch (error) {
-//                     console.error('Error parsing navigation params:', error);
-//                 }
-//             }
-//         });
-
-//         // 添加鼠标悬停效果的类
-//         card.classList.add('clickable');
-//     });
-// }); 
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', initializePage);

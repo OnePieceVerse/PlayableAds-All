@@ -1,0 +1,162 @@
+{
+    "games": [
+        {
+            "id": "multiPlayerRacing",
+            "url": "http://43.138.143.6:8080/playable_game/MultiPlayerRacing",
+            "image": "",
+            "title": {
+                "zh": "金铲铲之战-多人竞速游戏",
+                "en": "TFT - Multiplayer Racing Game"
+            },
+            "description": {
+                "zh": "紧张刺激的沉浸式多人竞速体验",
+                "en": "Immersive multiplayer racing experience"
+            }
+        },
+        {
+            "id": "dodgeGhost",
+            "url": "http://43.138.143.6:8080/playable_game/DodgeGhost",
+            "image": "",
+            "title": {
+                "zh": "躲避幽灵游戏",
+                "en": "Ghost Dodge Game"
+            },
+            "description": {
+                "zh": "考验智慧的躲避挑战",
+                "en": "A challenging dodge adventure"
+            }
+        },
+        {
+            "id": "flappyBird",
+            "url": "http://43.138.143.6:8080/playable_game/FlappyBird",
+            "image": "",
+            "title": {
+                "zh": "飞鸟小游戏",
+                "en": "Flappy Bird Game"
+            },
+            "description": {
+                "zh": "考验智慧的躲避挑战",
+                "en": "Test your reflexes in this classic challenge"
+            }
+        },
+        {
+            "id": "jigsawPuzzle",
+            "url": "http://43.138.143.6:8080/playable_game/JigsawPuzzle",
+            "image": "",
+            "title": {
+                "zh": "拼图游戏",
+                "en": "Jigsaw Puzzle Game"
+            },
+            "description": {
+                "zh": "考验智慧的拼图挑战",
+                "en": "Exercise your mind with puzzles"
+            }
+        },
+        {
+            "id": "jumpEscape",
+            "url": "http://43.138.143.6:8080/playable_game/JumpEscape",
+            "image": "",
+            "title": {
+                "zh": "跳跃逃生游戏",
+                "en": "Jump Escape Game"
+            },
+            "description": {
+                "zh": "考验智慧的跳跃挑战",
+                "en": "Exciting jumping challenge"
+            }
+        },
+        {
+            "id": "matchRescue",
+            "url": "http://43.138.143.6:8080/playable_game/MatchRescue",
+            "image": "",
+            "title": {
+                "zh": "匹配救援游戏",
+                "en": "Match Rescue Game"
+            },
+            "description": {
+                "zh": "考验智慧的匹配挑战",
+                "en": "Strategic matching challenge"
+            }
+        },
+        {
+            "id": "memoryPick",
+            "url": "http://43.138.143.6:8080/playable_game/MemoryPick",
+            "image": "",
+            "title": {
+                "zh": "记忆选择游戏",
+                "en": "Memory Pick Game"
+            },
+            "description": {
+                "zh": "考验智慧的记忆挑战",
+                "en": "Test your memory skills"
+            }
+        },
+        {
+            "id": "whackMole",
+            "url": "http://43.138.143.6:8080/playable_game/WhackMole",
+            "image": "",
+            "title": {
+                "zh": "打地鼠游戏",
+                "en": "Whack-a-Mole Game"
+            },
+            "description": {
+                "zh": "考验智慧的打地鼠挑战",
+                "en": "Classic arcade challenge"
+            }
+        }
+    ],
+    "videos": [
+        {
+            "id": "interactiveVideoVertical",
+            "url": "http://43.138.143.6:8080/playable_video/",
+            "params": {
+                "config": "config_升级_v2.json"
+            },
+            "image": "",
+            "title": {
+                "zh": "金铲铲之战-互动视频",
+                "en": "TFT - Interactive Video"
+            },
+            "description": {
+                "zh": "可试玩游戏的视频体验（竖屏）",
+                "en": "Playable game experience (vertical)"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "http://43.138.143.6:8080/playable_video/",
+            "params": {
+                "config": "config_升级_v3.json"
+            },
+            "image": "",
+            "title": {
+                "zh": "金铲铲之战-互动视频",
+                "en": "TFT - Interactive Video"
+            },
+            "description": {
+                "zh": "可试玩游戏的视频体验",
+                "en": "Playable game experience"
+            }
+        }
+    ],
+    "images": [
+        {
+            "id": "interactiveImageTitle",
+            "url": "http://43.138.143.6:8080/playable_image/",
+            "params": {
+                "type": "hotspot",
+                "id": "1"
+            },
+            "image": "",
+            "title": {
+                "zh": "金铲铲之战-互动图片",
+                "en": "TFT - Interactive Image"
+            },
+            "description": {
+                "zh": "可点击探索的互动图片",
+                "en": "Clickable and explorable interactive image"
+            }
+        }
+    ],
+    "creative": []
+} 
