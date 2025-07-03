@@ -119,6 +119,7 @@ async function initializePage() {
         const currentLanguage = getCurrentLanguage();
         await switchLanguage(currentLanguage);
         initializeAnimations();
+        initializeMobileDropdown();
     } catch (error) {
         console.error('Error initializing page:', error);
     }
@@ -232,15 +233,17 @@ function toggleMobileMenu() {
 }
 
 // 移动端下拉菜单切换
-document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
-    const link = dropdown.querySelector('.nav-link');
-    link.addEventListener('click', (e) => {
-        if (window.innerWidth <= 768) {
-            e.preventDefault();
-            dropdown.classList.toggle('active');
-        }
+function initializeMobileDropdown() {
+    document.querySelectorAll('.nav-dropdown').forEach(dropdown => {
+        const link = dropdown.querySelector('.nav-link');
+        link.addEventListener('click', (e) => {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                dropdown.classList.toggle('active');
+            }
+        });
     });
-});
+}
 
 // 点击页面其他地方关闭移动端菜单
 document.addEventListener('click', (e) => {

@@ -83,6 +83,7 @@ body {
     gap: 2rem;
     align-items: center;
     justify-content: center;
+    padding-right: 100px;
 }
 
 .nav-link {
@@ -939,6 +940,11 @@ body {
     height: 200px;
     background: linear-gradient(135deg, #fef3e2, #fed7aa);
     position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .work-image::after {
@@ -949,6 +955,10 @@ body {
     transform: translate(-50%, -50%);
     font-size: 3rem;
     opacity: 0.6;
+}
+
+.work-image[style*='background-image']::after {
+    content: '';
 }
 
 .work-card h3 {
@@ -1101,31 +1111,44 @@ body {
         width: 100%;
     }
 
-    .dropdown-content {
+    .nav-actions {
+        display: none;
+    }
+    .nav-menu.active .nav-actions {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        margin-top: 1rem;
+        margin-bottom: 1em;
+        align-items: center;
+        width: 100%;
+        justify-content: center;
+    }
+    .nav-menu.active .nav-actions .language-selector,
+    .nav-menu.active .nav-actions .login-btn {
+        width: auto;
+    }
+    .nav-dropdown .dropdown-content {
+        display: none;
         position: static;
         box-shadow: none;
-        border-radius: 0;
+        border: none;
+        padding: 0;
+        width: 100%;
         opacity: 1;
         visibility: visible;
-        transform: none;
-        display: none;
-        width: 100%;
-        background: #f8fafc;
+        max-height: none;
+        transition: none;
     }
-
     .nav-dropdown.active .dropdown-content {
         display: block;
+        margin-bottom: 0.5rem;
     }
-
-    .nav-actions {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 1rem;
-        padding: 1rem;
-        background: #f8fafc;
+    .dropdown-content a {
         width: 100%;
-        border-top: 1px solid #edf2f7;
+        box-sizing: border-box;
+        padding: 0.75rem 1.5rem;
+        display: block;
     }
 
     .language-selector select {

@@ -3,7 +3,7 @@
         {
             "id": "multiPlayerRacing",
             "url": "http://43.138.143.6:8080/playable_game/MultiPlayerRacing",
-            "image": "",
+            "image": "assets/works/games/MultiPlayerRacing.png",
             "title": {
                 "zh": "金铲铲之战-多人竞速游戏",
                 "en": "TFT - Multiplayer Racing Game"
@@ -16,7 +16,7 @@
         {
             "id": "dodgeGhost",
             "url": "http://43.138.143.6:8080/playable_game/DodgeGhost",
-            "image": "",
+            "image": "assets/works/games/DodgeGhost.png",
             "title": {
                 "zh": "躲避幽灵游戏",
                 "en": "Ghost Dodge Game"
@@ -29,7 +29,7 @@
         {
             "id": "flappyBird",
             "url": "http://43.138.143.6:8080/playable_game/FlappyBird",
-            "image": "",
+            "image": "assets/works/games/FlappyBird.png",
             "title": {
                 "zh": "飞鸟小游戏",
                 "en": "Flappy Bird Game"
@@ -42,7 +42,7 @@
         {
             "id": "jigsawPuzzle",
             "url": "http://43.138.143.6:8080/playable_game/JigsawPuzzle",
-            "image": "",
+            "image": "assets/works/games/JigsawPuzzle.png",
             "title": {
                 "zh": "拼图游戏",
                 "en": "Jigsaw Puzzle Game"
@@ -55,7 +55,7 @@
         {
             "id": "jumpEscape",
             "url": "http://43.138.143.6:8080/playable_game/JumpEscape",
-            "image": "",
+            "image": "assets/works/games/JumpEscape.png",
             "title": {
                 "zh": "跳跃逃生游戏",
                 "en": "Jump Escape Game"
@@ -68,7 +68,7 @@
         {
             "id": "matchRescue",
             "url": "http://43.138.143.6:8080/playable_game/MatchRescue",
-            "image": "",
+            "image": "assets/works/games/MatchRescue.png",
             "title": {
                 "zh": "匹配救援游戏",
                 "en": "Match Rescue Game"
@@ -81,7 +81,7 @@
         {
             "id": "memoryPick",
             "url": "http://43.138.143.6:8080/playable_game/MemoryPick",
-            "image": "",
+            "image": "assets/works/games/MemoryPick.png",
             "title": {
                 "zh": "记忆选择游戏",
                 "en": "Memory Pick Game"
@@ -94,7 +94,7 @@
         {
             "id": "whackMole",
             "url": "http://43.138.143.6:8080/playable_game/WhackMole",
-            "image": "",
+            "image": "assets/works/games/WhackMole.png",
             "title": {
                 "zh": "打地鼠游戏",
                 "en": "Whack-a-Mole Game"
@@ -112,7 +112,7 @@
             "params": {
                 "config": "config_升级_v2.json"
             },
-            "image": "",
+            "image": "assets/works/videos/jcc.png",
             "title": {
                 "zh": "金铲铲之战-互动视频",
                 "en": "TFT - Interactive Video"
@@ -128,7 +128,7 @@
             "params": {
                 "config": "config_升级_v3.json"
             },
-            "image": "",
+            "image": "assets/works/videos/jcc.png",
             "title": {
                 "zh": "金铲铲之战-互动视频",
                 "en": "TFT - Interactive Video"
@@ -147,7 +147,7 @@
                 "type": "hotspot",
                 "id": "1"
             },
-            "image": "",
+            "image": "assets/works/images/jcc.png",
             "title": {
                 "zh": "金铲铲之战-互动图片",
                 "en": "TFT - Interactive Image"
