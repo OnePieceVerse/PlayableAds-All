@@ -3,7 +3,7 @@
         {
             "id": "multiPlayerRacing",
             "url": "http://43.138.143.6:8080/playable_game/MultiPlayerRacing",
-            "image": "assets/works/games/MultiPlayerRacing.png",
+            "image": "assets/works/games/MultiPlayerRacing2.png",
             "title": {
                 "zh": "金铲铲之战-多人竞速游戏",
                 "en": "TFT - Multiplayer Racing Game"
@@ -28,7 +28,7 @@
         },
         {
             "id": "flappyBird",
-            "url": "http://43.138.143.6:8080/playable_game/FlappyBird",
+            "url": "FlappyBird/index.html",
             "image": "assets/works/games/FlappyBird.png",
             "title": {
                 "zh": "飞鸟小游戏",

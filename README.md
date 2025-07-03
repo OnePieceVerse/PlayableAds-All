@@ -46,28 +46,6 @@ PLAYABLE ALL 是一个创意自动化平台，帮助您轻松制作互动游戏�
   - 配置驱动
   - 可扩展架构
 
-## 项目结构
-
-```
-PlayableAds-All/
-├── components/          # 组件目录
-│   ├── header.html     # 页头组件
-│   └── footer.html     # 页脚组件
-├── config/             # 配置文件目录
-│   └── products.json   # 产品配置
-├── css/                # 样式文件
-│   └── main.css       # 主样式文件
-├── js/                 # JavaScript 文件
-│   └── products.js    # 产品相关功能
-├── assets/            # 静态资源
-│   ├── games/         # 游戏相关图片
-│   ├── videos/        # 视频相关图片
-│   └── images/        # 其他图片
-├── index.html         # 首页
-├── products.html      # 产品展示页
-└── main.js           # 主要JavaScript文件
-```
-
 ## 支持平台
 
 - Facebook
