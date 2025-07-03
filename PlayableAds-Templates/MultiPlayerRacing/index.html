@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>金铲铲竞速</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="race-container">
+    <button id="start-btn" class="game-btn">开始游戏</button>
+    <div class="track" id="track" style="display:none"></div>
+    <div id="result-modal" class="modal hidden">
+      <div class="modal-content">
+        <button id="close-modal-x" class="close-x">×</button>
+        <h2>比赛结果</h2>
+        <div id="final-ranking"></div>
+        <button id="restart-btn" class="game-btn">再来一局</button>
+      </div>
+    </div>
+  </div>
+  <script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  #app {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  .app-img {
+    width: 100vw;
+    height: 50vh;
+    object-fit: contain;
+    background: #000; /* 可选，图片比例不一致时填充 */
+    display: block;
+  }
+  
+  @keyframes bounce {
+    0%   { transform: scale(1);}
+    20%  { transform: scale(1.2);}
+    40%  { transform: scale(0.95);}
+    60%  { transform: scale(1.1);}
+    80%  { transform: scale(0.98);}
+    100% { transform: scale(1);}
+  }
+  
+  .hotspot-svg {
+    transition: 
+      transform 0.15s cubic-bezier(.4,2,.6,1), 
+      filter 0.15s;
+    cursor: pointer;
+    filter: drop-shadow(0 2px 6px rgba(25,118,210,0.15));
+  }
+  .hotspot-svg.bounce {
+    animation: bounce 0.8s cubic-bezier(.4,2,.6,1);
+  }
+  .hotspot-svg:hover,
+  .hotspot-svg:active {
+    transform: scale(1.18) rotate(-8deg);
+    filter: drop-shadow(0 4px 12px #1976d2);
+  }
+
+  /* 弹窗样式 */
+  #modal {
+    position: fixed;
+    left: 0; top: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+  
+  #modal.hidden {
+    display: none;
+  }
+  
+  .modal-content {
+    background: #112138;
+    border-radius: 10px;
+    padding: 1em;
+    max-width: 90vw;
+    width: 320px;
+    position: relative;
+    text-align: center;
+  }
+  
+  #close-modal {
+    position: absolute;
+    right: 0.5em;
+    top: 0.5em;
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    color: #888;
+    cursor: pointer;
+  }
+  
+  #modal-text {
+    width: 100%;
+    color: white;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-bottom: 0.5em;
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  #modal-imgs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    align-items: center;
+    margin-bottom: 0.5em;
+  }
+  
+  .modal-img {
+    width: 100%;         /* 强制所有图片宽度一致 */
+    max-width: 100%;     /* 防止超出容器 */
+    height: auto;        /* 高度自适应，保持比例 */
+    object-fit: contain; /* 保证图片完整显示 */
+    border-radius: 6px;
+    max-height: 200px;   /* 可选，防止图片过高撑出弹窗 */
+    display: block;
+    box-sizing: border-box;
+  }

@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>裸眼3D效果演示 (Naked-Eye 3D Demo)</title>
+    <style>
+        /* --- 基础样式 --- */
+        body {
+            margin: 0;
+            font-family: 'Inter', 'Helvetica Neue', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Microsoft Yahei', sans-serif;
+            background-color: #111;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden; /* 防止滚动条影响布局 */
+        }
+
+        /* --- 容器和标题样式 --- */
+        .header-content {
+            text-align: center;
+            padding: 20px;
+            z-index: 10;
+        }
+        h1 {
+            font-size: clamp(1.5rem, 5vw, 2.5rem);
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+        p {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            max-width: 600px;
+            margin: 0 auto;
+            color: #aaa;
+        }
+
+        /* --- 3D场景容器 (关键) --- */
+        #scene-container {
+            width: 90vw;
+            height: 75vh;
+            max-width: 960px;
+            max-height: 720px;
+            position: relative;
+            margin-top: 20px;
+            border-radius: 16px;
+            /* 创建一个微妙的内发光效果，模拟屏幕感 */
+            box-shadow: 0 0 15px 5px rgba(0, 191, 255, 0.1),
+                        inset 0 0 15px 0px rgba(0, 191, 255, 0.2);
+            border: 1px solid rgba(0, 191, 255, 0.3);
+            background-color: #000;
+            overflow: hidden; /* 隐藏初始的溢出部分，强化"盒子"概念 */
+            cursor: grab;
+        }
+        #scene-container:active {
+            cursor: grabbing;
+        }
+
+        /* --- Canvas画布样式 --- */
+        #c {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- 加载提示 --- */
+        #loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 1.2rem;
+            z-index: 20;
+        }
+
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="header-content">
+        <h1>裸眼3D H5 效果演示</h1>
+        <p>通过构建一个虚拟的"画框"，并让3D模型动态地穿越它，来模拟"破屏而出"的视觉错觉。请耐心等待模型加载。</p>
+    </div>
+
+    <div id="scene-container">
+        <div id="loader">正在加载模型...</div>
+        <canvas id="c"></canvas>
+    </div>
+
+    <!-- 导入所需库 -->
+    <!-- Three.js核心库 -->
+    <script src="./js/three.min.js"></script>
+    <!-- fflate压缩库 (FBXLoader依赖) -->
+    <script src="./js/fflate.min.js"></script>
+    <!-- GLTF模型加载器 -->
+    <script src="./js/GLTFLoader.js"></script>
+    <!-- FBX模型加载器 -->
+    <script src="./js/FBXLoader.js"></script>
+    <!-- 轨道控制器 (用于交互) -->
+    <script src="./js/OrbitControls.js"></script>
+    <!-- GSAP动画库 (用于制作流畅动画) -->
+    <script src="./js/gsap.min.js"></script>
+
+    <script type="module">
+        // 等待所有脚本加载完毕
+        window.onload = () => {
+            // FIX: GLTFLoader, FBXLoader and OrbitControls are properties of the global THREE object,
+            // not directly on the window. We get them from THREE.
+            const THREE = window.THREE;
+            const { GLTFLoader } = THREE;
+            const { FBXLoader } = THREE;
+            const { OrbitControls } = THREE;
+
+            // --- 变量和常量定义 ---
+            const canvas = document.querySelector('#c');
+            const sceneContainer = document.querySelector('#scene-container');
+            const loaderElement = document.querySelector('#loader');
+            let model, mixer, animationClip, animationAction;
+            let model2, mixer2, animationClip2, animationAction2;
+            let model3, mixer3, animationClip3, animationAction3;
+            let model4, mixer4, animationClip4, animationAction4;
+
+            // --- 1. 场景初始化 (Scene Initialization) ---
+            const scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000000); // 场景背景色
+
+            // --- 2. 渲染器设置 (Renderer Setup) ---
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(sceneContainer.clientWidth, sceneContainer.clientHeight);
+            renderer.outputEncoding = THREE.sRGBEncoding; // 确保颜色正确
+            renderer.shadowMap.enabled = true; // 开启阴影
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+            // --- 3. 摄像机设置 (Camera Setup) ---
+            const fov = 60; // 视场角
+            const aspect = sceneContainer.clientWidth / sceneContainer.clientHeight;
+            const near = 0.1;
+            const far = 100;
+            const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+            camera.position.set(0, 1, 8); // 摄像机位置
+
+            // --- 4. 灯光系统 (Lighting System) ---
+            // 环境光，提供基础照明
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            // 平行光，模拟太阳光，用于投射阴影
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            directionalLight.position.set(5, 10, 7.5);
+            directionalLight.castShadow = true; // 光源投射阴影
+            // 设置阴影贴图的分辨率
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            scene.add(directionalLight);
+
+            // 添加一个聚光灯，增加戏剧性
+            const spotLight = new THREE.SpotLight(0x00aaff, 3);
+            spotLight.position.set(-10, 10, 5);
+            spotLight.angle = Math.PI / 8;
+            spotLight.penumbra = 0.2;
+            spotLight.castShadow = true;
+            scene.add(spotLight);
+
+            // --- 5. 轨道控制器 (Orbit Controls) ---
+            // 允许用户通过鼠标拖拽、缩放来交互
+            const controls = new OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true; // 开启阻尼效果，更平滑
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 4; // 最小缩放距离
+            controls.maxDistance = 15; // 最大缩放距离
+            controls.minPolarAngle = Math.PI / 4; // 最小垂直角度
+            controls.maxPolarAngle = Math.PI / 1.5; // 最大垂直角度
+            controls.target.set(0, 1, 0); // 控制器中心点
+
+            // --- 6. 创建虚拟"画框"和背景 (The "Frame" and Background) ---
+            // 这是实现错觉的关键元素
+            const frameDepth = 0.5;
+            const frameMaterial = new THREE.MeshStandardMaterial({
+                color: 0x222222,
+                metalness: 0.8,
+                roughness: 0.4,
+                side: THREE.DoubleSide
+            });
+            const frameWidth = 10;
+            const frameHeight = 7.5;
+
+            const frameGeo = new THREE.BoxGeometry(frameWidth, frameHeight, frameDepth);
+            const holeGeo = new THREE.BoxGeometry(frameWidth - 0.5, frameHeight - 0.5, frameDepth);
+
+            // 使用CSG (Constructive Solid Geometry) 的概念，通过减法创建一个带孔的盒子
+            // 这里我们用更简单的方式：创建4个边框
+            const createFrameBar = (width, height, depth, position) => {
+                const barGeo = new THREE.BoxGeometry(width, height, depth);
+                const bar = new THREE.Mesh(barGeo, frameMaterial);
+                bar.position.set(position.x, position.y, position.z);
+                bar.castShadow = true;
+                bar.receiveShadow = true;
+                scene.add(bar);
+            };
+
+            const barThickness = 0.5;
+            // Top bar
+            createFrameBar(frameWidth, barThickness, frameDepth, {x: 0, y: frameHeight / 2 - barThickness / 2, z: 0});
+            // Bottom bar
+            createFrameBar(frameWidth, barThickness, frameDepth, {x: 0, y: -frameHeight / 2 + barThickness / 2, z: 0});
+            // Left bar
+            createFrameBar(barThickness, frameHeight - barThickness * 2, frameDepth, {x: -frameWidth / 2 + barThickness / 2, y: 0, z: 0});
+            // Right bar
+            createFrameBar(barThickness, frameHeight - barThickness * 2, frameDepth, {x: frameWidth / 2 - barThickness / 2, y: 0, z: 0});
+
+            // 创建一个接收阴影的背景平面
+            const backgroundPlane = new THREE.Mesh(
+                new THREE.PlaneGeometry(frameWidth, frameHeight),
+                new THREE.MeshStandardMaterial({ color: 0x1a1a1a })
+            );
+            backgroundPlane.position.z = -frameDepth / 2 - 0.01;
+            backgroundPlane.receiveShadow = true;
+            scene.add(backgroundPlane);
+
+            // --- 7. 加载3D模型 (Load 3D Model) ---
+            const gltfLoader = new GLTFLoader();
+            // FIX: Changed the model URL to the correct raw file link to prevent loading errors.
+            gltfLoader.load(
+                './models/Astronaut.glb',
+                (gltf) => {
+                    model = gltf.scene;
+                    model.scale.set(1.2, 1.2, 1.2);
+                    model.position.set(1.5, 1.5, 2);
+                    model.rotation.y = Math.PI * 0.25;
+
+                    // 遍历模型，使其所有部分都能投射和接收阴影
+                    model.traverse((node) => {
+                        if (node.isMesh) {
+                            node.castShadow = true;
+                            node.receiveShadow = true;
+                        }
+                    });
+
+                    scene.add(model);
+
+                    // 加载模型的内置动画
+                    mixer = new THREE.AnimationMixer(model);
+                    animationClip = gltf.animations[0];
+                    if (animationClip) {
+                        animationAction = mixer.clipAction(animationClip);
+                        animationAction.play();
+                    }
+
+                    // 隐藏加载提示，开始动画
+                    loaderElement.style.display = 'none';
+                    startBreakoutAnimation();
+                },
+                undefined,
+                (error) => {
+                    console.error('An error happened while loading the model:', error);
+                    loaderElement.textContent = '模型加载失败';
+                }
+            );
+
+            // 加载第二个模型 (Load the second model)
+            gltfLoader.load(
+                './models/LOL-Jinx.glb',
+                (gltf) => {
+                    model2 = gltf.scene;
+                    model2.scale.set(1.2, 1.2, 1.2);
+                    model2.position.set(-1.5, 1.5, 2); // 放置在左侧
+                    model2.rotation.x = - Math.PI / 2; // 旋转90度
+                    model2.rotation.z = Math.PI * 0.25;
+
+                    // 确保模型可以投射和接收阴影
+                    model2.traverse((node) => {
+                        if (node.isMesh) {
+                            node.castShadow = true;
+                            node.receiveShadow = true;
+                        }
+                    });
+
+                    scene.add(model2);
+
+                    // 加载模型的内置动画
+                    mixer2 = new THREE.AnimationMixer(model2);
+                    animationClip2 = gltf.animations[0];
+                    if (animationClip2) {
+                        animationAction2 = mixer2.clipAction(animationClip2);
+                        animationAction2.play();
+                    }
+                    startBreakoutAnimation2();
+                },
+                undefined,
+                (error) => {
+                    console.error('An error happened while loading the Jinx model:', error);
+                    // Optionally update UI for this specific error
+                }
+            );
+
+            // 加载第三个模型 anim-doll.glb (Load the third model - anim-doll)
+            gltfLoader.load(
+                './models/anim-doll.glb',
+                (gltf) => {
+                    model3 = gltf.scene;
+                    model3.scale.set(0.8, 0.8, 0.8);
+                    model3.position.set(0, -1, 2); // 放置在中下方
+                    model3.rotation.y = Math.PI; // 旋转180度面向前方
+
+                    // 确保模型可以投射和接收阴影
+                    model3.traverse((node) => {
+                        if (node.isMesh) {
+                            node.castShadow = true;
+                            node.receiveShadow = true;
+                        }
+                    });
+
+                    scene.add(model3);
+
+                    // 加载模型的内置动画并循环播放
+                    mixer3 = new THREE.AnimationMixer(model3);
+                    if (gltf.animations && gltf.animations.length > 0) {
+                        // 播放所有动画或选择第一个动画
+                        animationClip3 = gltf.animations[0];
+                        animationAction3 = mixer3.clipAction(animationClip3);
+                        animationAction3.setLoop(THREE.LoopRepeat); // 设置循环播放
+                        animationAction3.play();
+
+                        console.log(`anim-doll.glb 加载成功，包含 ${gltf.animations.length} 个动画`);
+                    } else {
+                        console.log('anim-doll.glb 没有包含动画');
+                    }
+
+                    startBreakoutAnimation3();
+                },
+                undefined,
+                (error) => {
+                    console.error('An error happened while loading the anim-doll model:', error);
+                }
+            );
+
+            // --- 8. "破屏"动画 (Breakout Animation) ---
+            function startBreakoutAnimation() {
+                if (!model) return;
+
+                // 使用GSAP创建一个无限循环的时间线动画
+                const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+
+                // 初始状态：宇航员在画框后面漂浮
+                tl.to(model.position, {
+                    x: 0, y: -1, z: -1.5, duration: 3, ease: 'power1.inOut'
+                });
+                tl.to(model.rotation, {
+                    y: Math.PI * 0.5, duration: 3, ease: 'power1.inOut'
+                }, "<"); // "<" 表示与上一个动画同时开始
+
+                // 破屏而出！
+                tl.to(model.position, {
+                    x: 2,
+                    y: 1,
+                    z: 3, // Z轴向前，穿越画框
+                    duration: 2.5,
+                    ease: 'power3.out'
+                }, ">1"); // ">1" 表示在上一个动画结束后延迟1秒开始
+                tl.to(model.rotation, {
+                    y: Math.PI * 0.1, duration: 2.5, ease: 'power3.out'
+                }, "<");
+                tl.to(model.scale, {
+                    x: 1.2, y: 1.2, z: 1.2, duration: 2.5, ease: 'power3.out'
+                }, "<");
+
+                // 回到画框内
+                tl.to(model.position, {
+                    x: 0, y: -3.0, z: -2.0, duration: 3, ease: 'power2.inOut'
+                }, ">2"); // 延迟2秒后返回
+                tl.to(model.rotation, {
+                    y: Math.PI * 0.25, duration: 3, ease: 'power2.inOut'
+                }, "<");
+                tl.to(model.scale, {
+                    x: 1.2, y: 1.2, z: 1.2, duration: 3, ease: 'power2.inOut'
+                }, "<");
+            }
+
+            function startBreakoutAnimation2() {
+                if (!model2) return;
+
+                // 使用GSAP创建一个无限循环的时间线动画
+                const tl = gsap.timeline({ repeat: -1, repeatDelay: 2 });
+
+                // 初始状态：模型在画框后面
+                tl.to(model2.position, {
+                    x: -1.5, y: 1, z: -2.0, duration: 3, ease: 'power1.inOut'
+                });
+
+                // 破屏而出！
+                tl.to(model2.position, {
+                    x: -2,
+                    y: 2,
+                    z: 3, // Z轴向前，穿越画框
+                    duration: 2.5,
+                    ease: 'power3.out'
+                }, ">1");
+                tl.to(model2.rotation, {
+                    z: Math.PI * 0.25, duration: 2.5, ease: 'power3.out'
+                }, "<");
+                tl.to(model2.scale, {
+                    x: 1.4, y: 1.4, z: 1.4, duration: 2.5, ease: 'power3.out'
+                }, "<");
+
+                // 回到画框内
+                tl.to(model2.position, {
+                    x: -1.5, y: 1.5, z: -2.0, duration: 3, ease: 'power2.inOut'
+                }, ">2");
+                tl.to(model2.rotation, {
+                    z: -Math.PI * 0.25 , duration: 3, ease: 'power2.inOut'
+                }, "<");
+                tl.to(model2.scale, {
+                    x: 1.2, y: 1.2, z: 1.2, duration: 3, ease: 'power2.inOut'
+                }, "<");
+            }
+
+            function startBreakoutAnimation3() {
+                if (!model3) return;
+
+                // 使用GSAP创建一个无限循环的时间线动画，与其他模型错开时间
+                const tl = gsap.timeline({ repeat: -1, repeatDelay: 1.5, delay: 1 });
+
+                // 初始状态：anim-doll在画框后面
+                tl.to(model3.position, {
+                    x: 0, y: -1.5, z: -1.8, duration: 2.5, ease: 'power1.inOut'
+                });
+                tl.to(model3.rotation, {
+                    y: Math.PI * 1.2, duration: 2.5, ease: 'power1.inOut'
+                }, "<");
+
+                // 破屏而出！从中下方穿越画框
+                tl.to(model3.position, {
+                    x: 0,
+                    y: 0.5,
+                    z: 3.5, // Z轴向前，穿越画框
+                    duration: 3,
+                    ease: 'power2.out'
+                }, ">0.8");
+                tl.to(model3.rotation, {
+                    y: Math.PI * 2, duration: 3, ease: 'power2.out'
+                }, "<");
+                tl.to(model3.scale, {
+                    x: 1.1, y: 1.1, z: 1.1, duration: 3, ease: 'power2.out'
+                }, "<");
+
+                // 回到画框内
+                tl.to(model3.position, {
+                    x: 0, y: -1, z: -2.2, duration: 2.8, ease: 'power1.inOut'
+                }, ">1.5");
+                tl.to(model3.rotation, {
+                    y: Math.PI, duration: 2.8, ease: 'power1.inOut'
+                }, "<");
+                tl.to(model3.scale, {
+                    x: 0.8, y: 0.8, z: 0.8, duration: 2.8, ease: 'power1.inOut'
+                }, "<");
+            }
+
+            // --- 9. 响应式布局 (Responsive Layout) ---
+            function onWindowResize() {
+                const width = sceneContainer.clientWidth;
+                const height = sceneContainer.clientHeight;
+                camera.aspect = width / height;
+                camera.updateProjectionMatrix();
+                renderer.setSize(width, height);
+            }
+            window.addEventListener('resize', onWindowResize, false);
+
+            // --- 10. 动画循环 (Animation Loop) ---
+            const clock = new THREE.Clock();
+            function animate() {
+                requestAnimationFrame(animate);
+
+                const delta = clock.getDelta();
+                if (mixer) {
+                    mixer.update(delta);
+                }
+                if(mixer2) {
+                    mixer2.update(delta);
+                }
+                if(mixer3) {
+                    mixer3.update(delta);
+                }
+                if(mixer4) {
+                    mixer4.update(delta);
+                }
+
+                controls.update(); // 更新控制器
+                renderer.render(scene, camera);
+            }
+
+            animate();
+        };
+    </script>
+</body>
+</html>

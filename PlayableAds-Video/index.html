@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Playable互动广告</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="ad-container">
+    <div id="top-image" class="top-image"></div>
+
+    <video id="game-video" muted playsinline webkit-playsinline x-webkit-airplay="allow" x5-video-player-type="h5"
+           x5-video-player-fullscreen="false" preload="auto">
+    </video>
+
+    <div id="bottom-image" class="bottom-image"></div>
+
+    <div id="guide-overlay">
+        <div class="finger-icon">
+            <img id="guide-image" src="" alt="Interaction Guide">
+        </div>
+        <div id="guide-tip"></div>
+    </div>
+
+    <div id="click-to-play" class="click-overlay"></div>
+
+    <button id="cta-button" class="cta-button">立即下载</button>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -2,7 +2,7 @@
     "games": [
         {
             "id": "multiPlayerRacing",
-            "url": "http://43.138.143.6:8080/playable_game/MultiPlayerRacing",
+            "url": "PlayableAds-Templates/MultiPlayerRacing/index.html",
             "image": "assets/works/games/MultiPlayerRacing2.png",
             "title": {
                 "zh": "金铲铲之战-多人竞速游戏",
@@ -15,7 +15,7 @@
         },
         {
             "id": "dodgeGhost",
-            "url": "http://43.138.143.6:8080/playable_game/DodgeGhost",
+            "url": "PlayableAds-Templates/DodgeGhost/index.html",
             "image": "assets/works/games/DodgeGhost.png",
             "title": {
                 "zh": "躲避幽灵游戏",
@@ -28,7 +28,7 @@
         },
         {
             "id": "flappyBird",
-            "url": "FlappyBird/index.html",
+            "url": "PlayableAds-Templates/FlappyBird/index.html",
             "image": "assets/works/games/FlappyBird.png",
             "title": {
                 "zh": "飞鸟小游戏",
@@ -41,7 +41,7 @@
         },
         {
             "id": "jigsawPuzzle",
-            "url": "http://43.138.143.6:8080/playable_game/JigsawPuzzle",
+            "url": "PlayableAds-Templates/JigsawPuzzle/index.html",
             "image": "assets/works/games/JigsawPuzzle.png",
             "title": {
                 "zh": "拼图游戏",
@@ -54,7 +54,7 @@
         },
         {
             "id": "jumpEscape",
-            "url": "http://43.138.143.6:8080/playable_game/JumpEscape",
+            "url": "PlayableAds-Templates/JumpEscape/index.html",
             "image": "assets/works/games/JumpEscape.png",
             "title": {
                 "zh": "跳跃逃生游戏",
@@ -67,7 +67,7 @@
         },
         {
             "id": "matchRescue",
-            "url": "http://43.138.143.6:8080/playable_game/MatchRescue",
+            "url": "PlayableAds-Templates/MatchRescue/index.html",
             "image": "assets/works/games/MatchRescue.png",
             "title": {
                 "zh": "匹配救援游戏",
@@ -80,7 +80,7 @@
         },
         {
             "id": "memoryPick",
-            "url": "http://43.138.143.6:8080/playable_game/MemoryPick",
+            "url": "PlayableAds-Templates/MemoryPick/index.html",
             "image": "assets/works/games/MemoryPick.png",
             "title": {
                 "zh": "记忆选择游戏",
@@ -93,7 +93,7 @@
         },
         {
             "id": "whackMole",
-            "url": "http://43.138.143.6:8080/playable_game/WhackMole",
+            "url": "PlayableAds-Templates/WhackMole/index.html",
             "image": "assets/works/games/WhackMole.png",
             "title": {
                 "zh": "打地鼠游戏",
@@ -108,7 +108,7 @@
     "videos": [
         {
             "id": "interactiveVideoVertical",
-            "url": "http://43.138.143.6:8080/playable_video/",
+            "url": "PlayableAds-Video/index.html",
             "params": {
                 "config": "config_升级_v2.json"
             },
@@ -124,7 +124,7 @@
         },
         {
             "id": "interactiveVideoHorizontal",
-            "url": "http://43.138.143.6:8080/playable_video/",
+            "url": "PlayableAds-Video/index.html",
             "params": {
                 "config": "config_升级_v3.json"
             },
@@ -142,7 +142,7 @@
     "images": [
         {
             "id": "interactiveImageTitle",
-            "url": "http://43.138.143.6:8080/playable_image/",
+            "url": "PlayableAds-Image/index.html",
             "params": {
                 "type": "hotspot",
                 "id": "1"

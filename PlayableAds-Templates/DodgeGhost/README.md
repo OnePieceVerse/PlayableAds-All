@@ -1,0 +1,4 @@
+# Dodge ghosts
+Dodge Ghost is a survival game developed using PhaserJS, where players must dodge the ghosts generated in a sealed arena. The number of ghosts gradually increases every once in a while, upgrading the challenge. Players use the navigation WASD key to survive for as long as possible by relying on quick reactions and strategic movements.
+The unique wall phase adjustment mechanic allows players to teleport between the four walls of the game area, adding a layer of tactical evasion. This feature is crucial for escaping tense situations and defeating ghosts in pursuit.The game also provides an invisibility button that activates the invincibility status in times of crisis, helping you get out of danger in an instant.
+Survive as long as possible under the pursuit of ghosts!

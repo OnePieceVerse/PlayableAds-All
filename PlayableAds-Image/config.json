@@ -1,0 +1,44 @@
+{
+    "appImgs": [
+        "images/jks/main-1.png",
+        "images/jks/main-2.png",
+        "images/jks/main-3.png",
+        "images/jks/main-4.png"
+    ],
+    "hotspots": [
+        {
+            "left": "48%",
+            "top": "38%",
+            "type": "jump",
+            "url": "https://jcc.qq.com/act/a20250327city/"
+        },
+        {
+            "left": "76%",
+            "top": "52%",
+            "type": "popup",
+            "modalImgs": [
+                "images/jks/main-skill.png"
+            ],
+            "modalText": "金克丝技能介绍"
+        },
+        {
+            "left": "46%",
+            "top": "60%",
+            "type": "popup",
+            "modalImgs": [
+                "images/jks/main-attr.png"
+            ],
+            "modalText": ""
+        },
+        {
+            "left": "47%",
+            "top": "85%",
+            "type": "popup",
+            "modalImgs": [
+                "images/jks/partner-info.png",
+                "images/jks/partner-skill.png"
+            ],
+            "modalText": ""
+        }
+    ]
+}
