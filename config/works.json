@@ -1,6 +1,19 @@
 {
     "games": [
         {
+            "id": "BlockShot",
+            "url": "PlayableAds-Templates/BlockShot/index.html",
+            "image": "assets/works/games/BlockShot.png",
+            "title": {
+                "zh": "打砖块游戏",
+                "en": "Block Shot Game"
+            },
+            "description": {
+                "zh": "考验智慧的打砖块挑战",
+                "en": "A challenging block-breaking experience"
+            }
+        },
+        {
             "id": "multiPlayerRacing",
             "url": "PlayableAds-Templates/MultiPlayerRacing/index.html",
             "image": "assets/works/games/MultiPlayerRacing2.png",
