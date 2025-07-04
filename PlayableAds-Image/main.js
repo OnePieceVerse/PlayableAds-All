@@ -5,11 +5,9 @@ const fingerSvg = `
 fetch('config.json')
     .then(response => response.json())
     .then(config => {
-        console.log(config);
         // 渲染 app 下的图片
         const app = document.getElementById('app');
         (config.appImgs || []).forEach(src => {
-            console.log(src);
             const img = document.createElement('img');
             img.src = src;
             img.className = 'app-img';
@@ -61,7 +59,7 @@ function handleHotspot(spot) {
 }
 
 function jump(url) {
-    window.location.href = url;
+    window.open(url, '_blank');
 }
 
 function showModal(spot) {
