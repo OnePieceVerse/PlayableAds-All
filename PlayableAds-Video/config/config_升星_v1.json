@@ -1,7 +1,7 @@
 {
   "videoUrl": "video/金铲铲新手之升星_v1.mp4",
   "completionTime": 27.5,
-  "displayMode": "landscape",
+  "displayMode": "portrait",
   "interactionPoints": [
     {
       "time": 6,
@@ -12,15 +12,15 @@
         "height": 50
       },
       "guidePosition": {
-        "x": 0.91,
-        "y": 0.87
+        "x": 0.88,
+        "y": 0.57
       },
       "swipeDirection": "scale",
       "interactionArea": {
         "x": 0.89,
-        "y": 0.78,
+        "y": 0.56,
         "width": 0.09,
-        "height": 0.19
+        "height": 0.04
       }
     },
     {
@@ -33,14 +33,14 @@
       },
       "guidePosition": {
         "x": 0.53,
-        "y": 0.23
+        "y": 0.44
       },
       "swipeDirection": "scale",
       "interactionArea": {
         "x": 0.48,
-        "y": 0.04,
+        "y": 0.40,
         "width": 0.16,
-        "height": 0.42
+        "height": 0.09
       }
     },
     {
@@ -53,22 +53,23 @@
       },
       "guidePosition": {
         "x": 0.70,
-        "y": 0.23
+        "y": 0.44
       },
       "swipeDirection": "scale",
       "interactionArea": {
-        "x": 0.65,
-        "y": 0.05,
-        "width": 0.15,
-        "height": 0.41
+        "x": 0.64,
+        "y": 0.40,
+        "width": 0.16,
+        "height": 0.09
       }
     }
   ],
   "cat_button": {
     "x": 0.51,
-    "y": 0.85,
+    "y": 0.575,
     "width": 0.12,
-    "height": 0.08,
-    "fontSize": 3
+    "height": 0.016,
+    "fontSize": 2,
+    "url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301"
   }
 }

@@ -51,6 +51,9 @@ async function initPlayableAd(configPath) {
         return container.getAttribute('data-rotate') === 'true'
     }
 
+    if (isPortraitRotateMode()) {
+        startCheckRotate();
+    }
     // 触摸事件
     guideOverlay.addEventListener('touchstart', (e) => {
         if (handleStart(e.touches[0].clientX, e.touches[0].clientY)) {
@@ -89,7 +92,7 @@ async function initPlayableAd(configPath) {
 
     // CTA按钮点击
     ctaButton.addEventListener('click', function () {
-        window.location.href = 'https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301';
+        window.location.href = config.cat_button.url;
     });
 
     // 判断操作是否在有一定角度旋转的矩形区域内
@@ -405,10 +408,6 @@ async function initPlayableAd(configPath) {
                         if (guideTip) guideTip.style.display = 'block';
                         isInteracting = true;
                         currentPointIndex = index;
-
-                        if (isPortraitRotateMode()) {
-                            startCheckRotate();
-                        }
 
                         // 设置超时自动继续
                         // interactionTimeout = setTimeout(() => {

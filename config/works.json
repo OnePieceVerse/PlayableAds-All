@@ -120,19 +120,35 @@
     ],
     "videos": [
         {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video/index.html",
+            "params": {
+                "config": "config_升级_v1.json"
+            },
+            "image": "assets/works/videos/jcc-upgrade-v1.png",
+            "title": {
+                "zh": "金铲铲之战之升级（竖屏）",
+                "en": "TFT - Interactive Video (Vertical)"
+            },
+            "description": {
+                "zh": "可试玩游戏的视频体验，竖屏模式",
+                "en": "Playable game experience, vertical mode"
+            }
+        },
+        {
             "id": "interactiveVideoVertical",
             "url": "PlayableAds-Video/index.html",
             "params": {
                 "config": "config_升级_v2.json"
             },
-            "image": "assets/works/videos/jcc.png",
+            "image": "assets/works/videos/jcc-upgrade-v2.png",
             "title": {
-                "zh": "金铲铲之战-互动视频",
-                "en": "TFT - Interactive Video"
+                "zh": "金铲铲之战之升级（竖屏v2）",
+                "en": "TFT - Interactive Video (Vertical v2)"
             },
             "description": {
-                "zh": "可试玩游戏的视频体验（竖屏）",
-                "en": "Playable game experience (vertical)"
+                "zh": "可试玩游戏的视频体验，竖屏模式，首页有上下Banner",
+                "en": "Playable game experience (Vertical), with top and bottom banners"
             }
         },
         {
@@ -141,14 +157,46 @@
             "params": {
                 "config": "config_升级_v3.json"
             },
-            "image": "assets/works/videos/jcc.png",
+            "image": "assets/works/videos/jcc-upgrade-v2.png",
             "title": {
-                "zh": "金铲铲之战-互动视频",
-                "en": "TFT - Interactive Video"
+                "zh": "金铲铲之战之升级（竖屏V2+横屏）",
+                "en": "TFT - Interactive Video (Vertical v2 + Horizontal)"
             },
             "description": {
-                "zh": "可试玩游戏的视频体验",
-                "en": "Playable game experience"
+                "zh": "可试玩游戏的视频体验，先竖屏后横屏，首页有上下Banner",
+                "en": "Playable game experience, vertical then horizontal, with top and bottom banners"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video/index.html",
+            "params": {
+                "config": "config_升星_v1.json"
+            },
+            "image": "assets/works/videos/jcc-upgrade-star.png",
+            "title": {
+                "zh": "金铲铲之战之升星（竖屏）",
+                "en": "TFT - Interactive Video (Vertical)"
+            },
+            "description": {
+                "zh": "可试玩游戏的视频体验，竖屏模式",
+                "en": "Playable game experience, vertical mode"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video/index.html",
+            "params": {
+                "config": "config_羁绊_v1.json"
+            },
+            "image": "assets/works/videos/jcc-partner.png",
+            "title": {
+                "zh": "金铲铲之战之羁绊（横屏）",
+                "en": "TFT - Interactive Video (Horizontal)"
+            },
+            "description": {
+                "zh": "可试玩游戏的视频体验，横屏模式",
+                "en": "Playable game experience, horizontal mode"
             }
         }
     ],
