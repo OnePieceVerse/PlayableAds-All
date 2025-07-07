@@ -27,19 +27,19 @@
                     <p data-translate="loginDescription"></p>
                 </div>
                 <div class="social-login">
-                    <button class="social-btn qq" onclick="handleSocialLogin('qq')">
+                    <button class="social-btn qq">
                         <i class="fab fa-qq"></i>
                         <span data-translate="loginWithQQ"></span>
                     </button>
-                    <button class="social-btn wechat" onclick="handleSocialLogin('wechat')">
+                    <button class="social-btn wechat">
                         <i class="fab fa-weixin"></i>
                         <span data-translate="loginWithWechat"></span>
                     </button>
-                    <button class="social-btn google" onclick="handleSocialLogin('google')">
+                    <button class="social-btn google">
                         <i class="fab fa-google"></i>
                         <span data-translate="loginWithGoogle"></span>
                     </button>
-                    <button class="social-btn facebook" onclick="handleSocialLogin('facebook')">
+                    <button class="social-btn facebook">
                         <i class="fab fa-facebook"></i>
                         <span data-translate="loginWithFacebook"></span>
                     </button>
@@ -58,8 +58,8 @@
 
     <!-- Footer -->
     <div id="footer"></div>
+
     <script src="index.js"></script>
-    <!-- <script src="js/login.js"></script> -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
@@ -146,5 +146,4 @@
         };
     </script>
 </body>
-
 </html>
