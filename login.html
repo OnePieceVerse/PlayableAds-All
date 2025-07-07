@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-translate="loginPageTitle"></title>
     <link rel="stylesheet" href="main.css">
-    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="login.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
@@ -59,7 +59,71 @@
     <div id="footer"></div>
 
     <script src="index.js"></script>
-    <script src="js/login.js"></script>
+    <!-- <script src="js/login.js"></script> -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNE_XZhiF6ARuOB_G_4-sP21M0rr3Ozc8",
+            authDomain: "playableads-1f632.firebaseapp.com",
+            projectId: "playableads-1f632",
+            storageBucket: "playableads-1f632.firebasestorage.app",
+            messagingSenderId: "660151343958",
+            appId: "1:660151343958:web:bf397369a0f9b261b554f7",
+            measurementId: "G-CM986RS9XC"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // 触发Google登录
+        function googleLogin() {
+            const provider = new GoogleAuthProvider();
+            provider.setCustomParameters({ prompt: 'select_account' });  // 强制选择账户
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;  // 获取用户信息
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;  // 获取访问令牌
+                    console.log("Google登录成功:", user.displayName, user.email);
+                })
+                .catch((error) => {
+                    console.error("Google登录失败:", error);
+                });
+        }
+
+        function facebookLogin() {
+            const provider = new FacebookAuthProvider();
+            provider.addScope('email');  // 请求用户邮箱权限
+            provider.setCustomParameters({
+                'display': 'popup'  // 弹窗式登录界面
+            });
+
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const user = result.user;  // 获取用户信息
+                    const credential = FacebookAuthProvider.credentialFromResult(result);
+                    const accessToken = credential.accessToken;  // 获取Facebook访问令牌
+
+                    // 可选：调用Graph API获取更多用户数据
+                    fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${accessToken}`)
+                        .then(response => response.json())
+                        .then(data => console.log("Facebook登录成功:", data));
+                })
+                .catch((error) => {
+                    console.error("登录失败:", error.code, error.message);
+                    if (error.code === 'auth/account-exists-with-different-credential') {
+                        alert("该邮箱在Firebase已绑定其他登录方式，请改用邮箱或设置为每个身份提供多个帐号");
+                    }
+                });
+        }
+
+        document.querySelector('.social-btn.google').onclick = function () {
+            googleLogin();
+        };
+        document.querySelector('.social-btn.facebook').onclick = function () {
+            facebookLogin();
+        };
+    </script>
 </body>
 
 </html>
