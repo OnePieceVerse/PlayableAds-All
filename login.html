@@ -42,6 +42,7 @@
                         <i class="fab fa-facebook"></i>
                         <span data-translate="loginWithFacebook"></span>
                     </button>
+                    <div id="qqLoginBtn"></div>
                 </div>
                 <div class="login-footer">
                     <p class="terms-text">
@@ -57,7 +58,7 @@
 
     <!-- Footer -->
     <div id="footer"></div>
-
+    s
     <script src="index.js"></script>
     <!-- <script src="js/login.js"></script> -->
     <script type="module">
@@ -85,6 +86,7 @@
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     const token = credential.accessToken;  // 获取访问令牌
                     console.log("Google登录成功:", user.displayName, user.email);
+                    window.location.href = 'admin.html';
                 })
                 .catch((error) => {
                     console.error("Google登录失败:", error);
@@ -107,7 +109,10 @@
                     // 可选：调用Graph API获取更多用户数据
                     fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${accessToken}`)
                         .then(response => response.json())
-                        .then(data => console.log("Facebook登录成功:", data));
+                        .then(data => {
+                            console.log("Facebook登录成功:", data);
+                            window.location.href = 'admin.html';
+                        });
                 })
                 .catch((error) => {
                     console.error("登录失败:", error.code, error.message);
@@ -123,7 +128,25 @@
         document.querySelector('.social-btn.facebook').onclick = function () {
             facebookLogin();
         };
+        document.querySelector('.social-btn.qq').onclick = function () {
+            // qqLogin();
+            const state = Date.now().toString(); // 防CSRF令牌
+            sessionStorage.setItem('qq_state', state);
+
+            const params = new URLSearchParams({
+                response_type: 'token', // 直接获取token（前端模式）
+                client_id: '102800176',
+                redirect_uri: encodeURIComponent('http://localhost:8000/admin.html'),
+                state: state,
+                scope: 'get_user_info',
+                display: 'popup' // 弹窗模式
+            });
+
+            window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
+                'QQLogin', 'width=600,height=500');
+        };
     </script>
+
 </body>
 
 </html>
