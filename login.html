@@ -265,6 +265,7 @@
                 // 调用QQ OpenAPI获取用户信息
                 QC.api('get_user_info', {})
                     .success(res => {
+                        // province, city, year
                         const userInfo = {
                             nickname: res.data.nickname,
                             avatar: res.data.figureurl_qq_2, // 高清头像
@@ -274,7 +275,7 @@
                         };
                         console.log('用户信息:', userInfo);
                         console.log(res);
-                        localStorage.setItem('qqUser', JSON.stringify({nickname: userInfo.nickname, gender: gender}))
+                        localStorage.setItem('qqUser', JSON.stringify({nickname: userInfo.nickname, gender: userInfo.gender}))
                         window.location.href = '/admin_index.html';
                         // 此处可调用后端接口保存用户信息
                     })
