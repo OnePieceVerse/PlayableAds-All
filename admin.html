@@ -11,8 +11,10 @@
 <body>
     <script>
         console.log(window.location.href)
+        alert(window.location.href)
         if (window.opener) {
             console.log('qq_login_success postMessage')
+            alert('qq_login_success postMessage')
             window.opener.postMessage('qq_login_success', '*'); // 通知父窗口
             window.close(); // 关闭当前子窗口
         }
