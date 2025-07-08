@@ -64,7 +64,11 @@
         //     // localStorage.setItem('qq_login_success', JSON.stringify({ openId: openId, accessToken: accessToken }));
         //     window.close(); // 关闭子窗口
         // });
-        window.close();
+
+        QC.Login.getMe(function (openId, accessToken) {
+            window.close(); // 关闭子窗口
+        });
+
 
     </script>
 </body>
