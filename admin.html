@@ -45,7 +45,7 @@
         QC.Login.getMe(function (openId, accessToken) {
             alert('hi');
             localStorage.setItem('qq_login_success', JSON.stringify({ openId: openId, accessToken: accessToken }));
-                // window.close(); // 关闭子窗口
+                window.close(); // 关闭子窗口
             });
         
 

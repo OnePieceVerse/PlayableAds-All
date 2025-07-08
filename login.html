@@ -292,6 +292,7 @@
         // });
         // 页面B监听变化
         window.addEventListener('storage', (e) => {
+            alert('storage');
             if (e.key === 'qq_login_success') console.log(JSON.parse(e.newValue));
         });
     </script>
