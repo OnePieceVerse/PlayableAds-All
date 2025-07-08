@@ -93,30 +93,35 @@
                     }
                 });
             } else if (loginType == 'qq') {
-                if (QC.Login.check()) { // 检查登录状态
-                    QC.Login.getMe(function (openId, accessToken) {
-                        QC.api('get_user_info', {})
-                            .success(res => {
-                                // province, city, year
-                                const userInfo = {
-                                    nickname: res.data.nickname,
-                                    avatar: res.data.figureurl_qq_2, // 高清头像
-                                    gender: res.data.gender,
-                                    openId: openId,
-                                    token: accessToken
-                                };
-                                console.log('用户信息:', userInfo);
-                                showQQUserInfo({ nickname: userInfo.nickname, gender: userInfo.gender });
-                                // localStorage.setItem('qqUser', JSON.stringify({ nickname: userInfo.nickname, gender: userInfo.gender }))
-                            })
-                            .error(err => {
-                                console.error('获取用户信息失败:', err);
+                // 轮询等待QC.Login可用
+                function checkQQLoginReady() {
+                    if (window.QC && QC.Login && typeof QC.Login.check === 'function') {
+                        if (QC.Login.check()) {
+                            QC.Login.getMe(function (openId, accessToken) {
+                                QC.api('get_user_info', {})
+                                    .success(res => {
+                                        const userInfo = {
+                                            nickname: res.data.nickname,
+                                            avatar: res.data.figureurl_qq_2,
+                                            gender: res.data.gender,
+                                            openId: openId,
+                                            token: accessToken
+                                        };
+                                        console.log('用户信息:', userInfo);
+                                        showQQUserInfo({ nickname: userInfo.nickname, gender: userInfo.gender });
+                                    })
+                                    .error(err => {
+                                        console.error('获取用户信息失败:', err);
+                                    });
                             });
-                    });
-                } else {
-                    // alert('qq not success');
-                    window.location.href = 'login.html';
+                        } else {
+                            window.location.href = 'login.html';
+                        }
+                    } else {
+                        setTimeout(checkQQLoginReady, 100);
+                    }
                 }
+                checkQQLoginReady();
             }
 
             document.getElementById('logout-btn').onclick = function () {
