@@ -58,7 +58,7 @@
 
     <!-- Footer -->
     <div id="footer"></div>
-    
+
     <script src="index.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -136,15 +136,27 @@
                 response_type: 'token', // 直接获取token（前端模式）
                 client_id: '102796919',
                 redirect_uri: 'https://playableall.com/admin.html',
-                // state: state,
-                // scope: 'get_user_info',
-                scope: 'all',
-                // display: 'popup' // 弹窗模式
+                state: state
             });
 
             window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
                 'QQLogin', 'width=600,height=500');
+
+            // 监听子窗口关闭事件（备用）
+            const timer = setInterval(() => {
+                if (loginWindow.closed) {
+                    clearInterval(timer);
+                    window.location.reload(); // 子窗口关闭后刷新父页面
+                }
+            }, 500);
+
+            window.addEventListener('message', (e) => {
+                if (e.data === 'qq_login_success') {
+                    window.location.href = '/admin.html'; // 跳转到用户页
+                }
+            });
         };
+
     </script>
 </body>
 

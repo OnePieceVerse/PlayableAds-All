@@ -4,80 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>后台首页</title>
+    <title>Callback</title>
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="main.css">
-    <style>
-        .admin-dashboard {
-            max-width: 480px;
-            margin: 60px auto;
-            background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            padding: 2.5rem 2rem;
-            text-align: center;
-        }
-
-        .admin-dashboard h1 {
-            font-size: 2rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .admin-dashboard .user-info {
-            margin-bottom: 2rem;
-            color: #4a5568;
-        }
-
-        .admin-dashboard .logout-btn {
-            background: #e53e3e;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            padding: 0.75rem 2rem;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background 0.2s;
-        }
-
-        .admin-dashboard .logout-btn:hover {
-            background: #c53030;
-        }
-    </style>
 </head>
 
 <body>
-    <div class="admin-dashboard">
-        <h1>欢迎来到后台首页</h1>
-        <div class="user-info" id="user-info">正在加载用户信息...</div>
-        <button class="logout-btn" id="logout-btn">退出登录</button>
-    </div>
-    <script type="module">
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-        const firebaseConfig = {
-            apiKey: "AIzaSyBNE_XZhiF6ARuOB_G_4-sP21M0rr3Ozc8",
-            authDomain: "playableads-1f632.firebaseapp.com",
-            projectId: "playableads-1f632",
-            storageBucket: "playableads-1f632.firebasestorage.app",
-            messagingSenderId: "660151343958",
-            appId: "1:660151343958:web:bf397369a0f9b261b554f7",
-            measurementId: "G-CM986RS9XC"
-        };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const userInfoDiv = document.getElementById('user-info');
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                userInfoDiv.innerHTML = `用户：<b>${user.displayName || user.email}</b><br>邮箱：${user.email}`;
-            } else {
-                window.location.href = 'login.html';
-            }
-        });
-        document.getElementById('logout-btn').onclick = function () {
-            signOut(auth).then(() => {
-                window.location.href = 'login.html';
-            });
-        };
+    <script>
+        if (window.opener) {
+            console.log(window.location.href)
+            window.opener.postMessage('qq_login_success', '*'); // 通知父窗口
+            window.close(); // 关闭当前子窗口
+        }
     </script>
 </body>
 
