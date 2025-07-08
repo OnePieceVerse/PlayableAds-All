@@ -248,7 +248,7 @@
 
             // 父窗口监听子窗口消息
             window.addEventListener('message', (event) => {
-                if (event.origin !== 'https://playableall.com') return;
+                if (event.origin !== 'https://www.playableall.com') return;
                 if (event.data.type === 'qq_login_success') {
                     console.log('接收到Token和OpenID:', event.data);
                     // 触发用户信息获取
