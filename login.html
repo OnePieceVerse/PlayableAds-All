@@ -136,9 +136,10 @@
                 response_type: 'token', // 直接获取token（前端模式）
                 client_id: '102796919',
                 redirect_uri: 'https://playableall.com/admin.html',
-                state: state,
-                scope: 'get_user_info',
-                display: 'popup' // 弹窗模式
+                // state: state,
+                // scope: 'get_user_info',
+                scope: 'all',
+                // display: 'popup' // 弹窗模式
             });
 
             window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
