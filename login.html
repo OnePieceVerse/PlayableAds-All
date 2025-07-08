@@ -58,7 +58,7 @@
 
     <!-- Footer -->
     <div id="footer"></div>
-
+    
     <script src="index.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -134,8 +134,8 @@
 
             const params = new URLSearchParams({
                 response_type: 'token', // 直接获取token（前端模式）
-                client_id: '102800176',
-                redirect_uri: encodeURIComponent('http://localhost:8000/admin.html'),
+                client_id: '102796919',
+                redirect_uri: encodeURIComponent('https://playable.com/admin.html'),
                 state: state,
                 scope: 'get_user_info',
                 display: 'popup' // 弹窗模式
@@ -146,4 +146,5 @@
         };
     </script>
 </body>
+
 </html>
