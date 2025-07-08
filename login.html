@@ -216,6 +216,7 @@
         function getTokenAndOpenID() {
             return new Promise((resolve, reject) => {
                 if (QC.Login.check()) { // 检查登录状态
+                    alert('no need login');
                     QC.Login.getMe(function (openId, accessToken) {
                         resolve({ openId, accessToken }); // 返回OpenID和Token
                     });
@@ -250,7 +251,7 @@
                     //         // }
                     //     }
                     // });
-
+alert('need login');
 
                     QC.Login.showPopup({
                         appId: "102796919",
@@ -305,7 +306,27 @@
             alert('init');
             window.addEventListener('storage', (e) => {
                 alert('storage');
-                if (e.key === 'qq_login_success') console.log(JSON.parse(e.newValue));
+                const data = JSON.parse(e.newValue)
+                QC.api('get_user_info', {})
+                    .success(res => {
+                        // province, city, year
+                        const userInfo = {
+                            nickname: res.data.nickname,
+                            avatar: res.data.figureurl_qq_2, // 高清头像
+                            gender: res.data.gender,
+                            openId: data.openId,
+                            token: data.accessToken
+                        };
+                        console.log('用户信息:', userInfo);
+                        console.log(res);
+                        localStorage.setItem('qqUser', JSON.stringify({ nickname: userInfo.nickname, gender: userInfo.gender }))
+                        window.location.href = '/admin_index.html';
+                        // 此处可调用后端接口保存用户信息
+                    })
+                    .error(err => {
+                        console.error('获取用户信息失败:', err);
+                    });
+                // if (e.key === 'qq_login_success') console.log(JSON.parse(e.newValue));
             });
         });
     </script>
