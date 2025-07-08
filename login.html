@@ -222,34 +222,40 @@
                 } else {
                     // alert('no');
                     // reject('未登录或登录已过期');
-                    const state = Date.now().toString(); // 防CSRF令牌
-                    sessionStorage.setItem('qq_state', state);
+                    // const state = Date.now().toString(); // 防CSRF令牌
+                    // sessionStorage.setItem('qq_state', state);
 
-                    const params = new URLSearchParams({
-                        response_type: 'token', // 直接获取token（前端模式）
-                        client_id: '102796919',
-                        redirect_uri: 'https://playableall.com/admin.html',
-                        state: state
-                    });
+                    // const params = new URLSearchParams({
+                    //     response_type: 'token', // 直接获取token（前端模式）
+                    //     client_id: '102796919',
+                    //     redirect_uri: 'https://playableall.com/admin.html',
+                    //     state: state
+                    // });
 
-                    const loginWindow = window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
-                        'QQLogin', 'width=600,height=500');
+                    // const loginWindow = window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
+                    //     'QQLogin', 'width=600,height=500');
 
-                    window.addEventListener('message', (e) => {
-                        if (e.data.type === 'qq_login_success') {
-                            console.log(e.data)
-                            // getUserInfo();
-                            // if (e.data.token) {
-                            //     //https://graph.qq.com/user/get_user_info?access_token=YOUR_ACCESS_TOKEN&oauth_consumer_key=YOUR_APP_ID&openid=YOUR_OPENID
-                            //     fetch(`/api/qq_user_info?access_token=${e.data.token}&app_id=xxx&openid=xxx`)
-                            //         .then(res => res.json())
-                            //         .then(data => console.log(data));
-                            //     window.location.href = '/admin_index.html'; // 跳转到用户页
-                            // } else {
-                            //     alert('登录失败，请重试');
-                            // }
-                        }
-                    });
+                    // window.addEventListener('message', (e) => {
+                    //     if (e.data.type === 'qq_login_success') {
+                    //         console.log(e.data)
+                    //         // getUserInfo();
+                    //         // if (e.data.token) {
+                    //         //     //https://graph.qq.com/user/get_user_info?access_token=YOUR_ACCESS_TOKEN&oauth_consumer_key=YOUR_APP_ID&openid=YOUR_OPENID
+                    //         //     fetch(`/api/qq_user_info?access_token=${e.data.token}&app_id=xxx&openid=xxx`)
+                    //         //         .then(res => res.json())
+                    //         //         .then(data => console.log(data));
+                    //         //     window.location.href = '/admin_index.html'; // 跳转到用户页
+                    //         // } else {
+                    //         //     alert('登录失败，请重试');
+                    //         // }
+                    //     }
+                    // });
+
+
+                              QC.Login.showPopup({
+                appId: "102796919",
+                redirectURI: "https://playableall.com/admin.html"
+            });
                 }
             });
         }
@@ -276,13 +282,17 @@
         }
 
         // 父窗口监听子窗口消息
-        window.addEventListener('message', (event) => {
-            if (event.origin !== 'https://playableall.com') return;
-            if (event.data.type === 'qq_login_success') {
-                console.log('接收到Token和OpenID:', event.data);
-                // 触发用户信息获取
-                getUserInfo();
-            }
+        // window.addEventListener('message', (event) => {
+        //     if (event.origin !== 'https://playableall.com') return;
+        //     if (event.data.type === 'qq_login_success') {
+        //         console.log('接收到Token和OpenID:', event.data);
+        //         // 触发用户信息获取
+        //         getUserInfo();
+        //     }
+        // });
+        // 页面B监听变化
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'qq_login_success') console.log(JSON.parse(e.newValue));
         });
     </script>
 </body>

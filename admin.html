@@ -30,16 +30,25 @@
         // }
 
         // 回调页面中自动关闭窗口并传递数据
-        if (window.opener) {
-            QC.Login.getMe(function (openId, accessToken) {
-                window.opener.postMessage({
-                    type: 'qq_login_success',
-                    openId,
-                    accessToken
-                }, 'https://www.playableall.com'); // 限制消息来源域名
-                window.close(); // 关闭子窗口
+        // if (window.opener) {
+        //     QC.Login.getMe(function (openId, accessToken) {
+        //         window.opener.postMessage({
+        //             type: 'qq_login_success',
+        //             openId,
+        //             accessToken
+        //         }, 'https://www.playableall.com'); // 限制消息来源域名
+        //         window.close(); // 关闭子窗口
+        //     });
+        // }
+
+        // 页面A设置数据
+        QC.Login.getMe(function (openId, accessToken) {
+            alert('hi');
+            localStorage.setItem('qq_login_success', JSON.stringify({ openId: openId, accessToken: accessToken }));
+                // window.close(); // 关闭子窗口
             });
-        }
+        
+
     </script>
 </body>
 
