@@ -67,7 +67,7 @@
         }
 
         function showQQUserInfo(qqUser) {
-            userInfoDiv.innerHTML = `QQ用户：<b>${qqUser.nickname}</b><br>QQ号：${qqUser.gender}`;
+            userInfoDiv.innerHTML = `QQ用户：<b>${qqUser.nickname}</b><br>性别：${qqUser.gender}`;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -128,22 +128,22 @@
                 // 清除本地QQ登录信息
                 localStorage.removeItem('loginType');
 
-                // 退出QQ登录
-                if (loginType == 'qq') {
-                    // QC.Login.signOut(function () {
-                    //     // 退出成功的回调
-                    //     alert('QQ登录已退出');
-                    //     // 可选：重定向到登录页或首页
-                    //     window.location.href = 'login.html';
-                    // });
-
-                    window.location.href = 'login.html';
-                }
                 // Firebase 登出
                 if (loginType == 'google' || loginType == 'facebook') {
                     signOut(auth).then(() => {
                         window.location.href = 'login.html';
                     });
+                } else if (loginType == 'qq') {
+                    QC.Login.signOut(function () {
+                        // 退出成功的回调
+                        alert('QQ登录已退出');
+                        // 可选：重定向到登录页或首页
+                        window.location.href = 'login.html';
+                    });
+
+                    // window.location.href = 'login.html';
+                } else {
+                    window.location.href = 'login.html';
                 }
             };
         });
