@@ -251,7 +251,7 @@
                     //         // }
                     //     }
                     // });
-alert('need login');
+                    alert('need login');
 
                     QC.Login.showPopup({
                         appId: "102796919",
@@ -306,26 +306,29 @@ alert('need login');
             alert('init');
             window.addEventListener('storage', (e) => {
                 alert('storage');
-                const data = JSON.parse(e.newValue)
-                QC.api('get_user_info', {})
-                    .success(res => {
-                        // province, city, year
-                        const userInfo = {
-                            nickname: res.data.nickname,
-                            avatar: res.data.figureurl_qq_2, // 高清头像
-                            gender: res.data.gender,
-                            openId: data.openId,
-                            token: data.accessToken
-                        };
-                        console.log('用户信息:', userInfo);
-                        console.log(res);
-                        localStorage.setItem('qqUser', JSON.stringify({ nickname: userInfo.nickname, gender: userInfo.gender }))
-                        window.location.href = '/admin_index.html';
-                        // 此处可调用后端接口保存用户信息
-                    })
-                    .error(err => {
-                        console.error('获取用户信息失败:', err);
-                    });
+                if (e.key === 'qq_login_success') {
+                    const data = JSON.parse(e.newValue)
+                    QC.api('get_user_info', {})
+                        .success(res => {
+                            // province, city, year
+                            const userInfo = {
+                                nickname: res.data.nickname,
+                                avatar: res.data.figureurl_qq_2, // 高清头像
+                                gender: res.data.gender,
+                                openId: data.openId,
+                                token: data.accessToken
+                            };
+                            console.log('用户信息:', userInfo);
+                            console.log(res);
+                            localStorage.setItem('qqUser', JSON.stringify({ nickname: userInfo.nickname, gender: userInfo.gender }))
+                            window.location.href = '/admin_index.html';
+                            // 此处可调用后端接口保存用户信息
+                        })
+                        .error(err => {
+                            console.error('获取用户信息失败:', err);
+                        });
+                        localStorage.removeItem('qq_login_success');
+                }
                 // if (e.key === 'qq_login_success') console.log(JSON.parse(e.newValue));
             });
         });
