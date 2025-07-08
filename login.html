@@ -220,7 +220,7 @@
                         resolve({ openId, accessToken }); // 返回OpenID和Token
                     });
                 } else {
-                    alert('no');
+                    // alert('no');
                     // reject('未登录或登录已过期');
                     const state = Date.now().toString(); // 防CSRF令牌
                     sessionStorage.setItem('qq_state', state);
@@ -277,7 +277,7 @@
 
         // 父窗口监听子窗口消息
         window.addEventListener('message', (event) => {
-            if (event.origin !== 'https://www.playableall.com') return;
+            if (event.origin !== 'https://playableall.com') return;
             if (event.data.type === 'qq_login_success') {
                 console.log('接收到Token和OpenID:', event.data);
                 // 触发用户信息获取
