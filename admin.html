@@ -42,11 +42,28 @@
         // }
 
         // 页面A设置数据
-        QC.Login.getMe(function (openId, accessToken) {
-            // alert('hi');
-            localStorage.setItem('qq_login_success', JSON.stringify({ openId: openId, accessToken: accessToken }));
-            window.close(); // 关闭子窗口
-        });
+        // QC.Login.getMe(function (openId, accessToken) {
+        //     // alert('hi');
+        //     QC.api('get_user_info', {})
+        //         .success(res => {
+        //             // province, city, year
+        //             const userInfo = {
+        //                 nickname: res.data.nickname,
+        //                 avatar: res.data.figureurl_qq_2, // 高清头像
+        //                 gender: res.data.gender,
+        //                 openId: openId,
+        //                 token: accessToken
+        //             };
+        //             console.log('用户信息:', userInfo);
+        //             console.log(res);
+        //             localStorage.setItem('qqUser', JSON.stringify({ nickname: userInfo.nickname, gender: userInfo.gender }))
+        //         })
+        //         .error(err => {
+        //             console.error('获取用户信息失败:', err);
+        //         });
+        //     // localStorage.setItem('qq_login_success', JSON.stringify({ openId: openId, accessToken: accessToken }));
+        //     window.close(); // 关闭子窗口
+        // });
 
 
     </script>
