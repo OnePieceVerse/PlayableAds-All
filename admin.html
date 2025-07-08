@@ -10,13 +10,33 @@
 
 <body>
     <script>
-        console.log(window.location.href)
-        alert(window.location.href)
+        // 解析URL中的token和state参数
+        // const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        // const accessToken = hashParams.get('access_token');
+        // const state = hashParams.get('state');
+
+        // if (accessToken && state === sessionStorage.getItem('qq_state')) {
+        //     // 验证通过后操作父窗口
+        //     if (window.opener) {
+        //         window.opener.postMessage({
+        //             type: 'qq_login_success',
+        //             token: accessToken
+        //         }, 'https://playableall.com'); // 限制消息来源域名
+
+        //         window.close(); // 关闭当前子窗口
+        //     }
+        // }
+
+        // 回调页面中自动关闭窗口并传递数据
         if (window.opener) {
-            console.log('qq_login_success postMessage')
-            alert('qq_login_success postMessage')
-            window.opener.postMessage('qq_login_success', '*'); // 通知父窗口
-            window.close(); // 关闭当前子窗口
+            QC.Login.getMe(function (openId, accessToken) {
+                window.opener.postMessage({
+                    type: 'qq_login_success',
+                    openId,
+                    accessToken
+                }, 'https://playableall.com'); // 限制消息来源域名
+                window.close(); // 关闭子窗口
+            });
         }
     </script>
 </body>
