@@ -139,7 +139,7 @@
                 state: state
             });
 
-            window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
+            const loginWindow = window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
                 'QQLogin', 'width=600,height=500');
 
             // 监听子窗口关闭事件（备用）
@@ -152,7 +152,7 @@
 
             window.addEventListener('message', (e) => {
                 if (e.data === 'qq_login_success') {
-                    window.location.href = '/admin.html'; // 跳转到用户页
+                    window.location.href = '/admin_index.html'; // 跳转到用户页
                 }
             });
         };
