@@ -152,36 +152,37 @@
             // });
 
             document.querySelector('.social-btn.qq').onclick = function () {
-                initQQLogin();
-                return;
+                // initQQLogin();
+                // return;
 
-                // const state = Date.now().toString(); // 防CSRF令牌
-                // sessionStorage.setItem('qq_state', state);
+                const state = Date.now().toString(); // 防CSRF令牌
+                sessionStorage.setItem('qq_state', state);
 
-                // const params = new URLSearchParams({
-                //     response_type: 'token', // 直接获取token（前端模式）
-                //     client_id: '102796919',
-                //     redirect_uri: 'https://playableall.com/admin.html',
-                //     state: state
-                // });
+                const params = new URLSearchParams({
+                    response_type: 'token', // 直接获取token（前端模式）
+                    client_id: '102796919',
+                    redirect_uri: 'https://playableall.com/admin.html',
+                    state: state
+                });
 
-                // const loginWindow = window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
-                //     'QQLogin', 'width=600,height=500');
+                const loginWindow = window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
+                    'QQLogin', 'width=600,height=500');
 
-                // window.addEventListener('message', (e) => {
-                //     if (e.data.type === 'qq_login_success') {
-                //         console.log(e.data.token)
-                //         if (e.data.token) {
-                //             //https://graph.qq.com/user/get_user_info?access_token=YOUR_ACCESS_TOKEN&oauth_consumer_key=YOUR_APP_ID&openid=YOUR_OPENID
-                //             fetch(`/api/qq_user_info?access_token=${e.data.token}&app_id=xxx&openid=xxx`)
-                //                 .then(res => res.json())
-                //                 .then(data => console.log(data));
-                //             window.location.href = '/admin_index.html'; // 跳转到用户页
-                //         } else {
-                //             alert('登录失败，请重试');
-                //         }
-                //     }
-                // });
+                window.addEventListener('message', (e) => {
+                    if (e.data.type === 'qq_login_success') {
+                        console.log(e.data.token)
+                        getUserInfo();
+                        // if (e.data.token) {
+                        //     //https://graph.qq.com/user/get_user_info?access_token=YOUR_ACCESS_TOKEN&oauth_consumer_key=YOUR_APP_ID&openid=YOUR_OPENID
+                        //     fetch(`/api/qq_user_info?access_token=${e.data.token}&app_id=xxx&openid=xxx`)
+                        //         .then(res => res.json())
+                        //         .then(data => console.log(data));
+                        //     window.location.href = '/admin_index.html'; // 跳转到用户页
+                        // } else {
+                        //     alert('登录失败，请重试');
+                        // }
+                    }
+                });
             };
 
             // 引入SDK并初始化登录按钮
@@ -205,10 +206,11 @@
                 // });
 
                 // 触发登录弹窗
-                QC.Login.showPopup({
-                    appId: "102796919",
-                    redirectURI: "https://playableall.com/admin.html"
-                });
+                // QC.Login.showPopup({
+                //     appId: "102796919",
+                //     redirectURI: "https://playableall.com/admin.html"
+                // });
+
             }
 
             function getTokenAndOpenID() {
