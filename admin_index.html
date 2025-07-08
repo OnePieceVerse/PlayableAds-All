@@ -125,12 +125,14 @@
 
                 // 退出QQ登录
                 if (loginType == 'qq') {
-                    QC.Login.signOut(function () {
-                        // 退出成功的回调
-                        alert('QQ登录已退出');
-                        // 可选：重定向到登录页或首页
-                        window.location.href = 'login.html';
-                    });
+                    // QC.Login.signOut(function () {
+                    //     // 退出成功的回调
+                    //     alert('QQ登录已退出');
+                    //     // 可选：重定向到登录页或首页
+                    //     window.location.href = 'login.html';
+                    // });
+
+                    window.location.href = 'login.html';
                 }
                 // Firebase 登出
                 if (loginType == 'google' || loginType == 'facebook') {
