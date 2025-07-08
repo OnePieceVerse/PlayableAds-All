@@ -51,6 +51,8 @@
         <div class="user-info" id="user-info">正在加载用户信息...</div>
         <button class="logout-btn" id="logout-btn">退出登录</button>
     </div>
+    <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="102796919"
+    data-redirecturi="https://playableall.com/admin.html" charset="utf-8"></script>
     <script type="module">
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
@@ -71,7 +73,7 @@
             userInfoDiv.innerHTML = `用户：<b>${user.displayName || user.email || user.uid}</b><br>邮箱：${user.email || '无'}`;
         }
         function showQQUserInfo(qqUser) {
-            userInfoDiv.innerHTML = `QQ用户：<b>${qqUser.nickname}</b><br>QQ号：${qqUser.qqid}`;
+            userInfoDiv.innerHTML = `QQ用户：<b>${qqUser.nickname}</b><br>QQ号：${qqUser.gender}`;
         }
 
         onAuthStateChanged(auth, (user) => {
@@ -80,7 +82,7 @@
             } else {
                 // 检查本地是否有QQ登录信息
                 const qqUser = JSON.parse(localStorage.getItem('qqUser') || 'null');
-                if (qqUser && qqUser.qqid) {
+                if (qqUser && qqUser.nickname) {
                     showQQUserInfo(qqUser);
                 } else {
                     window.location.href = 'login.html';
@@ -90,11 +92,21 @@
         document.getElementById('logout-btn').onclick = function() {
             // 清除本地QQ登录信息
             localStorage.removeItem('qqUser');
+
+            // 退出QQ登录
+            QC.Login.signOut(function() {
+                // 退出成功的回调
+                alert('QQ登录已退出');
+                // 可选：重定向到登录页或首页
+                window.location.href = '/login.html';
+            });
             // Firebase 登出
             signOut(auth).then(() => {
                 window.location.href = 'login.html';
             });
         };
+
+        
     </script>
 </body>
 
