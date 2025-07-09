@@ -95,26 +95,19 @@
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);
 
-
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        console.log("Facebook登录成功1:", user);
-                        if(loginType == 'facebook'){
+                        if (loginType == 'facebook') {
                             const fbAccessToken = localStorage.getItem('fbAccessToken');
-                            
-                        fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email,picture.width(500).height(500)&access_token=${fbAccessToken}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log("Facebook登录成功2:", data);
-                            const avatarUrl = data.picture.data.url; // 获取头像URL
-                            console.log("头像URL:", avatarUrl);
-                            
-                            user.photoURL = avatarUrl
+                            fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email,picture.width(500).height(500)&access_token=${fbAccessToken}`)
+                                .then(response => response.json())
+                                .then(data => {
+                                    user.photoURL = data.picture.data.url;
+                                    showUserInfo(user);
+                                });
+                        } else {
                             showUserInfo(user);
-                            console.log('user token:', user.accessToken);
-                        });
                         }
-                        // showUserInfo(user);
                     } else {
                         window.location.href = 'login.html';
                     }
