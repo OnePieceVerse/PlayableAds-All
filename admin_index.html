@@ -100,7 +100,7 @@
                     if (user) {
                         console.log("Facebook登录成功1:", user);
                         if(loginType == 'facebook'){
-                        fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email,picture.width(500).height(500)&access_token=${useraccessToken}`)
+                        fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email,picture.width(500).height(500)&access_token=${user.accessToken}`)
                         .then(response => response.json())
                         .then(data => {
                             console.log("Facebook登录成功2:", data);
