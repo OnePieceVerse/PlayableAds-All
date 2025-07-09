@@ -77,7 +77,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // 触发Google登录
+        // Google登录
         function googleLogin() {
             const provider = new GoogleAuthProvider();
             provider.setCustomParameters({ prompt: 'select_account' });  // 强制选择账户
@@ -86,7 +86,7 @@
                     const user = result.user;  // 获取用户信息
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     const token = credential.accessToken;  // 获取访问令牌
-                    console.log("Google登录成功:", user.displayName, user.email);
+                    console.log("Google登录成功:", user);
                     localStorage.setItem('loginType', 'google');
                     window.location.href = 'admin_index.html';
                 })
@@ -95,6 +95,7 @@
                 });
         }
 
+        // Facebook登录
         function facebookLogin() {
             const provider = new FacebookAuthProvider();
             provider.addScope('email');  // 请求用户邮箱权限
@@ -107,7 +108,7 @@
                     const user = result.user;  // 获取用户信息
                     const credential = FacebookAuthProvider.credentialFromResult(result);
                     const accessToken = credential.accessToken;  // 获取Facebook访问令牌
-
+                    console.log("Facebook登录成功1:", result);
                     // 可选：调用Graph API获取更多用户数据
                     fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${accessToken}`)
                         .then(response => response.json())
@@ -131,28 +132,11 @@
         document.querySelector('.social-btn.facebook').onclick = function () {
             facebookLogin();
         };
-
-
     </script>
-    <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="102796919"
-        data-redirecturi="https://playableall.com/admin.html" charset="utf-8">
+    <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8">
         </script>
     <script>
-        // document.addEventListener("DOMContentLoaded", () => {
-        //     alert('hi');
-
-        //     QC.Login({
-        //         // btnId: "qqLoginBtn",
-        //         scope: "get_user_info"
-        //     }, (reqData) => {
-        //         QC.api("get_user_info")
-        //             .success(res => {
-        //                 alert(`欢迎，${res.data.nickname}！`);
-        //                 console.log("用户数据:", res.data);
-        //             });
-        //     });
-        // });
-
+        // QQ登陆
         document.querySelector('.social-btn.qq').onclick = function () {
             QC.Login.showPopup({
                 appId: "102796919",
@@ -160,186 +144,7 @@
             });
             localStorage.setItem('loginType', 'qq');
             window.location.href = 'admin_index.html';
-            // initQQLogin();
-            // return;
-
-            // const state = Date.now().toString(); // 防CSRF令牌
-            // sessionStorage.setItem('qq_state', state);
-
-            // const params = new URLSearchParams({
-            //     response_type: 'token', // 直接获取token（前端模式）
-            //     client_id: '102796919',
-            //     redirect_uri: 'https://playableall.com/admin.html',
-            //     state: state
-            // });
-
-            // const loginWindow = window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
-            //     'QQLogin', 'width=600,height=500');
-
-            // window.addEventListener('message', (e) => {
-            //     if (e.data.type === 'qq_login_success') {
-            //         console.log(e.data.token)
-            //         getUserInfo();
-            //         // if (e.data.token) {
-            //         //     //https://graph.qq.com/user/get_user_info?access_token=YOUR_ACCESS_TOKEN&oauth_consumer_key=YOUR_APP_ID&openid=YOUR_OPENID
-            //         //     fetch(`/api/qq_user_info?access_token=${e.data.token}&app_id=xxx&openid=xxx`)
-            //         //         .then(res => res.json())
-            //         //         .then(data => console.log(data));
-            //         //     window.location.href = '/admin_index.html'; // 跳转到用户页
-            //         // } else {
-            //         //     alert('登录失败，请重试');
-            //         // }
-            //     }
-            // });
         };
-
-        // 引入SDK并初始化登录按钮
-        function initQQLogin() {
-
-            // const script = document.createElement('script');
-            // script.src = 'https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js';
-            // script.dataset.appid = '102796919'; // 替换为你的AppID
-            // script.dataset.redirecturi = encodeURIComponent('https://playableall.com/admin.html'); // 回调地址
-            // script.charset = 'utf-8';
-            // document.body.appendChild(script);
-
-            // 初始化登录按钮
-            // QC.Login({
-            //     // btnId: 'qqLoginBtn', // 绑定按钮ID
-            //     scope: 'get_user_info', // 需要获取的用户权限
-            //     size: 'A_L' // 按钮尺寸
-            // }, function (reqData, opts) {
-            //     console.log('登录成功，准备获取用户信息');
-            //     getUserInfo(); // 调用获取用户信息函数
-            // });
-
-            // 触发登录弹窗
-            // QC.Login.showPopup({
-            //     appId: "102796919",
-            //     redirectURI: "https://playableall.com/admin.html"
-            // });
-            getUserInfo();
-        }
-
-        function getTokenAndOpenID() {
-            return new Promise((resolve, reject) => {
-                if (QC.Login.check()) { // 检查登录状态
-                    alert('no need login');
-                    QC.Login.getMe(function (openId, accessToken) {
-                        resolve({ openId, accessToken }); // 返回OpenID和Token
-                    });
-                } else {
-                    // alert('no');
-                    // reject('未登录或登录已过期');
-                    // const state = Date.now().toString(); // 防CSRF令牌
-                    // sessionStorage.setItem('qq_state', state);
-
-                    // const params = new URLSearchParams({
-                    //     response_type: 'token', // 直接获取token（前端模式）
-                    //     client_id: '102796919',
-                    //     redirect_uri: 'https://playableall.com/admin.html',
-                    //     state: state
-                    // });
-
-                    // const loginWindow = window.open(`https://graph.qq.com/oauth2.0/authorize?${params}`,
-                    //     'QQLogin', 'width=600,height=500');
-
-                    // window.addEventListener('message', (e) => {
-                    //     if (e.data.type === 'qq_login_success') {
-                    //         console.log(e.data)
-                    //         // getUserInfo();
-                    //         // if (e.data.token) {
-                    //         //     //https://graph.qq.com/user/get_user_info?access_token=YOUR_ACCESS_TOKEN&oauth_consumer_key=YOUR_APP_ID&openid=YOUR_OPENID
-                    //         //     fetch(`/api/qq_user_info?access_token=${e.data.token}&app_id=xxx&openid=xxx`)
-                    //         //         .then(res => res.json())
-                    //         //         .then(data => console.log(data));
-                    //         //     window.location.href = '/admin_index.html'; // 跳转到用户页
-                    //         // } else {
-                    //         //     alert('登录失败，请重试');
-                    //         // }
-                    //     }
-                    // });
-                    alert('need login');
-
-                    QC.Login.showPopup({
-                        appId: "102796919",
-                        redirectURI: "https://playableall.com/admin.html"
-                    });
-                }
-            });
-        }
-
-        function getUserInfo() {
-            getTokenAndOpenID().then(({ openId, accessToken }) => {
-                // 调用QQ OpenAPI获取用户信息
-                QC.api('get_user_info', {})
-                    .success(res => {
-                        // province, city, year
-                        const userInfo = {
-                            nickname: res.data.nickname,
-                            avatar: res.data.figureurl_qq_2, // 高清头像
-                            gender: res.data.gender,
-                            openId: openId,
-                            token: accessToken
-                        };
-                        console.log('用户信息:', userInfo);
-                        console.log(res);
-                        localStorage.setItem('qqUser', JSON.stringify({ nickname: userInfo.nickname, gender: userInfo.gender }))
-                        window.location.href = '/admin_index.html';
-                        // 此处可调用后端接口保存用户信息
-                    })
-                    .error(err => {
-                        console.error('获取用户信息失败:', err);
-                    });
-            }).catch(err => console.error(err));
-        }
-
-        // 父窗口监听子窗口消息
-        // window.addEventListener('message', (event) => {
-        //     if (event.origin !== 'https://playableall.com') return;
-        //     if (event.data.type === 'qq_login_success') {
-        //         console.log('接收到Token和OpenID:', event.data);
-        //         // 触发用户信息获取
-        //         getUserInfo();
-        //     }
-        // });
-
-
-        // 页面B监听变化
-        // window.addEventListener('storage', (e) => {
-        //     alert('storage');
-        //     if (e.key === 'qq_login_success') console.log(JSON.parse(e.newValue));
-        // });
-        // window.addEventListener('DOMContentLoaded', () => {
-        //     alert('init');
-        //     window.addEventListener('storage', (e) => {
-        //         alert('storage');
-        //         if (e.key === 'qqUser') {
-        //             const data = JSON.parse(e.newValue)
-        //             QC.api('get_user_info', {})
-        //                 .success(res => {
-        //                     // province, city, year
-        //                     const userInfo = {
-        //                         nickname: res.data.nickname,
-        //                         avatar: res.data.figureurl_qq_2, // 高清头像
-        //                         gender: res.data.gender,
-        //                         openId: data.openId,
-        //                         token: data.accessToken
-        //                     };
-        //                     console.log('用户信息:', userInfo);
-        //                     console.log(res);
-        //                     localStorage.setItem('qqUser', JSON.stringify({ nickname: userInfo.nickname, gender: userInfo.gender }))
-        //                     window.location.href = '/admin_index.html';
-        //                     // 此处可调用后端接口保存用户信息
-        //                 })
-        //                 .error(err => {
-        //                     console.error('获取用户信息失败:', err);
-        //                 });
-        //                 localStorage.removeItem('qq_login_success');
-        //         }
-        //         // if (e.key === 'qq_login_success') console.log(JSON.parse(e.newValue));
-        //     });
-        // });
     </script>
 </body>
 
