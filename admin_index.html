@@ -60,6 +60,7 @@
 
         const userInfoDiv = document.getElementById('user-info');
         const loginType = localStorage.getItem('loginType');
+        alert(loginType);
         if (!loginType) {
             window.location.href = 'login.html';
         }
@@ -122,6 +123,7 @@
             } else if (loginType == 'qq') {
                 // 轮询等待QC.Login可用
                 function checkQQLoginReady() {
+                    alert('checkQQLoginReady');
                     if (window.QC && QC.Login && typeof QC.Login.check === 'function') {
                         if (QC.Login.check()) {
                             QC.Login.getMe(function (openId, accessToken) {
