@@ -109,6 +109,7 @@
                     const accessToken = credential.accessToken;
                     const email = result._tokenResponse.email;
                     localStorage.setItem('loginType', 'facebook');
+                    localStorage.setItem('fbAccessToken', accessToken);
                     console.log("Facebook登录成功user:", result);
                     window.location.href = 'admin_index.html';
                     // 可选：调用Graph API获取更多用户数据
