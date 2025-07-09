@@ -13,6 +13,13 @@ html, body {
     overflow: hidden;
   }
 
+  .img-wrapper {
+    position: relative;
+    width: 100vw;
+    height: 50vh;
+    overflow: hidden;
+  }
+
   .app-img {
     width: 100vw;
     height: 50vh;

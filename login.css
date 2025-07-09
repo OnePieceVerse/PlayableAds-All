@@ -1,7 +1,7 @@
 /* 登录页面样式 */
 .login-page {
     min-height: calc(100vh - 140px); /* 减去header和footer的高度 */
-    background-color: #f5f5f5;
+    background-color: #fafafa;
     margin: 0;
     display: flex;
     align-items: center;
@@ -12,10 +12,11 @@
 .login-container {
     width: 100%;
     max-width: 480px;
-    background: #fff;
+    background: #fff7ed;
     border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(217, 119, 6, 0.08);
     overflow: hidden;
+    border: 1.5px solid #fef3e2;
 }
 
 .login-content {
@@ -37,23 +38,23 @@
 
 .logo i {
     font-size: 32px;
-    color: #1a73e8;
+    color: #d97706;
 }
 
 .logo span {
     font-size: 28px;
     font-weight: bold;
-    color: #333;
+    color: #b45309;
 }
 
 .login-header h1 {
     font-size: 24px;
-    color: #333;
+    color: #b45309;
     margin-bottom: 8px;
 }
 
 .login-header p {
-    color: #666;
+    color: #b45309;
     font-size: 16px;
 }
 
@@ -72,9 +73,9 @@
     gap: 12px;
     height: 48px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 2px solid #fef3e2;
     background: #fff;
-    color: #333;
+    color: #b45309;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
@@ -85,21 +86,27 @@
 
 .social-btn i {
     font-size: 20px;
+    color: #d97706;
 }
 
 .social-btn:hover {
-    background: #f5f5f5;
+    background: #fef3e2;
+    color: #fff;
 }
 
 /* 各平台按钮样式 */
 .social-btn.qq {
-    background: #12B7F5;
-    border-color: #12B7F5;
+    background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+    border-color: #d97706;
     color: #fff;
 }
 
 .social-btn.qq:hover {
-    background: #0EA4DB;
+    background: #b45309;
+}
+
+.social-btn.qq i {
+    color: #fff;
 }
 
 .social-btn.wechat {
@@ -113,40 +120,44 @@
 }
 
 .social-btn.google {
-    background: linear-gradient(90deg, #4285F4 0%, #34A853 25%, #FBBC05 50%, #EA4335 100%);
-    color: #fff;
-    border: none;
+    background: linear-gradient(135deg, #fef3e2 0%, #fff7ed 100%);
+    color: #b45309;
+    border: 2px solid #d97706;
     font-weight: 500;
 }
 .social-btn.google:hover {
-    filter: brightness(0.95);
+    background: #d97706;
     color: #fff;
 }
 .social-btn.google i {
-    color: #fff;
+    color: #d97706;
 }
 
 .social-btn.facebook {
-    background: #1877F2;
-    border-color: #1877F2;
-    color: #fff;
+    background: linear-gradient(135deg, #fef3e2 0%, #fff7ed 100%);
+    border: 2px solid #d97706;
+    color: #b45309;
 }
 
 .social-btn.facebook:hover {
-    background: #166FE5;
+    background: #d97706;
+    color: #fff;
+}
+.social-btn.facebook i {
+    color: #d97706;
 }
 
 .social-btn.twitter {
-    background: #1da1f2;
-    color: #fff;
-    border: none;
+    background: linear-gradient(135deg, #fef3e2 0%, #fff7ed 100%);
+    border: 2px solid #d97706;
+    color: #b45309;
 }
 .social-btn.twitter:hover {
-    background: #0d8ddb;
+    background: #d97706;
     color: #fff;
 }
 .social-btn.twitter i {
-    color: #fff;
+    color: #d97706;
 }
 
 /* 登录页脚 */
@@ -156,12 +167,12 @@
 }
 
 .terms-text {
-    color: #666;
+    color: #b45309;
     font-size: 14px;
 }
 
 .terms-text a {
-    color: #1a73e8;
+    color: #d97706;
     text-decoration: none;
 }
 
