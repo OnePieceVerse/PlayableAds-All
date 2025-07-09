@@ -113,13 +113,17 @@
 }
 
 .social-btn.google {
-    background: #fff;
-    border-color: #ddd;
-    color: #333;
+    background: linear-gradient(90deg, #4285F4 0%, #34A853 25%, #FBBC05 50%, #EA4335 100%);
+    color: #fff;
+    border: none;
+    font-weight: 500;
 }
-
 .social-btn.google:hover {
-    background: #f5f5f5;
+    filter: brightness(0.95);
+    color: #fff;
+}
+.social-btn.google i {
+    color: #fff;
 }
 
 .social-btn.facebook {
