@@ -81,8 +81,15 @@
             userInfoDiv.innerHTML = `QQ用户：<b>${qqUser.nickname}</b>`;
         }
 
+        function showTwitterUserInfo(user) {
+            const avatarDiv = document.getElementById('user-avatar');
+            let avatarUrl = user.photoURL;
+            avatarDiv.innerHTML = `<img src="${avatarUrl}" alt="Twitter头像" style="width:80px;height:80px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px #eee;">`;
+            userInfoDiv.innerHTML = `Twitter用户：<b>${user.displayName || user.uid}</b>`;
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            if (loginType == 'google' || loginType == 'facebook') {
+            if (loginType == 'google' || loginType == 'facebook' || loginType == 'twitter') {
                 const firebaseConfig = {
                     apiKey: "AIzaSyBNE_XZhiF6ARuOB_G_4-sP21M0rr3Ozc8",
                     authDomain: "playableads-1f632.firebaseapp.com",
@@ -148,7 +155,7 @@
                 localStorage.removeItem('loginType');
 
                 // Firebase 登出
-                if (loginType == 'google' || loginType == 'facebook') {
+                if (loginType == 'google' || loginType == 'facebook' || loginType == 'twitter') {
                     signOut(auth).then(() => {
                         window.location.href = 'login.html';
                     });

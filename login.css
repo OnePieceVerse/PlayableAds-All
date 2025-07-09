@@ -132,6 +132,19 @@
     background: #166FE5;
 }
 
+.social-btn.twitter {
+    background: #1da1f2;
+    color: #fff;
+    border: none;
+}
+.social-btn.twitter:hover {
+    background: #0d8ddb;
+    color: #fff;
+}
+.social-btn.twitter i {
+    color: #fff;
+}
+
 /* 登录页脚 */
 .login-footer {
     text-align: center;

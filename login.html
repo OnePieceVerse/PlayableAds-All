@@ -33,10 +33,10 @@
                         <i class="fab fa-qq"></i>
                         <span data-translate="loginWithQQ"></span>
                     </button>
-                    <button class="social-btn wechat">
+                    <!-- <button class="social-btn wechat">
                         <i class="fab fa-weixin"></i>
                         <span data-translate="loginWithWechat"></span>
-                    </button>
+                    </button> -->
                     <button class="social-btn google">
                         <i class="fab fa-google"></i>
                         <span data-translate="loginWithGoogle"></span>
@@ -44,6 +44,10 @@
                     <button class="social-btn facebook">
                         <i class="fab fa-facebook"></i>
                         <span data-translate="loginWithFacebook"></span>
+                    </button>
+                    <button class="social-btn twitter">
+                        <i class="fab fa-twitter"></i>
+                        <span data-translate="loginWithTwitter"></span>
                     </button>
                 </div>
                 <div class="login-footer">
@@ -64,7 +68,7 @@
     <script src="index.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, FacebookAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+        import { getAuth, GoogleAuthProvider, FacebookAuthProvider, TwitterAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         const firebaseConfig = {
             apiKey: "AIzaSyBNE_XZhiF6ARuOB_G_4-sP21M0rr3Ozc8",
             authDomain: "playableads-1f632.firebaseapp.com",
@@ -119,12 +123,26 @@
                     }
                 });
         }
-
+        // Twitter登录
+        function twitterLogin() {
+            const provider = new TwitterAuthProvider();
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    localStorage.setItem('loginType', 'twitter');
+                    window.location.href = 'admin_index.html';
+                })
+                .catch((error) => {
+                    alert(`Twitter 登录失败: ${error.message}`);
+                });
+        }
         document.querySelector('.social-btn.google').onclick = function () {
             googleLogin();
         };
         document.querySelector('.social-btn.facebook').onclick = function () {
             facebookLogin();
+        };
+        document.querySelector('.social-btn.twitter').onclick = function () {
+            twitterLogin();
         };
     </script>
     <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8"></script>
