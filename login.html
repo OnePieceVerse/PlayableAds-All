@@ -85,7 +85,7 @@
                 .then((result) => {
                     const user = result.user;  // 获取用户信息
                     const credential = GoogleAuthProvider.credentialFromResult(result);
-                    const token = credential.accessToken;  // 获取访问令牌
+                    const token = credential.accessToken;
                     localStorage.setItem('loginType', 'google');
                     window.location.href = 'admin_index.html';
                 })
@@ -106,21 +106,15 @@
                 .then((result) => {
                     const user = result.user;  // 获取用户信息
                     const credential = FacebookAuthProvider.credentialFromResult(result);
-                    const accessToken = credential.accessToken;  // 获取Facebook访问令牌
-                    console.log("Facebook登录成功1:", result);
-                    console.log(result._tokenResponse.email);
-                    alert(result._tokenResponse.email);
+                    const accessToken = credential.accessToken;
+                    const email = result._tokenResponse.email;
                     localStorage.setItem('loginType', 'facebook');
                     window.location.href = 'admin_index.html';
-
                     // 可选：调用Graph API获取更多用户数据
                     // fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${accessToken}`)
                     //     .then(response => response.json())
                     //     .then(data => {
                     //         console.log("Facebook登录成功:", data);
-                    //         altert(data);
-                    //         localStorage.setItem('loginType', 'facebook');
-                    //         window.location.href = 'admin_index.html';
                     //     });
                 })
                 .catch((error) => {

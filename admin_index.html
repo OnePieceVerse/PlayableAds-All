@@ -60,20 +60,21 @@
 
         const userInfoDiv = document.getElementById('user-info');
         const loginType = localStorage.getItem('loginType');
-        if(!loginType) {
+        if (!loginType) {
             window.location.href = 'login.html';
         }
         let auth = null;
 
         function showUserInfo(user) {
-            // 显示头像
             const avatarDiv = document.getElementById('user-avatar');
             let avatarUrl = user.photoURL;
+            const uid = user.uid;
             avatarDiv.innerHTML = `<img src="${avatarUrl}" alt="用户头像" style="width:80px;height:80px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px #eee;">`;
-            userInfoDiv.innerHTML = `用户：<b>${user.displayName || user.email || user.uid}</b><br>邮箱：${user.email || '无'}`;
+            userInfoDiv.innerHTML = `用户：<b>${user.displayName || user.email || user.uid}</b><br>邮箱：${user.email || user.providerData[0].email || '无'}`;
         }
 
         function showQQUserInfo(qqUser) {
+            const openid = qqUser.openId;
             const avatarDiv = document.getElementById('user-avatar');
             let avatarUrl = qqUser.avatar;
             avatarDiv.innerHTML = `<img src="${avatarUrl}" alt="QQ头像" style="width:80px;height:80px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px #eee;">`;
@@ -97,16 +98,6 @@
 
                 onAuthStateChanged(auth, (user) => {
                     if (user) {
-                        console.log(user);
-                                            // 可选：调用Graph API获取更多用户数据
-                    // fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${accessToken}`)
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         console.log("Facebook登录成功:", data);
-                    //         altert(data);
-                    //         localStorage.setItem('loginType', 'facebook');
-                    //         window.location.href = 'admin_index.html';
-                    //     });
                         showUserInfo(user);
                     } else {
                         window.location.href = 'login.html';
@@ -127,7 +118,7 @@
                                             openId: openId,
                                             token: accessToken
                                         };
-                                        showQQUserInfo({ nickname: userInfo.nickname, avatar: userInfo.avatar });
+                                        showQQUserInfo({ openId: openId, nickname: userInfo.nickname, avatar: userInfo.avatar });
                                     })
                                     .error(err => {
                                         console.error('获取用户信息失败:', err);
