@@ -109,13 +109,16 @@
                     const accessToken = credential.accessToken;
                     const email = result._tokenResponse.email;
                     localStorage.setItem('loginType', 'facebook');
-                    window.location.href = 'admin_index.html';
+                    console.log("Facebook登录成功user:", result);
+                    // window.location.href = 'admin_index.html';
                     // 可选：调用Graph API获取更多用户数据
-                    // fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email&access_token=${accessToken}`)
-                    //     .then(response => response.json())
-                    //     .then(data => {
-                    //         console.log("Facebook登录成功:", data);
-                    //     });
+                    fetch(`https://graph.facebook.com/v12.0/me?fields=id,name,email,picture.width(500).height(500)&access_token=${accessToken}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log("Facebook登录成功:", data);
+                            const avatarUrl = data.picture.data.url; // 获取头像URL
+                            console.log("头像URL:", avatarUrl);
+                        });
                 })
                 .catch((error) => {
                     console.error("登录失败:", error.code, error.message);
