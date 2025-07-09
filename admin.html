@@ -9,16 +9,11 @@
 </head>
 
 <body>
-    <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="102796919"
-        data-redirecturi="https://playableall.com/admin.html" charset="utf-8"></script>
     <script>
-        // 解析URL中的token和state参数
+        // 解析URL中的token和expires_in参数
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
-        const state = hashParams.get('state');
-
-        alert(accessToken);
-        alert(state);
+        const expires_in = hashParams.get('expires_in');
         window.close(); // 关闭子窗口
     </script>
 </body>

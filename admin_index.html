@@ -68,16 +68,16 @@
         function showUserInfo(user) {
             // 显示头像
             const avatarDiv = document.getElementById('user-avatar');
-            let avatarUrl = user.photoURL || 'https://cdn.jsdelivr.net/gh/ryonluo/cdn-assets@main/avatar-default.png';
+            let avatarUrl = user.photoURL;
             avatarDiv.innerHTML = `<img src="${avatarUrl}" alt="用户头像" style="width:80px;height:80px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px #eee;">`;
             userInfoDiv.innerHTML = `用户：<b>${user.displayName || user.email || user.uid}</b><br>邮箱：${user.email || '无'}`;
         }
 
         function showQQUserInfo(qqUser) {
             const avatarDiv = document.getElementById('user-avatar');
-            let avatarUrl = qqUser.avatar || 'https://cdn.jsdelivr.net/gh/ryonluo/cdn-assets@main/avatar-default.png';
+            let avatarUrl = qqUser.avatar;
             avatarDiv.innerHTML = `<img src="${avatarUrl}" alt="QQ头像" style="width:80px;height:80px;border-radius:50%;object-fit:cover;box-shadow:0 2px 8px #eee;">`;
-            userInfoDiv.innerHTML = `QQ用户：<b>${qqUser.nickname}</b><br>性别：${qqUser.gender}`;
+            userInfoDiv.innerHTML = `QQ用户：<b>${qqUser.nickname}</b>`;
         }
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -118,9 +118,7 @@
                                             openId: openId,
                                             token: accessToken
                                         };
-                                        console.log('用户信息1:', res);
-                                        console.log('用户信息:', userInfo);
-                                        showQQUserInfo({ nickname: userInfo.nickname, gender: userInfo.gender });
+                                        showQQUserInfo({ nickname: userInfo.nickname, avatar: userInfo.avatar });
                                     })
                                     .error(err => {
                                         console.error('获取用户信息失败:', err);

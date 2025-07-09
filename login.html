@@ -86,7 +86,6 @@
                     const user = result.user;  // 获取用户信息
                     const credential = GoogleAuthProvider.credentialFromResult(result);
                     const token = credential.accessToken;  // 获取访问令牌
-                    console.log("Google登录成功:", user);
                     localStorage.setItem('loginType', 'google');
                     window.location.href = 'admin_index.html';
                 })
@@ -114,6 +113,7 @@
                         .then(response => response.json())
                         .then(data => {
                             console.log("Facebook登录成功:", data);
+                            altert(data);
                             localStorage.setItem('loginType', 'facebook');
                             window.location.href = 'admin_index.html';
                         });
@@ -133,8 +133,7 @@
             facebookLogin();
         };
     </script>
-    <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8">
-        </script>
+    <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8"></script>
     <script>
         // QQ登陆
         document.querySelector('.social-btn.qq').onclick = function () {
