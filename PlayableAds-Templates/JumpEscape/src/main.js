@@ -1,8 +1,8 @@
-import { BootScene } from './scenes/Boot.js';
-import { PreloaderScene } from './scenes/Preloader.js';
-import { GameScene } from './scenes/Game.js';
-import { GameoverScene } from './scenes/Gameover.js';
-import { GamesuccessScene } from './scenes/Gamesuccess.js';
+import { Start } from './scenes/Start.js';
+import { Preload } from './scenes/Preload.js';
+import { Game } from './scenes/Game.js';
+import { GameOver } from './scenes/GameOver.js';
+import { GameSuccess } from './scenes/GameSuccess.js';
 
 const config = {
     type: Phaser.AUTO,
@@ -25,11 +25,11 @@ const config = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
     scene: [
-        BootScene,
-        PreloaderScene,
-        GameScene,
-        GameoverScene,
-        GamesuccessScene
+        Start,
+        Preload,
+        Game,
+        GameOver,
+        GameSuccess
     ],
 }
 

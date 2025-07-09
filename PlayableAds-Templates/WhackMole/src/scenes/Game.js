@@ -24,6 +24,9 @@ export class Game extends Phaser.Scene {
     }
 
     create() {
+        this.backgroundSound = this.sound.add('background', { volume: 0.3 });
+        this.backgroundSound.play();
+
         const { width, height } = this.scale;
 
         // Background
@@ -234,6 +237,11 @@ export class Game extends Phaser.Scene {
     }
 
     gameWon() {
+        // Stop background music
+        if (this.backgroundSound) {
+            this.backgroundSound.stop();
+        }
+
         // Stop spawning moles
         if (this.moleSpawnTimer) {
             this.moleSpawnTimer.destroy();
@@ -257,6 +265,11 @@ export class Game extends Phaser.Scene {
     }
 
     gameOver() {
+        // Stop background music
+        if (this.backgroundSound) {
+            this.backgroundSound.stop();
+        }
+
         // Stop spawning moles
         if (this.moleSpawnTimer) {
             this.moleSpawnTimer.destroy();
@@ -284,6 +297,29 @@ export class Game extends Phaser.Scene {
 
     update() {
         // Game update logic if needed
+    }
+
+    shutdown() {
+        // Cleanup method called when scene is destroyed
+        // Stop background music if it's still playing
+        if (this.backgroundSound) {
+            this.backgroundSound.stop();
+        }
+
+        // Clean up timers
+        if (this.moleSpawnTimer) {
+            this.moleSpawnTimer.destroy();
+            this.moleSpawnTimer = null;
+        }
+
+        if (this.gameTimer) {
+            this.gameTimer.destroy();
+            this.gameTimer = null;
+        }
+
+        // Clean up moles array
+        this.moles = [];
+        this.molePositions = [];
     }
 
 }

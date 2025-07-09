@@ -1,7 +1,7 @@
-export class GameoverScene extends Phaser.Scene {
+export class GameOver extends Phaser.Scene {
 
     constructor() {
-        super('GameoverScene');
+        super('GameOver');
     }
 
     preload() {

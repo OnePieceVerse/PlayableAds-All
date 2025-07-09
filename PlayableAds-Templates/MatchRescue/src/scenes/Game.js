@@ -1,9 +1,9 @@
 import Player from '../gameObjects/Player.js';
 
-export class GameScene extends Phaser.Scene {
+export class Game extends Phaser.Scene {
 
     constructor() {
-        super('GameScene');
+        super('Game');
         this.boardSize = 10; // 10x10 grid
         this.tileSize = 60; // Size of each tile
         this.boardOffsetX = 1; // X offset for the board
@@ -20,6 +20,14 @@ export class GameScene extends Phaser.Scene {
     create() {
         // Add background
         this.add.image(300, 400, 'background');
+
+        // Add sound
+        this.backgroundSound = this.sound.add('background', { volume: 0.5 });
+        this.backgroundSound.play();
+
+        this.matchSound = this.sound.add('match-sound', { volume: 0.5 });
+        this.gameOverSound = this.sound.add('game-over', { volume: 0.8 });
+        this.gameSuccessSound = this.sound.add('game-success', { volume: 0.8 });
 
         // Add physics group for tiles
         this.blocksGroup = this.physics.add.group({
@@ -380,6 +388,8 @@ export class GameScene extends Phaser.Scene {
     }
 
     processMatches() {
+        this.matchSound.play();
+
         let matchCount = 0;
 
         // First, remove all matched tiles
@@ -530,22 +540,28 @@ export class GameScene extends Phaser.Scene {
     }
 
     gameOver() {
+        this.gameOverSound.play();
+        this.backgroundSound.stop();
+
         console.log('Game Over!');
         this.physics.pause();
         this.player.idle();
         this.player.setTint(0xff0000);
         this.time.delayedCall(1000, () => {
-            this.scene.start('GameoverScene');
+            this.scene.start('GameOver');
         });
     }
 
     gameSuccess() {
+        this.gameSuccessSound.play();
+        this.backgroundSound.stop();
+
         console.log('Game Success!');
         this.physics.pause();
         this.player.idle();
         this.player.setTint(0x00ff00);
         this.time.delayedCall(1000, () => {
-            this.scene.start('GamesuccessScene');
+            this.scene.start('GameSuccess');
         });
     }
 }

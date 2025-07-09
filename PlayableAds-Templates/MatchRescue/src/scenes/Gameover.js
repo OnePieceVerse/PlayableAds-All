@@ -1,7 +1,7 @@
 // "Every great game begins with a single scene. Let's make this one unforgettable!"
-export class GameoverScene extends Phaser.Scene {
+export class GameOver extends Phaser.Scene {
     constructor() {
-        super('GameoverScene');
+        super('GameOver');
     }
 
     init() {

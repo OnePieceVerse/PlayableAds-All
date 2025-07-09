@@ -1,14 +1,20 @@
 import { Player } from '../gameObjects/Player.js';
 
-export class GameScene extends Phaser.Scene {
+export class Game extends Phaser.Scene {
   constructor() {
-    super('GameScene');
+    super('Game');
   }
 
   preload() {
   }
 
   create() {
+    this.backgroundSound = this.sound.add('background', { volume: 1.0 });
+    this.backgroundSound.play();
+
+    this.gameOverSound = this.sound.add('game-over', { volume: 0.8 });
+    this.gameSuccessSound = this.sound.add('game-success', { volume: 0.8 });
+
     this.add.image(300, 400, 'background');
 
     this.waterHeight = 0; // Start with 0 and increase over time
@@ -111,8 +117,8 @@ export class GameScene extends Phaser.Scene {
           this.player.setTint(0xff0000);
           this.player.anims.play('turn');
 
-          this.time.delayedCall(1000, () => {
-            this.scene.start('GameoverScene');
+          this.time.delayedCall(100, () => {
+            this.gameOver();
           })
         }
       }
@@ -125,11 +131,22 @@ export class GameScene extends Phaser.Scene {
     this.player.setTint(0x00ff00);
     this.player.anims.play('turn');
 
-    this.time.delayedCall(1000, () => {
-      this.scene.start('GamesuccessScene');
+    this.time.delayedCall(100, () => {
+      this.gameSuccess();
     })
   }
 
+  gameOver() {
+    this.gameOverSound.play();
+    this.backgroundSound.stop();
+    this.scene.start('GameOver');
+  }
+
+  gameSuccess() {
+    this.gameSuccessSound.play();
+    this.backgroundSound.stop();
+    this.scene.start('GameSuccess');
+  }
 
   // 跟踪泡泡是否碰到水面
   trackBubble(particle, x) {
