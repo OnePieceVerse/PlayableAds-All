@@ -16,12 +16,10 @@
         const hashParams = new URLSearchParams(window.location.hash.substring(1));
         const accessToken = hashParams.get('access_token');
         const expires_in = hashParams.get('expires_in');
+        // 需要在这调用QC.Login.getMe，否则后续QC.Login.check()为false
         QC.Login.getMe(function (openId, accessToken) {
-            alert(openId);
-            alert(accessToken);
-            window.close(); // 关闭子窗口
+            window.close(); 
         });
-        
     </script>
 </body>
 

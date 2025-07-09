@@ -128,62 +128,28 @@
                     }
                 }
                 // 轮询等待QC.Login可用
-                // function checkQQLoginReady() {
-                //     alert('checkQQLoginReady');
-                //     if (window.QC && QC.Login && typeof QC.Login.check === 'function') {
-                //         alert(QC.Login.check());
-                //         if (QC.Login.check()) {
-                //             QC.Login.getMe(function (openId, accessToken) {
-                //                 QC.api('get_user_info', {})
-                //                     .success(res => {
-                //                         const userInfo = {
-                //                             nickname: res.data.nickname,
-                //                             avatar: res.data.figureurl_qq_2,
-                //                             gender: res.data.gender,
-                //                             openId: openId,
-                //                             token: accessToken
-                //                         };
-                //                         showQQUserInfo({ openId: openId, nickname: userInfo.nickname, avatar: userInfo.avatar });
-                //                     })
-                //                     .error(err => {
-                //                         console.error('获取用户信息失败:', err);
-                //                     });
-                //             });
-                //         } else {
-                //             alert(QC.Login.check());
-                //             alert('ready to login');
-                //             window.location.href = 'login.html';
-                //         }
-                //     } else {
-                //         alert('ready to setTimeout');
-                //         setTimeout(checkQQLoginReady, 100);
-                //     }
-                // }
                 waitForQCReady(() => {
                     if (QC.Login.check()) {
-                            QC.Login.getMe(function (openId, accessToken) {
-                                QC.api('get_user_info', {})
-                                    .success(res => {
-                                        const userInfo = {
-                                            nickname: res.data.nickname,
-                                            avatar: res.data.figureurl_qq_2,
-                                            gender: res.data.gender,
-                                            openId: openId,
-                                            token: accessToken
-                                        };
-                                        showQQUserInfo({ openId: openId, nickname: userInfo.nickname, avatar: userInfo.avatar });
-                                    })
-                                    .error(err => {
-                                        console.error('获取用户信息失败:', err);
-                                    });
-                            });
-                        } else {
-                            alert(QC.Login.check());
-                            alert('ready to login');
-                            window.location.href = 'login.html';
-                        }
+                        QC.Login.getMe(function (openId, accessToken) {
+                            QC.api('get_user_info', {})
+                                .success(res => {
+                                    const userInfo = {
+                                        nickname: res.data.nickname,
+                                        avatar: res.data.figureurl_qq_2,
+                                        gender: res.data.gender,
+                                        openId: openId,
+                                        token: accessToken
+                                    };
+                                    showQQUserInfo({ openId: openId, nickname: userInfo.nickname, avatar: userInfo.avatar });
+                                })
+                                .error(err => {
+                                    console.error('获取用户信息失败:', err);
+                                });
+                        });
+                    } else {
+                        window.location.href = 'login.html';
+                    }
                 });
-                // checkQQLoginReady();
             }
 
             document.getElementById('logout-btn').onclick = function () {
