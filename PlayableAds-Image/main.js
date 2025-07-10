@@ -5,34 +5,55 @@ const fingerSvg = `
 fetch('config.json')
     .then(response => response.json())
     .then(config => {
-        // 渲染 app 下的图片
         const app = document.getElementById('app');
-        (config.appImgs || []).forEach(src => {
+        // 渲染 app 下的图片和对应热点
+        (config.appImgs || []).forEach((src, idx) => {
+            // 创建图片包裹容器
+            const wrapper = document.createElement('div');
+            wrapper.className = 'img-wrapper';
+            wrapper.style.position = 'relative';
+            wrapper.style.width = '100vw';
+            wrapper.style.overflow = 'hidden';
+
+            // 创建图片
             const img = document.createElement('img');
             img.src = src;
             img.className = 'app-img';
-            app.appendChild(img);
-        });
+            img.style.width = '100%';
+            img.style.display = 'block';
+            wrapper.appendChild(img);
 
-        (config.hotspots || []).forEach(spot => {
-            const div = document.createElement('div');
-            div.className = 'hotspot-svg-container';
-            div.style.left = spot.left;
-            div.style.top = spot.top;
-            div.style.position = 'absolute';
-            div.style.transform = 'translate(-50%, -50%)';
-            div.style.zIndex = 2;
-            div.innerHTML = fingerSvg;
-            const svg = div.querySelector('svg');
-            svg.style.width = '100px';
-            svg.style.height = '100px';
-            svg.classList.add('hotspot-svg');
-            svg.querySelectorAll('path').forEach(path => {
-                path.setAttribute('fill', 'white');
+            // 渲染属于该图片的热点
+            console.log(config.hotspots);
+            (config.hotspots || []).forEach(spot => {
+                console.log(spot.imgIndex, idx);
+                if (spot.imgIndex === idx) {
+                    const div = document.createElement('div');
+                    div.className = 'hotspot-svg-container';
+                    div.style.left = spot.left;
+                    div.style.top = spot.top;
+                    div.style.position = 'absolute';
+                    div.style.transform = 'translate(-50%, -50%)';
+                    div.style.zIndex = 2;
+                    div.innerHTML = fingerSvg;
+                    const svg = div.querySelector('svg');
+                    svg.style.width = '100px';
+                    svg.style.height = '100px';
+                    svg.classList.add('hotspot-svg');
+                    svg.querySelectorAll('path').forEach(path => {
+                        path.setAttribute('fill', 'white');
+                    });
+                    svg.addEventListener('click', () => handleHotspot(spot));
+                    wrapper.appendChild(div);
+                }
             });
-            svg.addEventListener('click', () => handleHotspot(spot));
-            app.appendChild(div);
+
+            app.appendChild(wrapper);
         });
+        // 插入flex-filler填充底部空白
+        const filler = document.createElement('div');
+        filler.className = 'flex-filler';
+        app.appendChild(filler);
 
         // 动画定时器
         setInterval(() => {

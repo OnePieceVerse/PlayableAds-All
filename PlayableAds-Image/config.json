@@ -8,18 +8,20 @@
     "hotspots": [
         {
             "left": "48%",
-            "top": "38%",
+            "top": "90%",
             "type": "jump",
-            "url": "https://jcc.qq.com/act/a20250327city/"
+            "url": "https://jcc.qq.com/act/a20250327city/",
+            "imgIndex": 1
         },
         {
             "left": "76%",
-            "top": "52%",
+            "top": "26%",
             "type": "popup",
             "modalImgs": [
                 "images/jks/main-skill.png"
             ],
-            "modalText": "金克丝技能介绍"
+            "modalText": "金克丝技能介绍",
+            "imgIndex": 2
         },
         {
             "left": "46%",
@@ -28,17 +30,19 @@
             "modalImgs": [
                 "images/jks/main-attr.png"
             ],
-            "modalText": ""
+            "modalText": "",
+            "imgIndex": 2
         },
         {
             "left": "47%",
-            "top": "85%",
+            "top": "34%",
             "type": "popup",
             "modalImgs": [
                 "images/jks/partner-info.png",
                 "images/jks/partner-skill.png"
             ],
-            "modalText": ""
+            "modalText": "",
+            "imgIndex": 3
         }
     ]
 }
