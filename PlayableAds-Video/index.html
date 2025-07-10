@@ -10,18 +10,18 @@
 <div class="ad-container">
     <div id="top-image" class="top-image"></div>
 
-    <video id="game-video" muted playsinline webkit-playsinline x-webkit-airplay="allow" x5-video-player-type="h5"
-           x5-video-player-fullscreen="false" preload="auto">
-    </video>
+    <div class="video-wrapper">
+        <video id="game-video" muted playsinline webkit-playsinline x-webkit-airplay="allow" x5-video-player-type="h5"
+               x5-video-player-fullscreen="false" preload="auto">
+        </video>
+
+        <div id="guide-overlay">
+            <div id="guidePosition"></div>
+            <div id="guideTipPosition"></div>
+        </div>
+    </div>
 
     <div id="bottom-image" class="bottom-image"></div>
-
-    <div id="guide-overlay">
-        <div class="finger-icon">
-            <img id="guide-image" src="" alt="Interaction Guide">
-        </div>
-        <div id="guide-tip"></div>
-    </div>
 
     <div id="click-to-play" class="click-overlay"></div>
 

@@ -8,9 +8,13 @@ html, body {
 }
 
 .ad-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    overflow-y: auto;
+    box-sizing: border-box;
 }
 
 
@@ -31,19 +35,25 @@ html, body {
 }
 
 .top-image {
-    position: absolute;
-    top: 26%;
-    left: 0;
     width: 100%;
-    z-index: 10;
+    max-height: 20vh;
+    min-height: 0;
+    margin-bottom: 2vh;
+    flex-shrink: 0;
+    position: static;
+    z-index: auto;
+    background: transparent;
 }
 
 .bottom-image {
-    position: absolute;
-    bottom: 15%;
-    left: 0;
     width: 100%;
-    z-index: 10;
+    max-height: 20vh;
+    min-height: 0;
+    margin-top: 2vh;
+    flex-shrink: 0;
+    position: static;
+    z-index: auto;
+    background: transparent;
 }
 
 .top-image img, .bottom-image img {
@@ -53,11 +63,13 @@ html, body {
 
 #game-video {
     width: 100%;
-    height: 100%;
-    /* 填充屏幕，但是内容可能会被裁剪 */
-    /* object-fit: cover; */
-    /* 保持内容完整，但是可能会有空白边 */
+    max-height: 60vh;
+    min-height: 0;
     object-fit: contain;
+    background: #000;
+    display: block;
+    flex-shrink: 1;
+    flex-grow: 0;
 }
 
 .click-overlay {
@@ -75,17 +87,41 @@ html, body {
 
 #guide-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0; left: 0;
     width: 100%;
     height: 100%;
     display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 10;
     touch-action: none;
+    z-index: 10;
 }
+
+/*.video-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+ #guide-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 20;
+}
+
+#guidePosition, #guideTipPosition {
+    position: absolute;
+    left: 50%;
+    top: 30%;
+    transform: translate(-50%, -50%);
+    /* 可根据需要调整宽高或内容 */
+} */
 
 .finger-icon {
     position: absolute;
