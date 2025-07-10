@@ -20,7 +20,7 @@ html, body {
   .img-wrapper {
     position: relative;
     width: 100vw;
-    height: 50vh;
+    /* height: 50vh; */
     overflow: hidden;
   }
 
