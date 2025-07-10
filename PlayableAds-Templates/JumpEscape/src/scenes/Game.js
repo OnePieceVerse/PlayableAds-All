@@ -9,13 +9,18 @@ export class Game extends Phaser.Scene {
   }
 
   create() {
+    // 获取屏幕尺寸
+    this.gameWidth = this.cameras.main.width;
+    this.gameHeight = this.cameras.main.height;
+
     this.backgroundSound = this.sound.add('background', { volume: 1.0 });
     this.backgroundSound.play();
 
     this.gameOverSound = this.sound.add('game-over', { volume: 0.8 });
     this.gameSuccessSound = this.sound.add('game-success', { volume: 0.8 });
 
-    this.add.image(300, 400, 'background');
+    // 背景图片居中显示
+    this.add.image(this.gameWidth / 2, this.gameHeight / 2, 'background');
 
     this.waterHeight = 0; // Start with 0 and increase over time
     this.waveOffset = 0;
@@ -47,22 +52,34 @@ export class Game extends Phaser.Scene {
       emitting: false
     });
 
-    // 创建玩家
-    this.player = new Player(this, 300, 650);
+    // 创建玩家 - 水平居中，垂直位置约为屏幕高度的80%
+    this.player = new Player(this, this.gameWidth / 2, this.gameHeight * 0.8);
     this.trackPlayer();
 
     // 玩家输入
     this.cursors = this.input.keyboard.createCursorKeys();
 
+    // 移动端控制状态
+    this.mobileControls = {
+      leftPressed: false,
+      rightPressed: false,
+      jumpPressed: false
+    };
+
+    // 创建移动端虚拟控制按钮
+    this.createMobileControls();
+
     // 创建静态平台组
     this.staticPlatforms = this.physics.add.staticGroup();
-    this.staticPlatforms.create(300, 100, 'platform');
-    this.staticPlatforms.create(300, 700, 'platform');
+    // 顶部平台 - 水平居中，垂直位置约为屏幕高度的12.5%
+    this.staticPlatforms.create(this.gameWidth / 2, this.gameHeight * 0.125, 'platform');
+    // 底部平台 - 水平居中，垂直位置约为屏幕高度的87.5%
+    this.staticPlatforms.create(this.gameWidth / 2, this.gameHeight * 0.875, 'platform');
     // 碰撞检测
     this.physics.add.collider(this.player, this.staticPlatforms);
 
-    // 创建收集目标 - 星星
-    this.star = this.physics.add.image(300, 50, 'star');
+    // 创建收集目标 - 星星，水平居中，垂直位置约为屏幕高度的6.25%
+    this.star = this.physics.add.image(this.gameWidth / 2, this.gameHeight * 0.0625, 'star');
     this.physics.add.collider(this.staticPlatforms, this.star);
     this.physics.add.overlap(this.player, this.star, this.collectStar, null, this);
 
@@ -90,18 +107,126 @@ export class Game extends Phaser.Scene {
       delay: 300,
       loop: true,
       callback: () => {
-        const x = Phaser.Math.Between(50, 750);
-        const particle = this.bubbleEmitter.emitParticleAt(x, 795);
+        // 泡泡在屏幕宽度范围内随机生成，留出左右边距
+        const x = Phaser.Math.Between(this.gameWidth * 0.08, this.gameWidth * 0.92);
+        const particle = this.bubbleEmitter.emitParticleAt(x, this.gameHeight - 5);
         if (particle) this.trackBubble(particle, x);
       }
+    });
+  }
+
+  // 创建移动端虚拟控制按钮
+  createMobileControls() {
+    const buttonSize = Math.min(this.gameWidth, this.gameHeight) * 0.1;
+    const buttonAlpha = 0.6;
+    const buttonColor = 0x333333;
+    const buttonPressedColor = 0x666666;
+
+    // 左移按钮
+    this.leftButton = this.add.circle(buttonSize * 1.2, this.gameHeight - buttonSize * 1.2, buttonSize, buttonColor, buttonAlpha);
+    this.leftButton.setInteractive();
+    this.leftButton.setScrollFactor(0); // 固定在屏幕上
+    this.leftButton.setDepth(1000);
+
+    // 左箭头图标
+    this.leftArrow = this.add.graphics();
+    this.leftArrow.fillStyle(0xffffff);
+    this.leftArrow.fillTriangle(
+      this.leftButton.x - buttonSize * 0.3, this.leftButton.y,
+      this.leftButton.x + buttonSize * 0.3, this.leftButton.y - buttonSize * 0.3,
+      this.leftButton.x + buttonSize * 0.3, this.leftButton.y + buttonSize * 0.3
+    );
+    this.leftArrow.setScrollFactor(0);
+    this.leftArrow.setDepth(1001);
+
+    // 右移按钮
+    this.rightButton = this.add.circle(buttonSize * 3, this.gameHeight - buttonSize * 1.2, buttonSize, buttonColor, buttonAlpha);
+    this.rightButton.setInteractive();
+    this.rightButton.setScrollFactor(0);
+    this.rightButton.setDepth(1000);
+
+    // 右箭头图标
+    this.rightArrow = this.add.graphics();
+    this.rightArrow.fillStyle(0xffffff);
+    this.rightArrow.fillTriangle(
+      this.rightButton.x + buttonSize * 0.3, this.rightButton.y,
+      this.rightButton.x - buttonSize * 0.3, this.rightButton.y - buttonSize * 0.3,
+      this.rightButton.x - buttonSize * 0.3, this.rightButton.y + buttonSize * 0.3
+    );
+    this.rightArrow.setScrollFactor(0);
+    this.rightArrow.setDepth(1001);
+
+    // 跳跃按钮
+    this.jumpButton = this.add.circle(this.gameWidth - buttonSize * 1.2, this.gameHeight - buttonSize * 1.2, buttonSize, buttonColor, buttonAlpha);
+    this.jumpButton.setInteractive();
+    this.jumpButton.setScrollFactor(0);
+    this.jumpButton.setDepth(1000);
+
+    // 跳跃图标
+    this.jumpArrow = this.add.graphics();
+    this.jumpArrow.fillStyle(0xffffff);
+    this.jumpArrow.fillTriangle(
+      this.jumpButton.x, this.jumpButton.y - buttonSize * 0.3,
+      this.jumpButton.x - buttonSize * 0.3, this.jumpButton.y + buttonSize * 0.3,
+      this.jumpButton.x + buttonSize * 0.3, this.jumpButton.y + buttonSize * 0.3
+    );
+    this.jumpArrow.setScrollFactor(0);
+    this.jumpArrow.setDepth(1001);
+
+    // 左移按钮事件
+    this.leftButton.on('pointerdown', () => {
+      this.mobileControls.leftPressed = true;
+      this.leftButton.setFillStyle(buttonPressedColor, buttonAlpha);
+    });
+
+    this.leftButton.on('pointerup', () => {
+      this.mobileControls.leftPressed = false;
+      this.leftButton.setFillStyle(buttonColor, buttonAlpha);
+    });
+
+    this.leftButton.on('pointerout', () => {
+      this.mobileControls.leftPressed = false;
+      this.leftButton.setFillStyle(buttonColor, buttonAlpha);
+    });
+
+    // 右移按钮事件
+    this.rightButton.on('pointerdown', () => {
+      this.mobileControls.rightPressed = true;
+      this.rightButton.setFillStyle(buttonPressedColor, buttonAlpha);
+    });
+
+    this.rightButton.on('pointerup', () => {
+      this.mobileControls.rightPressed = false;
+      this.rightButton.setFillStyle(buttonColor, buttonAlpha);
+    });
+
+    this.rightButton.on('pointerout', () => {
+      this.mobileControls.rightPressed = false;
+      this.rightButton.setFillStyle(buttonColor, buttonAlpha);
+    });
+
+    // 跳跃按钮事件
+    this.jumpButton.on('pointerdown', () => {
+      this.mobileControls.jumpPressed = true;
+      this.jumpButton.setFillStyle(buttonPressedColor, buttonAlpha);
+    });
+
+    this.jumpButton.on('pointerup', () => {
+      this.mobileControls.jumpPressed = false;
+      this.jumpButton.setFillStyle(buttonColor, buttonAlpha);
+    });
+
+    this.jumpButton.on('pointerout', () => {
+      this.mobileControls.jumpPressed = false;
+      this.jumpButton.setFillStyle(buttonColor, buttonAlpha);
     });
   }
 
   // 获取当前水面 Y 值（包含波动）
   getWaveY(x) {
     // In Phaser, (0,0) is at top-left, Y increases downward
-    // So 800 - waterHeight means water rises from bottom (800) upward as waterHeight increases
-    return 800 - this.waterHeight + Math.sin((x + this.waveOffset) * 0.05) * 5;
+    // So gameHeight - waterHeight means water rises from bottom upward as waterHeight increases
+    return this.gameHeight - this.waterHeight + Math.sin((x + this.waveOffset) * 0.05) * 5;
   }
 
   trackPlayer() {
@@ -185,35 +310,37 @@ export class Game extends Phaser.Scene {
 
     // 绘制波纹水面
     g.beginPath();
-    g.moveTo(0, 800); // Start at bottom-left (y=800 is bottom)
-    for (let x = 0; x <= 600; x++) {
+    g.moveTo(0, this.gameHeight); // Start at bottom-left
+    for (let x = 0; x <= this.gameWidth; x++) {
       const y = this.getWaveY(x);
       g.lineTo(x, y);
     }
-    g.lineTo(600, 800); // End at bottom-right
+    g.lineTo(this.gameWidth, this.gameHeight); // End at bottom-right
     g.closePath();
     g.fillPath();
   }
 
   // 生成从右往左或从左往右移动的平台
   spawnPlatform() {
-    // 只有当水面高度接近0时才生成平台
-    if (this.waterHeight >= 700) return;
+    // 只有当水面高度接近游戏区域底部时才停止生成平台
+    const maxWaterHeight = this.gameHeight * 0.875; // 最大水位高度为屏幕高度的87.5%
+    if (this.waterHeight >= maxWaterHeight) return;
 
     // 随机选择平台类型
     const platformType = Phaser.Math.RND.pick(this.platformConfig.types);
 
-    // 随机生成y坐标，范围为0到waterHeight
-    const maxY = 800 - this.waterHeight - 100; // 水面当前高度（从底部算起）
-    const y = Phaser.Math.Between(100, maxY); // 确保平台在水面上方
+    // 随机生成y坐标，范围为屏幕高度的12.5%到当前水面高度
+    const maxY = this.gameHeight - this.waterHeight - 100; // 水面当前高度（从底部算起）
+    const minY = this.gameHeight * 0.125; // 最小Y坐标为屏幕高度的12.5%
+    const y = Phaser.Math.Between(minY, maxY); // 确保平台在水面上方
 
     // 从屏幕右侧或左侧生成平台
     const direction = Phaser.Math.RND.pick([-1, 1]);
     let platform;
     if (direction === -1) {
-      platform = this.platforms.create(800, y, platformType);
+      platform = this.platforms.create(this.gameWidth + 50, y, platformType);
     } else {
-      platform = this.platforms.create(0, y, platformType);
+      platform = this.platforms.create(-50, y, platformType);
     }
 
     // 设置平台物理属性
@@ -227,9 +354,11 @@ export class Game extends Phaser.Scene {
     platform.body.allowGravity = false;
     platform.setVelocityY(0); // 确保没有垂直方向的速度
 
-    // 设置平台大小和碰撞边界
-    platform.setDisplaySize(150, 22);
-    platform.body.setSize(150, 22);
+    // 设置平台大小和碰撞边界 - 基于屏幕宽度调整
+    const platformWidth = this.gameWidth * 0.25; // 平台宽度为屏幕宽度的25%
+    const platformHeight = 22;
+    platform.setDisplaySize(platformWidth, platformHeight);
+    platform.body.setSize(platformWidth, platformHeight);
 
     // 当平台离开屏幕时销毁
     platform.checkWorldBounds = true;
@@ -239,8 +368,12 @@ export class Game extends Phaser.Scene {
   update() {
     this.waveOffset += 1;
     this.waterHeight += 0.3; // Increased the rate for more visible rising effect
-    if (this.waterHeight >= 700) this.waterHeight = 700; // Limit to 800 to keep some playable area
+    const maxWaterHeight = this.gameHeight * 0.875; // 最大水位高度为屏幕高度的87.5%
+    if (this.waterHeight >= maxWaterHeight) this.waterHeight = maxWaterHeight; // 限制最大水位
     this.drawWater();
+
+    // 清理离开屏幕的平台
+    this.cleanupOffscreenPlatforms();
 
     // 更新平台生成间隔（随着水位上升，平台生成更频繁）
     const newInterval = Math.max(500, this.platformConfig.spawnInterval - this.waterHeight / 2);
@@ -248,19 +381,33 @@ export class Game extends Phaser.Scene {
       this.platformTimer.delay = newInterval;
     }
 
-    // 玩家输入
-    if (this.cursors.left.isDown) {
+    // 玩家输入 - 支持键盘和触摸控制
+    const isLeftPressed = this.cursors.left.isDown || this.mobileControls.leftPressed;
+    const isRightPressed = this.cursors.right.isDown || this.mobileControls.rightPressed;
+    const isJumpPressed = this.cursors.up.isDown || this.mobileControls.jumpPressed;
+
+    if (isLeftPressed) {
       this.player.moveLeft();
     }
-    else if (this.cursors.right.isDown) {
+    else if (isRightPressed) {
       this.player.moveRight();
     }
     else {
       this.player.idle();
     }
 
-    if (this.cursors.up.isDown) {
+    if (isJumpPressed) {
       this.player.jump();
     }
+  }
+
+  // 清理离开屏幕的平台
+  cleanupOffscreenPlatforms() {
+    this.platforms.children.entries.forEach(platform => {
+      // 检查平台是否完全离开屏幕边界
+      if (platform.x < -100 || platform.x > this.gameWidth + 100) {
+        platform.destroy();
+      }
+    });
   }
 }
