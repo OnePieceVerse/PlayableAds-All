@@ -94,7 +94,7 @@ export class Game extends Phaser.Scene {
         this.physics.add.collider(this.player, this.platform, this.gameSuccess, null, this);
 
         // Add falling brickwall - 从屏幕顶部上方开始
-        this.brickwall = this.physics.add.sprite(gameWidth / 2, -gameHeight * 0.6, 'brickwall');
+        this.brickwall = this.physics.add.sprite(gameWidth / 2, -gameHeight * 0.7, 'brickwall');
         this.brickwall.setDepth(1);
         this.brickwall.body.allowGravity = false; // Disable gravity to maintain constant speed
         this.brickwall.setVelocityY(30); // Very slow falling speed
