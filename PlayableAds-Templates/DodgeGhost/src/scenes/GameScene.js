@@ -13,13 +13,7 @@ export default class GameScene extends Phaser.Scene {
         this.isGameOver = false;
         this.isGameStarted = false;
         this.playerSpeed = 250; // 玩家移动速度
-        this.fenceConfig = {
-            width: 380, // 游戏屏幕宽度
-            height: 680, // 游戏屏幕高度
-            x: 0, // 从屏幕左上角开始
-            y: 0, // 从屏幕左上角开始
-            wallHeight: 25 // 边界高度参数
-        };
+        this.fenceConfig = null; // 初始化为null，create时赋值
         this.canTeleport = true; // 穿墙冷却标志
         // 技能相关属性
         this.isInvincible = false; // 是否处于无敌状态
@@ -27,6 +21,10 @@ export default class GameScene extends Phaser.Scene {
         this.skillCooldown = 0; // 技能冷却时间
         this.skillButtonText = null; // 冷却倒计时文本
         this.invincibleTimer = null; // 无敌状态计时器
+        // 拖动相关
+        this.isDragging = false;
+        this.dragOffset = { x: 0, y: 0 };
+        this.lastPlayerPos = undefined; // 记录上一次玩家位置
     }
 
     preload() {
@@ -45,6 +43,16 @@ export default class GameScene extends Phaser.Scene {
     }
 
     create() {
+        const width = this.scale.width;
+        const height = this.scale.height;
+        // fenceConfig按比例
+        this.fenceConfig = {
+            width: width,
+            height: height,
+            x: 0,
+            y: 0,
+            wallHeight: Math.round(height * 0.036) // 25/680
+        };
         this.gameTime = 0;
         this.isGameOver = false;
         this.isGameStarted = false; // 游戏开始时设置为未开始状态
@@ -62,16 +70,17 @@ export default class GameScene extends Phaser.Scene {
         }
 
         // 添加背景
-        this.bg = this.add.image(0, 0, 'bg').setOrigin(0, 0).setDisplaySize(380, 680);
+        this.bg = this.add.image(0, 0, 'bg').setOrigin(0, 0).setDisplaySize(width, height);
 
         // 创建围栏
         this.platforms = this.physics.add.staticGroup();
         this.createFence(this.fenceConfig);
 
         // 创建玩家
+        const playerSize = Math.round(width * 0.168); // 64/380
         this.player = this.physics.add.sprite(
-            this.cameras.main.centerX,
-            this.cameras.main.centerY,
+            width / 2,
+            height / 2,
             'playerSpritesheet'
         );
         // 创建动画
@@ -88,7 +97,7 @@ export default class GameScene extends Phaser.Scene {
         this.player.setGravity(0);
         this.player.setVelocity(0, 0);
         // 设置玩家显示尺寸
-        this.player.setDisplaySize(64, 64);
+        this.player.setDisplaySize(playerSize, playerSize);
         this.player.body.setSize(themeConfig.playerSpritesheet.frameWidth * 0.6, themeConfig.playerSpritesheet.frameHeight * 0.6);
         // 设置默认朝向（向右）
         this.player.setFlipX(false);
@@ -107,7 +116,7 @@ export default class GameScene extends Phaser.Scene {
         this.physics.add.overlap(this.player, this.ghosts, this.handleCollision, null, this);
 
         // 添加计时器文本 
-        this.timeText = this.add.text(0, 0, 'Survival time: 0s', { fontSize: '26px', fill: '#ff0000' });
+        this.timeText = this.add.text(width * 0.02, height * 0.01, 'Survival time: 0s', { fontSize: Math.round(width * 0.068) + 'px', fill: '#ff0000' }); // 26/380
 
         // 创建技能按钮
         this.createSkillButton();
@@ -121,14 +130,104 @@ export default class GameScene extends Phaser.Scene {
             paused: true // 初始时暂停
         });
 
-        // 设置键盘控制
-        this.keys = {
-            w: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
-            a: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
-            s: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
-            d: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
-            space: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-        };
+        // 允许玩家被点击
+        this.player.setInteractive();
+        // 监听pointerdown，拖动起点为角色当前位置
+        this.input.on('pointerdown', (pointer) => {
+            if (this.isGameOver || !this.isGameStarted) return;
+            this.isDragging = true;
+            this.dragOffset.x = this.player.x - pointer.x;
+            this.dragOffset.y = this.player.y - pointer.y;
+        });
+        // 监听pointermove，拖动时移动玩家
+        this.input.on('pointermove', (pointer) => {
+            if (this.isDragging && this.isGameStarted && !this.isGameOver) {
+                const { width, height, x, y, wallHeight } = this.fenceConfig;
+                const minX = x + wallHeight + this.player.displayWidth / 2;
+                const maxX = x + width - wallHeight - this.player.displayWidth / 2;
+                const minY = y + wallHeight + this.player.displayHeight / 2;
+                const maxY = y + height - wallHeight - this.player.displayHeight / 2;
+                let newX = Phaser.Math.Clamp(pointer.x + this.dragOffset.x, minX, maxX);
+                let newY = Phaser.Math.Clamp(pointer.y + this.dragOffset.y, minY, maxY);
+                // 记录上一次位置
+                if (this.lastPlayerPos === undefined) {
+                    this.lastPlayerPos = { x: this.player.x, y: this.player.y };
+                }
+                // 判断是否移动
+                const moved = (Math.abs(newX - this.player.x) > 0.5) || (Math.abs(newY - this.player.y) > 0.5);
+                if (moved) {
+                    // 切换为动画
+                    if (this.player.texture.key !== 'playerSpritesheet') {
+                        this.player.setTexture('playerSpritesheet');
+                    }
+                    this.player.play('fly', true);
+                    // 判断左右朝向
+                    if (newX < this.player.x) {
+                        this.player.setFlipX(true);
+                    } else if (newX > this.player.x) {
+                        this.player.setFlipX(false);
+                    }
+                } else {
+                    if (this.player.texture.key !== 'player') {
+                        this.player.setTexture('player');
+                    }
+                    this.player.anims.stop();
+                }
+                // 穿墙逻辑
+                let teleported = false;
+                if (this.canTeleport && !this.isInvincible) {
+                    // 左边界
+                    if (newX <= minX) {
+                        newX = maxX;
+                        this.canTeleport = false;
+                        this.time.delayedCall(800, () => { this.canTeleport = true; });
+                        teleported = true;
+                    }
+                    // 右边界
+                    else if (newX >= maxX) {
+                        newX = minX;
+                        this.canTeleport = false;
+                        this.time.delayedCall(800, () => { this.canTeleport = true; });
+                        teleported = true;
+                    }
+                    // 上边界
+                    if (newY <= minY) {
+                        newY = maxY;
+                        this.canTeleport = false;
+                        this.time.delayedCall(800, () => { this.canTeleport = true; });
+                        teleported = true;
+                    }
+                    // 下边界
+                    else if (newY >= maxY) {
+                        newY = minY;
+                        this.canTeleport = false;
+                        this.time.delayedCall(800, () => { this.canTeleport = true; });
+                        teleported = true;
+                    }
+                    // 穿墙后同步dragOffset，防止闪回
+                    if (teleported) {
+                        this.dragOffset.x = newX - pointer.x;
+                        this.dragOffset.y = newY - pointer.y;
+                        // 穿墙后1秒无敌，半透明
+                        this.isInvincible = true;
+                        this.player.setAlpha(0.6);
+                        if (this.invincibleTimer) {
+                            this.invincibleTimer.remove(false);
+                        }
+                        this.invincibleTimer = this.time.delayedCall(1000, () => {
+                            this.isInvincible = false;
+                            this.player.setAlpha(1);
+                        });
+                    }
+                }
+                this.player.setPosition(newX, newY);
+                this.lastPlayerPos = { x: newX, y: newY };
+            }
+        });
+        // 监听pointerup，取消拖动
+        this.input.on('pointerup', () => {
+            this.isDragging = false;
+        });
 
         // 音频对象
         this.bgmSound = this.sound.add('bgm', { loop: true, volume: 0.5 });
@@ -143,13 +242,15 @@ export default class GameScene extends Phaser.Scene {
     }
 
     createStartOverlay() {
+        const width = this.scale.width;
+        const height = this.scale.height;
         // 创建半透明黑色蒙版
-        this.startOverlay = this.add.rectangle(0, 0, 380, 680, 0x000000, 0.7);
+        this.startOverlay = this.add.rectangle(0, 0, width, height, 0x000000, 0.7);
         this.startOverlay.setOrigin(0, 0);
 
         // 游戏标题
-        this.startTitle = this.add.text(190, 200, 'Dodge Ghosts', {
-            fontSize: '40px',
+        this.startTitle = this.add.text(width / 2, height * 0.294, 'Dodge Ghosts', {
+            fontSize: Math.round(width * 0.105) + 'px', // 40/380
             fill: '#ffffff',
             fontStyle: 'bold',
             stroke: '#000000',
@@ -158,8 +259,8 @@ export default class GameScene extends Phaser.Scene {
         this.startTitle.setOrigin(0.5);
 
         // 游戏说明
-        this.startInstruction = this.add.text(190, 280, 'Survive as long as possible \n and dodge the ghosts!', {
-            fontSize: '20px',
+        this.startInstruction = this.add.text(width / 2, height * 0.412, 'Survive as long as possible \n and dodge the ghosts!', {
+            fontSize: Math.round(width * 0.052) + 'px', // 20/380
             fill: '#ffffff',
             align: 'center',
             stroke: '#000000',
@@ -168,8 +269,8 @@ export default class GameScene extends Phaser.Scene {
         this.startInstruction.setOrigin(0.5);
 
         // 点击开始提示
-        this.startText = this.add.text(190, 400, 'Click to start game', {
-            fontSize: '25px',
+        this.startText = this.add.text(width / 2, height * 0.588, 'Click to start game', {
+            fontSize: Math.round(width * 0.066) + 'px', // 25/380
             fill: '#ffff00',
             fontStyle: 'bold',
             stroke: '#000000',
@@ -283,8 +384,6 @@ export default class GameScene extends Phaser.Scene {
     }
 
     handleWallCollision(player, wall) {
-        if (!this.canTeleport && !this.isInvincible) return; // 无敌状态下可以穿墙
-
         const { width, height, x, y, wallHeight } = this.fenceConfig;
 
         // 获取碰撞的墙的位置
@@ -319,81 +418,17 @@ export default class GameScene extends Phaser.Scene {
         }
     }
 
-    handlePlayerMovement() {
-        if (this.isGameOver || !this.isGameStarted) return;
-
-        // 计算水平和垂直方向的移动
-        let moveX = 0;
-        let moveY = 0;
-
-        // 处理WASD移动
-        if (this.keys.w.isDown) {
-            moveY -= 1;
-        }
-        if (this.keys.s.isDown) {
-            moveY += 1;
-        }
-        if (this.keys.a.isDown) {
-            moveX -= 1;
-        }
-        if (this.keys.d.isDown) {
-            moveX += 1;
-        }
-
-        // 如果有对角线移动，标准化移动向量
-        if (moveX !== 0 && moveY !== 0) {
-            const length = Math.sqrt(moveX * moveX + moveY * moveY);
-            moveX /= length;
-            moveY /= length;
-        }
-
-        // 只有在没有移动输入时才重置速度，避免与穿墙逻辑冲突
-        if (moveX === 0 && moveY === 0) {
-            this.player.setVelocity(0, 0);
-        } else {
-            // 应用移动速度
-            this.player.setVelocity(
-                moveX * this.playerSpeed,
-                moveY * this.playerSpeed
-            );
-        }
-
-        // 更新动画和方向
-        if (moveX !== 0 || moveY !== 0) {
-            if (this.player.texture.key !== 'playerSpritesheet') {
-                this.player.setTexture('playerSpritesheet');
-            }
-            this.player.play('fly', true);
-            // 根据水平移动方向翻转玩家
-            if (moveX < 0) {
-                this.player.setFlipX(true);
-            } else if (moveX > 0) {
-                this.player.setFlipX(false);
-            }
-        } else {
-            if (this.player.texture.key !== 'player') {
-                this.player.setTexture('player');
-                // this.player.setDisplaySize(64, 64);
-                // this.player.body.setSize(themeConfig.playerSpritesheet.frameWidth * 0.8, themeConfig.playerSpritesheet.frameHeight * 0.7);
-            }
-            this.player.anims.stop();
-        }
-    }
-
     update() {
         if (this.isGameOver || !this.isGameStarted) return;
 
         // 空格键触发技能
-        if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
-            this.activateSkill();
-        }
+        // if (Phaser.Input.Keyboard.JustDown(this.keys.space)) {
+        //     this.activateSkill();
+        // }
 
         // 更新游戏时间
         this.gameTime += this.game.loop.delta;
         this.timeText.setText('Survival time: ' + (this.gameTime / 1000).toFixed(3) + 's');
-
-        // 处理玩家移动
-        this.handlePlayerMovement();
 
         // 更新鬼的移动和朝向
         this.ghosts.getChildren().forEach(ghost => {
@@ -431,48 +466,42 @@ export default class GameScene extends Phaser.Scene {
     }
 
     spawnGhost() {
-        // 使用与构造函数相同的fenceConfig
         const fenceConfig = this.fenceConfig;
-
-        // 计算安全生成位置（远离玩家）
+        const width = this.scale.width;
+        const height = this.scale.height;
         let x, y;
         do {
-            // 在围栏内随机生成x坐标（避开边界50像素）
-            x = Phaser.Math.Between(fenceConfig.x + fenceConfig.wallHeight + 50, fenceConfig.x + fenceConfig.width - fenceConfig.wallHeight - 50);
-            // 在围栏内随机生成y坐标（避开边界50像素）
-            y = Phaser.Math.Between(fenceConfig.y + fenceConfig.wallHeight + 50, fenceConfig.y + fenceConfig.height - fenceConfig.wallHeight - 50);
-        } while (Phaser.Math.Distance.Between(x, y, this.player.x, this.player.y) < 200); // 确保生成位置与玩家距离不小于200像素
-
+            x = Phaser.Math.Between(fenceConfig.x + fenceConfig.wallHeight + Math.round(width * 0.13), fenceConfig.x + fenceConfig.width - fenceConfig.wallHeight - Math.round(width * 0.13)); // 50/380
+            y = Phaser.Math.Between(fenceConfig.y + fenceConfig.wallHeight + Math.round(height * 0.073), fenceConfig.y + fenceConfig.height - fenceConfig.wallHeight - Math.round(height * 0.073)); // 50/680
+        } while (Phaser.Math.Distance.Between(x, y, this.player.x, this.player.y) < Math.max(width, height) * 0.294); // 200/680
+        const ghostSize = Math.round(width * 0.066); // 25/380
         const ghost = this.ghosts.create(x, y, 'ghost');
         ghost.setBounce(0.2);
         ghost.setCollideWorldBounds(false);
-        ghost.setDisplaySize(25, 25);
+        ghost.setDisplaySize(ghostSize, ghostSize);
     }
 
     createSkillButton() {
-        // 用图片替换圆形技能按钮
+        const width = this.scale.width;
+        const height = this.scale.height;
         if (this.skillButton) this.skillButton.destroy();
         if (this.skillButtonText) this.skillButtonText.destroy();
         if (this.skillButtonIcon) this.skillButtonIcon.destroy();
-
-        // 按钮底色圆形（用于冷却变灰等效果）
-        this.skillButton = this.add.circle(320, 620, 25, 0x4e8cff, 1);
+        const btnX = width * 0.842; // 320/380
+        const btnY = height * 0.912; // 620/680
+        const btnRadius = Math.round(width * 0.066); // 25/380
+        this.skillButton = this.add.circle(btnX, btnY, btnRadius, 0x4e8cff, 1);
         this.skillButton.setInteractive();
         this.skillButton.setStrokeStyle(3, 0xffffff);
-
-        // 技能图标
-        this.skillButtonIcon = this.add.image(320, 620, 'stealth');
-        this.skillButtonIcon.setDisplaySize(32, 32);
+        this.skillButtonIcon = this.add.image(btnX, btnY, 'stealth');
+        this.skillButtonIcon.setDisplaySize(Math.round(width * 0.084), Math.round(width * 0.084)); // 32/380
         this.skillButtonIcon.setDepth(1);
-
-        // 添加技能冷却倒计时文本
-        this.skillButtonText = this.add.text(320, 620, '', {
-            fontSize: '20px',
+        this.skillButtonText = this.add.text(btnX, btnY, '', {
+            fontSize: Math.round(width * 0.052) + 'px', // 20/380
             fill: '#ffffff',
             fontStyle: 'bold'
         }).setOrigin(0.5);
         this.skillButtonText.setDepth(2);
-
         // 按钮交互
         this.skillButton.on('pointerdown', this.activateSkill, this);
         this.skillButton.on('pointerover', () => {
