@@ -23,7 +23,7 @@ async function getTranslations() {
     }
 
     try {
-        const response = await fetch('./config/translations.json');
+        const response = await fetch('config/translations.json');
         translations = await response.json();
         return translations;
     } catch (error) {

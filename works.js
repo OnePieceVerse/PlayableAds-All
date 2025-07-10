@@ -6,7 +6,7 @@ let modalIframe = null;
 // 加载产品配置
 async function loadProducts() {
     try {
-        const response = await fetch('/config/works.json');
+        const response = await fetch('config/works.json');
         const products = await response.json();
         return products;
     } catch (error) {
