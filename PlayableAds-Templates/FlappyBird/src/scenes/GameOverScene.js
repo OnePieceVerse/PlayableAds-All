@@ -15,37 +15,37 @@ export default class GameOverScene extends Phaser.Scene {
     }
 
     create(data) {
+        const sw = this.scale.width;
+        const sh = this.scale.height;
         // 添加背景
-        this.add.image(190, 340, themeConfig.background.key)
-            .setDisplaySize(380, 680);
+        this.add.image(sw / 2, sh / 2, themeConfig.background.key)
+            .setDisplaySize(sw, sh);
 
         // 添加半透明蒙版
-        const mask = this.add.rectangle(190, 340, 380, 680, 0x000000, 0.4);
+        const mask = this.add.rectangle(sw / 2, sh / 2, sw, sh, 0x000000, 0.4);
         mask.setDepth(1);
 
         // 添加Game Over文本
-        this.add.text(190, 250, 'Game Over', {
-            fontSize: '48px',
+        this.add.text(sw / 2, sh * 0.37, 'Game Over', {
+            fontSize: Math.round(sw * 0.13) + 'px',
             fill: '#fff',
             fontStyle: 'bold'
         }).setOrigin(0.5).setDepth(2);
 
         // 显示分数
-        this.add.text(190, 340, `Score: ${data && data.score ? data.score : 0}`, {
-            fontSize: '36px',
+        this.add.text(sw / 2, sh * 0.5, `Score: ${data && data.score ? data.score : 0}`, {
+            fontSize: Math.round(sw * 0.09) + 'px',
             fill: '#fff',
             align: 'center'
         }).setOrigin(0.5).setDepth(2);
 
-
-
         // 添加重新开始按钮
-        const restartButton = this.add.text(190, 420, 'Click to download', {
-            fontSize: '24px',
+        const restartButton = this.add.text(sw / 2, sh * 0.62, 'Click to download', {
+            fontSize: Math.round(sw * 0.065) + 'px',
             fill: '#fff',
             backgroundColor: '#4CAF50',
             fontStyle: 'bold',
-            padding: { x: 20, y: 10 }
+            padding: { x: Math.round(sw * 0.053), y: Math.round(sw * 0.026) }
         }).setOrigin(0.5).setInteractive().setDepth(2);
 
         restartButton.on('pointerdown', () => {

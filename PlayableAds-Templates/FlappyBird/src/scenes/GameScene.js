@@ -23,6 +23,10 @@ export default class GameScene extends Phaser.Scene {
         // 清理可能存在的旧定时器
         this.time.removeAllEvents();
 
+        // 获取当前屏幕宽高
+        const sw = this.scale.width;
+        const sh = this.scale.height;
+
         // 游戏状态
         this.gameOver = false;
         this.score = 0;
@@ -32,15 +36,16 @@ export default class GameScene extends Phaser.Scene {
         this.obstaclePairs = new Map();    // 用于记录障碍物对
 
         // 添加背景
-        this.background = this.add.image(190, 340, themeConfig.background.key)
-            .setDisplaySize(380, 680);
+        this.background = this.add.image(sw / 2, sh / 2, themeConfig.background.key)
+            .setDisplaySize(sw, sh);
 
         // 创建玩家
-        this.player = this.physics.add.sprite(100, 340, themeConfig.playerSpritesheet.key);
+        const playerSize = sw * 0.168;
+        this.player = this.physics.add.sprite(sw * 0.26, sh / 2, themeConfig.playerSpritesheet.key);
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
         // 设置玩家显示尺寸
-        this.player.setDisplaySize(64, 64);
+        this.player.setDisplaySize(playerSize, playerSize);
         this.player.body.setSize(themeConfig.playerSpritesheet.frameWidth * 0.6, themeConfig.playerSpritesheet.frameHeight * 0.6);
 
         // 创建动画
@@ -85,16 +90,16 @@ export default class GameScene extends Phaser.Scene {
         this.input.on('pointerdown', this.handleClick, this);
 
         // 分数显示
-        this.scoreText = this.add.text(16, 16, 'Score: 0', { fontSize: '24px', fill: '#fff' });
+        this.scoreText = this.add.text(sw * 0.04, sh * 0.025, 'Score: 0', { fontSize: Math.round(sw * 0.06) + 'px', fill: '#fff' });
         this.scoreText.setDepth(1000);
 
         // 难度显示
-        this.difficultyText = this.add.text(16, 50, 'Difficulty: 1', { fontSize: '24px', fill: '#fff' });
+        this.difficultyText = this.add.text(sw * 0.04, sh * 0.07, 'Difficulty: 1', { fontSize: Math.round(sw * 0.06) + 'px', fill: '#fff' });
         this.difficultyText.setDepth(1000);
 
         // 游戏结束文本
-        this.gameOverText = this.add.text(190, 340, 'Game Over\nClick to restart', {
-            fontSize: '24px',
+        this.gameOverText = this.add.text(sw / 2, sh / 2, 'Game Over\nClick to restart', {
+            fontSize: Math.round(sw * 0.06) + 'px',
             fill: '#fff',
             align: 'center'
         }).setOrigin(0.5).setVisible(false);
@@ -142,75 +147,66 @@ export default class GameScene extends Phaser.Scene {
     createObstacle() {
         if (this.gameOver) return;
 
-        // 先计算理想的位置和大小参数
-        const screenWidth = 380;
-        const screenHeight = 680;
+        const sw = this.scale.width;
+        const sh = this.scale.height;
 
         // 设置障碍物间隙
-        const minGap = 140;
-        const maxGap = 180;
+        const minGap = sh * 0.21;
+        const maxGap = sh * 0.27;
         const gap = Phaser.Math.Between(minGap, maxGap);
 
-        // 素材高度和宽度
-        const mountainWidth = 1025;
-        const mountainHeight = 1536;
-
         // 设置障碍物宽度
-        const obstacleWidth = 60;  // 固定的障碍物宽度
+        const obstacleWidth = sw * 0.16;  // 比例宽度
 
         // 计算顶部障碍物的理想高度
-        const minTopHeight = 80;
-        const maxTopHeight = 450;
+        const minTopHeight = sh * 0.12;
+        const maxTopHeight = sh * 0.66;
         const topHeight = Phaser.Math.Between(minTopHeight, maxTopHeight);
 
         // 计算底部障碍物的理想高度
-        let bottomHeight = screenHeight - topHeight - gap;
-
-        // 确保底部障碍物有足够的高度
-        if (bottomHeight < 80) {
-            bottomHeight = 90;
+        let bottomHeight = sh - topHeight - gap;
+        if (bottomHeight < sh * 0.12) {
+            bottomHeight = sh * 0.13;
         }
 
         // 创建顶部障碍物
-        const topObstacle = this.obstacles.create(screenWidth, 0, themeConfig.obstacleTop.key);
-        // 设置顶部障碍物显示尺寸
+        const topObstacle = this.obstacles.create(sw, 0, themeConfig.obstacleTop.key);
         topObstacle.setDisplaySize(obstacleWidth, topHeight);
         topObstacle.setOrigin(0, 0);
         topObstacle.setImmovable(true);
         topObstacle.body.allowGravity = false;
-        topObstacle.setVelocityX(-200 * this.difficulty);
-        const obstaclePairId = Date.now() + Math.random();  // 确保唯一性
+        topObstacle.setVelocityX(-sw * 0.53 * this.difficulty);
+        const obstaclePairId = Date.now() + Math.random();
         topObstacle.obstacleId = obstaclePairId;
         topObstacle.isTop = true;
 
         // 创建底部障碍物
-        const bottomObstacle = this.obstacles.create(screenWidth, screenHeight - bottomHeight, themeConfig.obstacleBottom.key);
-        // 设置底部障碍物显示尺寸
+        const bottomObstacle = this.obstacles.create(sw, sh - bottomHeight, themeConfig.obstacleBottom.key);
         bottomObstacle.setDisplaySize(obstacleWidth, bottomHeight);
         bottomObstacle.setOrigin(0, 0);
         bottomObstacle.setImmovable(true);
         bottomObstacle.body.allowGravity = false;
-        bottomObstacle.setVelocityX(-200 * this.difficulty);
+        bottomObstacle.setVelocityX(-sw * 0.53 * this.difficulty);
         bottomObstacle.obstacleId = obstaclePairId;
         bottomObstacle.isTop = false;
 
-        // 记录障碍物对信息
         this.obstaclePairs.set(obstaclePairId, {
             top: topObstacle,
             bottom: bottomObstacle,
             passed: false
         });
 
-        // 设置定时器创建新障碍物，间隔随难度减少
         this.time.delayedCall(Math.max(500, 1500 / this.difficulty), this.createObstacle, [], this);
     }
 
     createBomb() {
         if (this.gameOver) return;
-
-        const bomb = this.bombs.create(380, Phaser.Math.Between(100, 580), themeConfig.bomb.key);
-        bomb.setVelocityX(-300 * this.difficulty);  // 速度随难度增加
-        bomb.setDisplaySize(25, 25);
+        const sw = this.scale.width;
+        const sh = this.scale.height;
+        const bombSize = Math.min(sw, sh) * 0.065;
+        const bomb = this.bombs.create(sw, Phaser.Math.Between(sh * 0.15, sh * 0.85), themeConfig.bomb.key);
+        bomb.setVelocityX(-sw * 0.8 * this.difficulty);
+        bomb.setDisplaySize(bombSize, bombSize);
         bomb.body.allowGravity = false;
         bomb.setCollideWorldBounds(false);
     }
