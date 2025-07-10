@@ -31,7 +31,7 @@ export class GameOver extends Phaser.Scene {
 
         // Create animated title text with sad colors
         const titleText = this.add.text(gameWidth / 2, gameHeight * 0.3, 'Game Over', {
-            fontSize: '72px',
+            fontSize: '64px',
             fontFamily: 'Arial Black',
             color: '#FF4444',
             stroke: '#8B0000',
@@ -86,8 +86,8 @@ export class GameOver extends Phaser.Scene {
             repeat: -1
         });
 
-        // Create Try Again button with different color scheme
-        this.createTryAgainButton(gameWidth, gameHeight);
+        // Create Try Again and Main Menu buttons side by side
+        this.createGameButtons(gameWidth, gameHeight);
 
         // Add lightning flash effect
         this.createLightningEffect(gameWidth, gameHeight);
@@ -127,63 +127,126 @@ export class GameOver extends Phaser.Scene {
         });
     }
 
-    createTryAgainButton(gameWidth, gameHeight) {
-        // Create button background using Graphics - red theme for game over
-        const buttonBg = this.add.graphics();
-        buttonBg.fillStyle(0xCC3333);
-        buttonBg.lineStyle(4, 0x888888);
-        buttonBg.fillRoundedRect(gameWidth / 2 - 150, gameHeight * 0.7 - 40, 300, 80, 10);
-        buttonBg.strokeRoundedRect(gameWidth / 2 - 150, gameHeight * 0.7 - 40, 300, 80, 10);
-        buttonBg.setInteractive(new Phaser.Geom.Rectangle(gameWidth / 2 - 150, gameHeight * 0.7 - 40, 300, 80), Phaser.Geom.Rectangle.Contains);
-        buttonBg.input.cursor = 'pointer';
+    createGameButtons(gameWidth, gameHeight) {
+        const buttonWidth = Math.min(gameWidth * 0.35, 220);
+        const buttonHeight = Math.min(gameHeight * 0.08, 70);
+        const buttonSpacing = gameWidth * 0.05;
 
-        // Create button text
-        const buttonText = this.add.text(gameWidth / 2, gameHeight * 0.7, 'Try Again', {
-            fontSize: '36px',
+        // Try Again button (left)
+        const tryAgainButton = this.add.graphics();
+        tryAgainButton.fillStyle(0xCC3333);
+        tryAgainButton.lineStyle(4, 0x888888);
+        const tryAgainX = gameWidth / 2 - buttonWidth / 2 - buttonSpacing;
+        tryAgainButton.fillRoundedRect(tryAgainX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+        tryAgainButton.strokeRoundedRect(tryAgainX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+        tryAgainButton.setInteractive(new Phaser.Geom.Rectangle(tryAgainX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight), Phaser.Geom.Rectangle.Contains);
+        tryAgainButton.input.cursor = 'pointer';
+
+        const tryAgainText = this.add.text(tryAgainX, gameHeight * 0.7, 'Try Again', {
+            fontSize: Math.min(gameWidth * 0.04, gameHeight * 0.03) + 'px',
             fontFamily: 'Arial Bold',
             color: '#FFFFFF',
             stroke: '#000000',
             strokeThickness: 3
         }).setOrigin(0.5);
 
-        // Button hover effects
-        buttonBg.on('pointerover', () => {
-            buttonBg.clear();
-            buttonBg.fillStyle(0xDD4444);
-            buttonBg.lineStyle(4, 0xAAAAAA);
-            buttonBg.fillRoundedRect(gameWidth / 2 - 150, gameHeight * 0.7 - 40, 300, 80, 10);
-            buttonBg.strokeRoundedRect(gameWidth / 2 - 150, gameHeight * 0.7 - 40, 300, 80, 10);
+        // Main Menu button (right)
+        const mainMenuButton = this.add.graphics();
+        mainMenuButton.fillStyle(0x4a4a8a);
+        mainMenuButton.lineStyle(4, 0x888888);
+        const mainMenuX = gameWidth / 2 + buttonWidth / 2 + buttonSpacing;
+        mainMenuButton.fillRoundedRect(mainMenuX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+        mainMenuButton.strokeRoundedRect(mainMenuX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+        mainMenuButton.setInteractive(new Phaser.Geom.Rectangle(mainMenuX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight), Phaser.Geom.Rectangle.Contains);
+        mainMenuButton.input.cursor = 'pointer';
+
+        const mainMenuText = this.add.text(mainMenuX, gameHeight * 0.7, 'Main Menu', {
+            fontSize: Math.min(gameWidth * 0.04, gameHeight * 0.03) + 'px',
+            fontFamily: 'Arial Bold',
+            color: '#FFFFFF',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setOrigin(0.5);
+
+        // Try Again button hover effects
+        tryAgainButton.on('pointerover', () => {
+            tryAgainButton.clear();
+            tryAgainButton.fillStyle(0xDD4444);
+            tryAgainButton.lineStyle(4, 0xAAAAAA);
+            tryAgainButton.fillRoundedRect(tryAgainX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+            tryAgainButton.strokeRoundedRect(tryAgainX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
             this.tweens.add({
-                targets: [buttonBg, buttonText],
+                targets: [tryAgainButton, tryAgainText],
                 scale: 1.1,
                 duration: 200,
                 ease: 'Power2'
             });
         });
 
-        buttonBg.on('pointerout', () => {
-            buttonBg.clear();
-            buttonBg.fillStyle(0xCC3333);
-            buttonBg.lineStyle(4, 0x888888);
-            buttonBg.fillRoundedRect(gameWidth / 2 - 150, gameHeight * 0.7 - 40, 300, 80, 10);
-            buttonBg.strokeRoundedRect(gameWidth / 2 - 150, gameHeight * 0.7 - 40, 300, 80, 10);
+        tryAgainButton.on('pointerout', () => {
+            tryAgainButton.clear();
+            tryAgainButton.fillStyle(0xCC3333);
+            tryAgainButton.lineStyle(4, 0x888888);
+            tryAgainButton.fillRoundedRect(tryAgainX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+            tryAgainButton.strokeRoundedRect(tryAgainX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
             this.tweens.add({
-                targets: [buttonBg, buttonText],
+                targets: [tryAgainButton, tryAgainText],
                 scale: 1,
                 duration: 200,
                 ease: 'Power2'
             });
         });
 
-        // Button click handler
-        buttonBg.on('pointerdown', () => {
-            // Restart the game directly
+        // Main Menu button hover effects
+        mainMenuButton.on('pointerover', () => {
+            mainMenuButton.clear();
+            mainMenuButton.fillStyle(0x6a6aaa);
+            mainMenuButton.lineStyle(4, 0xAAAAAA);
+            mainMenuButton.fillRoundedRect(mainMenuX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+            mainMenuButton.strokeRoundedRect(mainMenuX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+            this.tweens.add({
+                targets: [mainMenuButton, mainMenuText],
+                scale: 1.1,
+                duration: 200,
+                ease: 'Power2'
+            });
+        });
+
+        mainMenuButton.on('pointerout', () => {
+            mainMenuButton.clear();
+            mainMenuButton.fillStyle(0x4a4a8a);
+            mainMenuButton.lineStyle(4, 0x888888);
+            mainMenuButton.fillRoundedRect(mainMenuX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+            mainMenuButton.strokeRoundedRect(mainMenuX - buttonWidth / 2, gameHeight * 0.7 - buttonHeight / 2, buttonWidth, buttonHeight, 10);
+            this.tweens.add({
+                targets: [mainMenuButton, mainMenuText],
+                scale: 1,
+                duration: 200,
+                ease: 'Power2'
+            });
+        });
+
+        // Button click handlers
+        tryAgainButton.on('pointerdown', () => {
             this.scene.start('Game');
         });
 
-        // Add subtle pulsing glow effect to button
+        mainMenuButton.on('pointerdown', () => {
+            this.scene.start('Start');
+        });
+
+        // Add pulsing glow effects to buttons
         this.tweens.add({
-            targets: buttonBg,
+            targets: tryAgainButton,
+            alpha: { from: 1, to: 0.8 },
+            duration: 1500,
+            ease: 'Sine.easeInOut',
+            yoyo: true,
+            repeat: -1
+        });
+
+        this.tweens.add({
+            targets: mainMenuButton,
             alpha: { from: 1, to: 0.8 },
             duration: 1500,
             ease: 'Sine.easeInOut',
