@@ -13,14 +13,23 @@
       },
       "guidePosition": {
         "x": 0.88,
-        "y": 0.57
+        "y": 0.82
       },
       "swipeDirection": "scale",
       "interactionArea": {
         "x": 0.89,
-        "y": 0.56,
+        "y": 0.80,
         "width": 0.09,
-        "height": 0.04
+        "height": 0.15
+      },
+      "guideTip": "点击打开商店",
+      "guideTipFont": {
+        "size": 1,
+        "color": "#fff"
+      },
+      "guideTipPosition": {
+        "x": 0.85,
+        "y": 0.65
       }
     },
     {
@@ -33,14 +42,23 @@
       },
       "guidePosition": {
         "x": 0.53,
-        "y": 0.44
+        "y": 0.25
       },
       "swipeDirection": "scale",
       "interactionArea": {
         "x": 0.48,
-        "y": 0.40,
+        "y": 0.05,
         "width": 0.16,
-        "height": 0.09
+        "height": 0.40
+      },
+      "guideTip": "点击购买英雄",
+      "guideTipFont": {
+        "size": 1,
+        "color": "#fff"
+      },
+      "guideTipPosition": {
+        "x": 0.40,
+        "y": 0.15
       }
     },
     {
@@ -53,22 +71,31 @@
       },
       "guidePosition": {
         "x": 0.70,
-        "y": 0.44
+        "y": 0.25
       },
       "swipeDirection": "scale",
       "interactionArea": {
         "x": 0.64,
-        "y": 0.40,
+        "y": 0.05,
         "width": 0.16,
-        "height": 0.09
+        "height": 0.40
+      },
+      "guideTip": "点击购买英雄",
+      "guideTipFont": {
+        "size": 1,
+        "color": "#fff"
+      },
+      "guideTipPosition": {
+        "x": 0.60,
+        "y": 0.15
       }
     }
   ],
   "cat_button": {
     "x": 0.51,
-    "y": 0.575,
+    "y": 0.851,
     "width": 0.12,
-    "height": 0.016,
+    "height": 0.07,
     "fontSize": 2,
     "url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301"
   }

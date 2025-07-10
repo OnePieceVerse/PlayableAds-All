@@ -12,15 +12,24 @@
         "height": 50
       },
       "guidePosition": {
-        "x": 0.05,
-        "y": 0.57
+        "x": 0.06,
+        "y": 0.79
       },
       "swipeDirection": "scale",
       "interactionArea": {
         "x": 0.04,
-        "y": 0.56,
+        "y": 0.76,
         "width": 0.09,
-        "height": 0.04
+        "height": 0.20
+      },
+      "guideTip": "点击升级英雄",
+      "guideTipFont": {
+        "size": 1,
+        "color": "#fff"
+      },
+      "guideTipPosition": {
+        "x": 0.16,
+        "y": 0.63
       }
     },
     {
@@ -32,8 +41,8 @@
         "height": 100
       },
       "guidePosition": {
-        "x": 0.2,
-        "y": 0.56
+        "x": 0.18,
+        "y": 0.76
       },
       "swipeDirection": {
         "type": "angle",
@@ -41,18 +50,27 @@
         "distance": "50"
       },
       "interactionArea": {
-        "x": 0.17,
-        "y": 0.53,
-        "width": 0.25,
-        "height": 0.06
+        "x": 0.19,
+        "y": 0.62,
+        "width": 0.19,
+        "height": 0.27
+      },
+      "guideTip": "拖动英雄上场",
+      "guideTipFont": {
+        "size": 1,
+        "color": "#fff"
+      },
+      "guideTipPosition": {
+        "x": 0.32,
+        "y": 0.50
       }
     }
   ],
   "cat_button": {
     "x": 0.51,
-    "y": 0.575,
+    "y": 0.851,
     "width": 0.12,
-    "height": 0.016,
+    "height": 0.07,
     "fontSize": 2,
     "url": "https://apps.apple.com/cn/app/%E9%87%91%E9%93%B2%E9%93%B2%E4%B9%8B%E6%88%98/id1478101301"
   }
