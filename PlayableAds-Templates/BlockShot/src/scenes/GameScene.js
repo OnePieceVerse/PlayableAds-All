@@ -223,43 +223,43 @@ export default class GameScene extends Phaser.Scene {
         this.score = 0;
         this.scoreText = null;
         this.blockCount = 8; // 每行block数量
-        this.blockWidth = 60; // block宽度（像素）
-        this.blockHeight = 60; // block高度（像素）
-        this.bulletWidth = 18; // 子弹宽度（像素）
-        this.bulletHeight = 18; // 子弹高度（像素）
-        this.blockStartY = -this.blockHeight; // 新生成block行的起始y坐标
-        this.blockMoveSpeed = 20; // block墙体整体下移速度（像素/秒）
-        this.rowGapRatio = 0.7; // 行间距系数（0.7表示每行有30%重叠）
-        this.blockGenInterval = this.blockHeight * this.rowGapRatio / this.blockMoveSpeed * 1000; // 新block行生成间隔（ms）
+        // 下面这些都要在create里根据屏幕尺寸动态赋值
+        // this.blockWidth = 60; // block宽度（像素）
+        // this.blockHeight = 60; // block高度（像素）
+        // this.bulletWidth = 18; // 子弹宽度（像素）
+        // this.bulletHeight = 18; // 子弹高度（像素）
+        // this.blockStartY = -this.blockHeight; // 新生成block行的起始y坐标
+        // this.blockMoveSpeed = 20; // block墙体整体下移速度（像素/秒）
+        // this.rowGapRatio = 0.7; // 行间距系数（0.7表示每行有30%重叠）
+        // this.blockGenInterval = this.blockHeight * this.rowGapRatio / this.blockMoveSpeed * 1000; // 新block行生成间隔（ms）
         this.isGameOver = false;
-        this.playerSpeed = 350; // 玩家左右移动速度
-        this.blockStackOffset = 5; // 堆叠层y轴偏移（像素）
-        this.blockRowsMin = 1; // 每列最小堆叠层数
-        this.blockRowsMax = 3; // 每列最大堆叠层数
-        this.difficultyStep = 0; // 难度递增步长
+        // this.playerSpeed = 350; // 玩家左右移动速度
+        // this.blockStackOffset = 5; // 堆叠层y轴偏移（像素）
+        // this.blockRowsMin = 1; // 每列最小堆叠层数
+        // this.blockRowsMax = 3; // 每列最大堆叠层数
+        this.difficultyStep = 0;
         this.difficultyInterval = 6000; // 难度递增间隔（ms）
-        this.rowIndex = 0; // 当前生成到第几行
+        this.rowIndex = 0;
         this.blockGenTimer = null;
         this.bulletTimer = null;
         this.difficultyTimer = null;
         this.blockWalls = [];
-        this.bulletsPerShot = 1; // 每次发射子弹数
-        this.shootInterval = 400; // 射击间隔（ms）
-        this.pendingSpecialType = null; // 下一个新行要生成的特殊类型
-        this.specialType2XProb = 0.2; // 2X概率(1-speedup概率)
-        this.bulletsPerShotMax = 16; // 每次发射子弹数最大值
-        this.shootIntervalMin = 100; // 射击间隔最小值
-        this.specialTypeInterval = 6000; // 特殊类型生成间隔（ms）
+        this.bulletsPerShot = 1;
+        this.shootInterval = 400;
+        this.pendingSpecialType = null;
+        this.specialType2XProb = 0.2;
+        this.bulletsPerShotMax = 16;
+        this.shootIntervalMin = 100;
+        this.specialTypeInterval = 6000;
         this.isGamePaused = true;
-        // fire技能相关
         this.fireCooldown = 0;
-        this.fireCooldownMax = 10000; // 10秒
+        this.fireCooldownMax = 10000;
         this.isFireActive = false;
         this.fireButton = null;
         this.fireCooldownText = null;
         this._oldBulletsPerShot = null;
         this._oldShootInterval = null;
-        this.fireTime = 3000; // 狂暴射击持续时间
+        this.fireTime = 3000;
     }
 
     preload() {
@@ -267,15 +267,35 @@ export default class GameScene extends Phaser.Scene {
         this.load.image('player', themeConfig.player.path);
         this.load.image('block', themeConfig.block.path);
         this.load.image('bullet', themeConfig.bullet.path);
-        this.load.image('fire', themeConfig.fire.path); // fire技能图片
-        // 加载音效
+        this.load.image('fire', themeConfig.fire.path);
         this.load.audio('blockBreak', themeConfig.blockBreak.path);
         this.load.audio('specialBuff', themeConfig.specialBuff.path);
         this.load.audio('lose', themeConfig.lose.path);
     }
 
     create() {
-        // 游戏开始前的蒙版和说明
+        // 适配屏幕尺寸，按比例设置所有参数
+        const width = this.scale.width;
+        const height = this.scale.height;
+        // 以设计稿380x680为基准
+        const baseW = 380, baseH = 680;
+        const scaleW = width / baseW;
+        const scaleH = height / baseH;
+        const scale = Math.min(scaleW, scaleH);
+        // 主要尺寸参数
+        this.blockWidth = 60 * scale;
+        this.blockHeight = 60 * scale;
+        this.bulletWidth = 18 * scale;
+        this.bulletHeight = 18 * scale;
+        this.blockStartY = -this.blockHeight;
+        this.blockMoveSpeed = 20 * scale;
+        this.rowGapRatio = 0.7;
+        this.blockGenInterval = this.blockHeight * this.rowGapRatio / this.blockMoveSpeed * 1000;
+        this.playerSpeed = 350 * scale;
+        this.blockStackOffset = 5 * scale;
+        this.blockRowsMin = 1;
+        this.blockRowsMax = 3;
+
         this.isGamePaused = true;
         this.isGameOver = false;
         this.score = 0;
@@ -284,10 +304,10 @@ export default class GameScene extends Phaser.Scene {
         this.shootInterval = 400;
         this.pendingSpecialType = null;
         this.blockWalls = [];
-        this.add.image(0, 0, 'background').setOrigin(0, 0).setDisplaySize(380, 680);
+        this.add.image(0, 0, 'background').setOrigin(0, 0).setDisplaySize(width, height);
 
-        // --- 游戏说明蒙版 ---
-        this.startMask = this.add.rectangle(190, 340, 380, 680, 0x000000, 0.78).setDepth(99999);
+        // 游戏说明蒙版
+        this.startMask = this.add.rectangle(width / 2, height / 2, width, height, 0x000000, 0.78).setDepth(99999);
         const introText =
             '拖动角色左右移动，击碎下落的方块\n' +
             '别让方块压到你！\n' +
@@ -295,25 +315,24 @@ export default class GameScene extends Phaser.Scene {
             '2X：击破后子弹数量翻倍\n' +
             'SpeedUp：击破后射击速度提升\n' +
             '\n狂暴射击：\n' +
-            '按下狂暴射击按钮，持续3秒，期间子弹数量和射击速度翻倍!\n'
-        this.startText = this.add.text(190, 250, introText, {
-            fontSize: '20px',
+            '按下狂暴射击按钮，持续3秒，期间子弹数量和射击速度翻倍!\n';
+        this.startText = this.add.text(width / 2, height * 0.37, introText, {
+            fontSize: (20 * scale) + 'px',
             fill: '#fff',
             fontStyle: 'bold',
             align: 'center',
             stroke: '#222',
-            strokeThickness: 4,
-            wordWrap: { width: 320, useAdvancedWrap: true }
+            strokeThickness: 4 * scale,
+            wordWrap: { width: width * 0.85, useAdvancedWrap: true }
         }).setOrigin(0.5).setDepth(99999);
-        this.startTip = this.add.text(190, 540, '点击屏幕开始游戏', {
-            fontSize: '24px',
+        this.startTip = this.add.text(width / 2, height * 0.8, '点击屏幕开始游戏', {
+            fontSize: (24 * scale) + 'px',
             fill: '#ffe066',
             fontStyle: 'bold',
             align: 'center',
             stroke: '#222',
-            strokeThickness: 4
+            strokeThickness: 4 * scale
         }).setOrigin(0.5).setDepth(99999);
-        // 添加闪烁渐变效果
         this.tweens.add({
             targets: this.startTip,
             alpha: { from: 1, to: 0.3 },
@@ -329,26 +348,25 @@ export default class GameScene extends Phaser.Scene {
             this.isGamePaused = false;
             this.startGameLogic();
         });
-        // --- 游戏说明蒙版结束 ---
 
         // 玩家
-        this.player = this.physics.add.sprite(190, 600, 'player').setDisplaySize(48, 48);
-        this.player.body.setSize(themeConfig.player.width * 0.9, themeConfig.player.height * 0.9);
+        this.player = this.physics.add.sprite(width / 2, height * 0.88, 'player').setDisplaySize(48 * scale, 48 * scale);
+        this.player.body.setSize(themeConfig.player.width * 0.9 * scale, themeConfig.player.height * 0.9 * scale);
         this.player.setCollideWorldBounds(true);
         this.player.body.allowGravity = false;
 
         // 拖动控制
         this.input.on('pointermove', pointer => {
             if (this.isGameOver || this.isGamePaused) return;
-            this.player.x = Phaser.Math.Clamp(pointer.x, 24, 380 - 24);
+            this.player.x = Phaser.Math.Clamp(pointer.x, 24 * scale, width - 24 * scale);
         });
 
         // 子弹组
         this.bullets = this.physics.add.group();
 
         // 分数文本
-        this.scoreText = this.add.text(12, 12, 'score: 0', { fontSize: '22px', fill: '#000', fontStyle: 'bold', stroke: '#fff', strokeThickness: 3 });
-        this.scoreText.setDepth(9999); // 始终最上层
+        this.scoreText = this.add.text(12 * scale, 12 * scale, 'score: 0', { fontSize: (22 * scale) + 'px', fill: '#000', fontStyle: 'bold', stroke: '#fff', strokeThickness: 3 * scale });
+        this.scoreText.setDepth(9999);
         // 初始的blockwall
         for (let i = 0; i < 6; i++) {
             let specialType = null;
@@ -363,17 +381,16 @@ export default class GameScene extends Phaser.Scene {
                 this.blockRowsMin + this.difficultyStep,
                 this.blockRowsMax + this.difficultyStep,
                 this.blockWidth,
-                5 - i, // depth: i=0最上层，i=5最下层
+                5 - i,
                 specialType
             );
             this.blockWalls.push(wall);
         }
-        // 定时生成障碍墙、发射子弹、难度递增、特殊道具定时器等逻辑，全部放到startGameLogic里
         this.fireCooldown = 0;
         this.isFireActive = false;
-        this.fireButton = this.add.image(340, 620, 'fire').setDisplaySize(60, 60).setInteractive().setDepth(9999);
-        this.fireCooldownText = this.add.text(340, 620, '', {
-            fontSize: '24px', fill: '#fff', fontStyle: 'bold', stroke: '#222', strokeThickness: 4
+        this.fireButton = this.add.image(width * 0.89, height * 0.91, 'fire').setDisplaySize(60 * scale, 60 * scale).setInteractive().setDepth(9999);
+        this.fireCooldownText = this.add.text(width * 0.89, height * 0.91, '', {
+            fontSize: (24 * scale) + 'px', fill: '#fff', fontStyle: 'bold', stroke: '#222', strokeThickness: 4 * scale
         }).setOrigin(0.5).setDepth(10000);
         this.fireCooldownText.setVisible(false);
         this.fireButton.on('pointerdown', () => {
