@@ -9,8 +9,9 @@ const config = {
     title: 'Overlord Rising',
     description: '',
     parent: 'game-container',
-    width: 600,
-    height: 800,
+    resolution: window.devicePixelRatio,
+    width: window.innerWidth,
+    height: window.innerHeight,
     backgroundColor: '#000000',
     pixelArt: false,
     physics: {
@@ -28,7 +29,7 @@ const config = {
         GameSuccess
     ],
     scale: {
-        mode: Phaser.Scale.RESIZE,
+        mode: Phaser.Scale.ENVELOP,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 }

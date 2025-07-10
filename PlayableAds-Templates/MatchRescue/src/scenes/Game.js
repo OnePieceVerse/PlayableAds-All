@@ -4,10 +4,7 @@ export class Game extends Phaser.Scene {
 
     constructor() {
         super('Game');
-        this.boardSize = 10; // 10x10 grid
-        this.tileSize = 60; // Size of each tile
-        this.boardOffsetX = 1; // X offset for the board
-        this.boardOffsetY = 200; // Y offset for the board
+        // 移除固定的棋盘大小，在create方法中根据屏幕尺寸动态计算
         this.selectedTile = null; // Currently selected tile
         this.canMove = true; // Flag to control if player can make moves
         this.matchTypes = ['crystal', 'heart', 'star']; // Available tile types
@@ -18,8 +15,43 @@ export class Game extends Phaser.Scene {
     }
 
     create() {
-        // Add background
-        this.add.image(300, 400, 'background');
+        // 获取屏幕尺寸
+        const gameWidth = this.cameras.main.width;
+        const gameHeight = this.cameras.main.height;
+
+        // 根据屏幕比例动态计算合适的棋盘行列数
+        const aspectRatio = gameWidth / gameHeight;
+
+        if (aspectRatio > 1.5) {
+            // 宽屏设备（如横屏手机、平板）
+            this.boardCols = 10;
+            this.boardRows = 8;
+        } else if (aspectRatio > 0.8) {
+            // 接近正方形或略宽（如iPad）
+            this.boardCols = 8;
+            this.boardRows = 10;
+        } else {
+            // 竖屏设备（如竖屏手机）
+            this.boardCols = 8;
+            this.boardRows = 12;
+        }
+
+        // 根据屏幕尺寸和棋盘大小计算合适的瓦片尺寸
+        const availableWidth = gameWidth * 0.9; // 预留10%边距
+        const availableHeight = gameHeight * 0.6; // 棋盘占屏幕高度60%
+
+        const maxTileWidth = availableWidth / this.boardCols;
+        const maxTileHeight = availableHeight / this.boardRows;
+
+        // 选择较小的尺寸以确保棋盘完全可见，并设置合理的最小最大值
+        this.tileSize = Math.max(30, Math.min(60, Math.min(maxTileWidth, maxTileHeight)));
+
+        // 计算棋盘偏移量（居中对齐）
+        this.boardOffsetX = (gameWidth - this.boardCols * this.tileSize) / 2;
+        this.boardOffsetY = gameHeight * 0.2; // 从屏幕高度的20%开始
+
+        // Add background - 居中显示
+        this.add.image(gameWidth / 2, gameHeight / 2, 'background');
 
         // Add sound
         this.backgroundSound = this.sound.add('background', { volume: 0.5 });
@@ -39,25 +71,30 @@ export class Game extends Phaser.Scene {
         this.board = [];
         this.createBoard();
 
-        // Add player
-        const playerPositionX = Phaser.Math.RND.pick([30, 90, 150, 210, 270, 330, 390, 450, 510, 570]);
-        this.player = new Player(this, playerPositionX, 150);
+        // Add player - 计算可能的X位置（基于棋盘列）
+        const possibleXPositions = [];
+        for (let i = 0; i < this.boardCols; i++) {
+            possibleXPositions.push(this.boardOffsetX + i * this.tileSize + this.tileSize / 2);
+        }
+        const playerPositionX = Phaser.Math.RND.pick(possibleXPositions);
+        const playerPositionY = this.boardOffsetY - gameHeight * 0.06; // 在棋盘上方
+
+        this.player = new Player(this, playerPositionX, playerPositionY);
         this.player.setVelocityY(100);
         this.player.anxiety();
 
         // Add physics collision
         this.physics.add.collider(this.player, this.blocksGroup);
 
-        // Add Platform
-        this.platform = this.physics.add.sprite(300, 850, 'platform');
+        // Add Platform - 在屏幕底部
+        this.platform = this.physics.add.sprite(gameWidth / 2, gameHeight * 0.95, 'platform');
         this.platform.setImmovable(true); // can not move
         this.platform.body.allowGravity = false; // disable gravity
 
         this.physics.add.collider(this.player, this.platform, this.gameSuccess, null, this);
 
-
-        // Add falling brickwall
-        this.brickwall = this.physics.add.sprite(300, -460, 'brickwall');
+        // Add falling brickwall - 从屏幕顶部上方开始
+        this.brickwall = this.physics.add.sprite(gameWidth / 2, -gameHeight * 0.5, 'brickwall');
         this.brickwall.setDepth(1);
         this.brickwall.body.allowGravity = false; // Disable gravity to maintain constant speed
         this.brickwall.setVelocityY(20); // Very slow falling speed
@@ -70,9 +107,9 @@ export class Game extends Phaser.Scene {
 
     createBoard() {
         // Create a 2D array to represent the board
-        for (let row = 0; row < this.boardSize; row++) {
+        for (let row = 0; row < this.boardRows; row++) {
             this.board[row] = [];
-            for (let col = 0; col < this.boardSize; col++) {
+            for (let col = 0; col < this.boardCols; col++) {
                 const tile = this.createTile(row, col);
                 this.blocksGroup.add(tile);
             }
@@ -281,8 +318,8 @@ export class Game extends Phaser.Scene {
 
         // Reset all matched flags first
         if (!isInitialCheck) {
-            for (let row = 0; row < this.boardSize; row++) {
-                for (let col = 0; col < this.boardSize; col++) {
+            for (let row = 0; row < this.boardRows; row++) {
+                for (let col = 0; col < this.boardCols; col++) {
                     const tile = this.board[row][col];
                     if (tile) {
                         tile.setData('matched', false);
@@ -295,8 +332,8 @@ export class Game extends Phaser.Scene {
         const matchedPositions = new Set();
 
         // Check horizontal matches
-        for (let row = 0; row < this.boardSize; row++) {
-            for (let col = 0; col <= this.boardSize - 3; col++) {
+        for (let row = 0; row < this.boardRows; row++) {
+            for (let col = 0; col <= this.boardCols - 3; col++) {
                 const tile1 = this.board[row][col];
                 const tile2 = this.board[row][col + 1];
                 const tile3 = this.board[row][col + 2];
@@ -320,7 +357,7 @@ export class Game extends Phaser.Scene {
 
                         // Check for longer matches
                         let extendCol = col + 3;
-                        while (extendCol < this.boardSize && this.board[row][extendCol] &&
+                        while (extendCol < this.boardCols && this.board[row][extendCol] &&
                                this.board[row][extendCol].getData('type') === tile1.getData('type')) {
                             matchedPositions.add(`${row},${extendCol}`);
                             extendCol++;
@@ -331,8 +368,8 @@ export class Game extends Phaser.Scene {
         }
 
         // Check vertical matches
-        for (let col = 0; col < this.boardSize; col++) {
-            for (let row = 0; row <= this.boardSize - 3; row++) {
+        for (let col = 0; col < this.boardCols; col++) {
+            for (let row = 0; row <= this.boardRows - 3; row++) {
                 const tile1 = this.board[row][col];
                 const tile2 = this.board[row + 1][col];
                 const tile3 = this.board[row + 2][col];
@@ -356,7 +393,7 @@ export class Game extends Phaser.Scene {
 
                         // Check for longer matches
                         let extendRow = row + 3;
-                        while (extendRow < this.boardSize && this.board[extendRow][col] &&
+                        while (extendRow < this.boardRows && this.board[extendRow][col] &&
                                this.board[extendRow][col].getData('type') === tile1.getData('type')) {
                             matchedPositions.add(`${extendRow},${col}`);
                             extendRow++;
@@ -393,8 +430,8 @@ export class Game extends Phaser.Scene {
         let matchCount = 0;
 
         // First, remove all matched tiles
-        for (let row = 0; row < this.boardSize; row++) {
-            for (let col = 0; col < this.boardSize; col++) {
+        for (let row = 0; row < this.boardRows; row++) {
+            for (let col = 0; col < this.boardCols; col++) {
                 const tile = this.board[row][col];
                 if (tile && tile.getData('matched') === true) {
                     matchCount++;
@@ -431,8 +468,8 @@ export class Game extends Phaser.Scene {
         let hasTilesFallen = false;
 
         // Process from bottom to top
-        for (let col = 0; col < this.boardSize; col++) {
-            for (let row = this.boardSize - 1; row >= 0; row--) {
+        for (let col = 0; col < this.boardCols; col++) {
+            for (let row = this.boardRows - 1; row >= 0; row--) {
                 // If this position is empty, look for a tile above to fall down
                 if (!this.board[row][col]) {
                     // Find the closest tile above
@@ -485,12 +522,12 @@ export class Game extends Phaser.Scene {
 
         // Fill empty spaces at the top with new tiles
         /*
-        for (let col = 0; col < this.boardSize; col++) {
-            for (let row = 0; row < this.boardSize; row++) {
+        for (let col = 0; col < this.boardCols; col++) {
+            for (let row = 0; row < this.boardRows; row++) {
                 if (!this.board[row][col]) {
                     const tile = this.createTile(row, col);
 
-                    // Start the tile above the board and animate it falling
+                    // Start the tile above the board and animate it falling - 使用自适应位置
                     tile.y = this.boardOffsetY - this.tileSize;
 
                     this.tweens.add({
