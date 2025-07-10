@@ -135,30 +135,16 @@ async function initPlayableAd(configPath) {
     function isInInteractionArea(clientX, clientY) {
         if (!interactionArea) return true;
 
-        let x, y;
-        // 获取最新的容器尺寸，因为屏幕可能旋转
-        containerRect = container.getBoundingClientRect();
-        x = clientX - containerRect.left;
-        y = clientY - containerRect.top;
+        // 获取视频内容区域
+        const rect = getVideoContentRect(video);
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
 
-        // 对于旋转区域的判断逻辑
-        if (requiredDirection && requiredDirection.type === 'angle') {
-            return isPointInRotatedRect({x, y}, interactionArea, requiredDirection.value);
-        }
-
-        // 对于非旋转区域的判断逻辑 (这部分也需要确保坐标系正确)
-        let areaLeft, areaRight, areaTop, areaBottom;
-        if (hasPortraitRotate()) {
-          areaLeft = (1-interactionArea.y-interactionArea.height) * containerRect.width;
-          areaRight = areaLeft + interactionArea.height * containerRect.width;
-          areaTop = interactionArea.x * containerRect.height; // y轴对应的是横屏时的宽度
-          areaBottom = areaTop + interactionArea.width * containerRect.height;
-        } else {
-          areaLeft = interactionArea.x * containerRect.width;
-          areaRight = areaLeft + interactionArea.width * containerRect.width;
-          areaTop = interactionArea.y * containerRect.height;
-          areaBottom = areaTop + interactionArea.height * containerRect.height;
-        }
+        // interactionArea 是视频内容区域的百分比
+        const areaLeft = interactionArea.x * rect.width;
+        const areaRight = areaLeft + interactionArea.width * rect.width;
+        const areaTop = interactionArea.y * rect.height;
+        const areaBottom = areaTop + interactionArea.height * rect.height;
 
         return x >= areaLeft && x <= areaRight && y >= areaTop && y <= areaBottom;
     }
@@ -270,11 +256,13 @@ async function initPlayableAd(configPath) {
             if (video.currentTime >= config.completionTime - interval &&
                 video.currentTime < config.completionTime + interval) {
                 clearInterval(checkEndTimeInterval);
-                ctaButton.style.left = config.cat_button.x * 100 + '%';
-                ctaButton.style.top = config.cat_button.y * 100 + '%';
-                ctaButton.style.width = config.cat_button.width * 100 + '%';
-                ctaButton.style.height = config.cat_button.height * 100 + '%';
+                // 替换原有百分比定位
+                // ctaButton.style.left = config.cat_button.x * 100 + '%';
+                // ctaButton.style.top = config.cat_button.y * 100 + '%';
+                // ctaButton.style.width = config.cat_button.width * 100 + '%';
+                // ctaButton.style.height = config.cat_button.height * 100 + '%';
                 ctaButton.style.display = 'block';
+                setCTAButtonPosition(ctaButton, video, config.cat_button);
             }
         }
         checkEndTimeInterval = setInterval(checkEndTime, 50);
@@ -290,14 +278,19 @@ async function initPlayableAd(configPath) {
 
         const debugArea = document.createElement('div');
         debugArea.id = 'debug-interaction-area';
+
+        // 获取视频内容区域
+        const rect = getVideoContentRect(video);
+
+        // 计算实际像素位置和尺寸
         debugArea.style.position = 'absolute';
-        debugArea.style.left = `${interactionArea.x * 100}%`;
-        debugArea.style.top = `${interactionArea.y * 100}%`;
-        debugArea.style.width = `${interactionArea.width * 100}%`;
-        debugArea.style.height = `${interactionArea.height * 100}%`;
+        debugArea.style.left = (rect.left + rect.width * interactionArea.x) + 'px';
+        debugArea.style.top = (rect.top + rect.height * interactionArea.y) + 'px';
+        debugArea.style.width = (rect.width * interactionArea.width) + 'px';
+        debugArea.style.height = (rect.height * interactionArea.height) + 'px';
         debugArea.style.border = '2px dashed rgba(255, 0, 0, 0.5)';
         debugArea.style.pointerEvents = 'none';
-        debugArea.style.zIndex = '30';
+        debugArea.style.zIndex = '100';
 
         // 计算旋转角度（如果有）
         const angle = requiredDirection && requiredDirection.type === 'angle'
@@ -350,16 +343,21 @@ async function initPlayableAd(configPath) {
                         guideImage.src = point.guideImage;
                         guideImage.style.width = `${point.guideSize.width}px`;
                         guideImage.style.height = `${point.guideSize.height}px`;
-                        fingerIcon.style.left = `${point.guidePosition.x * 100}%`;
-                        fingerIcon.style.top = `${point.guidePosition.y * 100}%`;
+                        // 替换 fingerIcon 位置设置
+                        // fingerIcon.style.left = `${point.guidePosition.x * 100}%`;
+                        // fingerIcon.style.top = `${point.guidePosition.y * 100}%`;
+                        setGuidePosition(fingerIcon, video, point.guidePosition.x, point.guidePosition.y);
+                        currentGuideX = point.guidePosition.x;
+                        currentGuideY = point.guidePosition.y;
 
                         // 确保手指图标在视口内
                         const maxX = 0.9; // 防止图标滑出右侧
                         const maxY = 0.9; // 防止图标滑出底部
-                        const posX = Math.min(point.guidePosition.x, maxX);
-                        const posY = Math.min(point.guidePosition.y, maxY);
-                        fingerIcon.style.left = `${posX * 100}%`;
-                        fingerIcon.style.top = `${posY * 100}%`;
+                        // const posX = Math.min(point.guidePosition.x, maxX);
+                        // const posY = Math.min(point.guidePosition.y, maxY);
+                        // fingerIcon.style.left = `${posX * 100}%`;
+                        // fingerIcon.style.top = `${posY * 100}%`;
+                        setGuidePosition(fingerIcon, video, Math.min(point.guidePosition.x, 0.9), Math.min(point.guidePosition.y, 0.9));
 
                         // 设置动画方向
                         fingerIcon.style.animation = 'none'; // 先清除现有动画
@@ -386,10 +384,13 @@ async function initPlayableAd(configPath) {
                         if (guideTip) {
                             guideTip.style.display = 'block';
                             guideTip.textContent = point.guideTip;
+                            // 替换 guideTip 位置设置
+                            // guideTip.style.left = (point.guideTipPosition.x * 100) + '%';
+                            // guideTip.style.top = (point.guideTipPosition.y * 100) + '%';
                             if (point.guideTipPosition) {
-                                guideTip.style.position = 'absolute';
-                                guideTip.style.left = (point.guideTipPosition.x * 100) + '%';
-                                guideTip.style.top = (point.guideTipPosition.y * 100) + '%';
+                                setGuidePosition(guideTip, video, point.guideTipPosition.x, point.guideTipPosition.y);
+                                currentTipX = point.guideTipPosition.x;
+                                currentTipY = point.guideTipPosition.y;
                                 guideTip.style.fontSize = point.guideTipFont.size + 'em';
                                 guideTip.style.color = point.guideTipFont.color;
                                 guideTip.style.transform = 'translate(-50%, 0)';
@@ -402,7 +403,7 @@ async function initPlayableAd(configPath) {
                         }
 
                         // 显示交互区域（调试用，正式发布时可移除）
-                        // drawInteractionArea();
+                        drawInteractionArea();
 
                         guideOverlay.style.display = 'flex';
                         if (guideTip) guideTip.style.display = 'block';
@@ -442,9 +443,74 @@ async function initPlayableAd(configPath) {
         bottomImage.appendChild(bottomImgElement);
     }
 
-    window.addEventListener('orientationchange', () => {
-        handleRotation(screen.orientation.angle);
+    video.addEventListener('loadedmetadata', () => {
+        setCTAButtonPosition(ctaButton, video, config.cat_button);
     });
+
+    // 监听窗口resize和orientationchange，自动刷新guide位置
+    window.addEventListener('resize', () => {
+        if (currentGuideX !== null && currentGuideY !== null) {
+            setGuidePosition(fingerIcon, video, currentGuideX, currentGuideY);
+        }
+        if (currentTipX !== null && currentTipY !== null) {
+            setGuidePosition(guideTip, video, currentTipX, currentTipY);
+        }
+        setCTAButtonPosition(ctaButton, video, config.cat_button);
+        drawInteractionArea();
+    });
+    window.addEventListener('orientationchange', () => {
+        if (currentGuideX !== null && currentGuideY !== null) {
+            setGuidePosition(fingerIcon, video, currentGuideX, currentGuideY);
+        }
+        if (currentTipX !== null && currentTipY !== null) {
+            setGuidePosition(guideTip, video, currentTipX, currentTipY);
+        }
+        setCTAButtonPosition(ctaButton, video, config.cat_button);
+        drawInteractionArea();
+    });
+}
+
+// 计算视频内容实际显示区域（去除黑边）
+function getVideoContentRect(video) {
+    const videoRect = video.getBoundingClientRect();
+    const videoRatio = video.videoWidth / video.videoHeight;
+    const elementRatio = videoRect.width / videoRect.height;
+
+    let width, height, left, top;
+    if (videoRatio > elementRatio) {
+        // 上下有黑边
+        width = videoRect.width;
+        height = width / videoRatio;
+        left = videoRect.left;
+        top = videoRect.top + (videoRect.height - height) / 2;
+    } else {
+        // 左右有黑边
+        height = videoRect.height;
+        width = height * videoRatio;
+        top = videoRect.top;
+        left = videoRect.left + (videoRect.width - width) / 2;
+    }
+    return { width, height, left, top };
+}
+
+// 设置 guide 元素在视频内容区域的指定百分比位置
+function setGuidePosition(guideEl, video, videoX, videoY) {
+    const rect = getVideoContentRect(video);
+    guideEl.style.position = 'absolute';
+    guideEl.style.left = (rect.left + rect.width * videoX) + 'px';
+    guideEl.style.top = (rect.top + rect.height * videoY) + 'px';
+    guideEl.style.transform = 'translate(-50%, -50%)';
+}
+
+// 设置 CTA 按钮在视频内容区域的指定百分比位置
+function setCTAButtonPosition(ctaButton, video, ctaConfig) {
+    const rect = getVideoContentRect(video);
+    ctaButton.style.position = 'absolute';
+    ctaButton.style.left = (rect.left + rect.width * ctaConfig.x) + 'px';
+    ctaButton.style.top = (rect.top + rect.height * ctaConfig.y) + 'px';
+    ctaButton.style.width = (rect.width * ctaConfig.width) + 'px';
+    ctaButton.style.height = (rect.height * ctaConfig.height) + 'px';
+    ctaButton.style.transform = 'translate(-50%, -50%)';
 }
 
 // 初始化

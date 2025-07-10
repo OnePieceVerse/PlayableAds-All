@@ -16,8 +16,10 @@
         </video>
 
         <div id="guide-overlay">
-            <div id="guidePosition"></div>
-            <div id="guideTipPosition"></div>
+            <div class="finger-icon">
+                <img id="guide-image" src="" alt="Interaction Guide">
+            </div>
+            <div id="guide-tip"></div>
         </div>
     </div>
 
@@ -26,6 +28,10 @@
     <div id="click-to-play" class="click-overlay"></div>
 
     <button id="cta-button" class="cta-button">立即下载</button>
+</div>
+
+<div class="landscape-block" style="display:none;justify-content:center;align-items:center;height:100vh;position:fixed;top:0;left:0;width:100vw;background:#000;z-index:9999;color:#fff;font-size:1.5em;">
+  <div>请将设备旋转为竖屏以获得最佳体验</div>
 </div>
 
 <script src="script.js"></script>
