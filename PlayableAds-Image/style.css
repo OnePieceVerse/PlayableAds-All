@@ -2,15 +2,19 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
   }
   
   #app {
     display: flex;
     flex-direction: column;
     width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    height: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
+    align-items: stretch;
   }
 
   .img-wrapper {
@@ -22,10 +26,14 @@ html, body {
 
   .app-img {
     width: 100vw;
-    height: 50vh;
-    object-fit: contain;
-    background: #000; /* 可选，图片比例不一致时填充 */
+    max-width: 100vw;
+    height: auto;
+    min-height: 0;
+    object-fit: cover;
+    background: #000;
     display: block;
+    margin: 0;
+    padding: 0;
   }
   
   @keyframes bounce {
@@ -119,3 +127,66 @@ html, body {
     display: block;
     box-sizing: border-box;
   }
+
+/* 响应式热点 SVG 容器 */
+.hotspot-svg-container {
+  width: 15vw;
+  height: 15vw;
+  min-width: 60px;
+  min-height: 60px;
+  max-width: 120px;
+  max-height: 120px;
+  pointer-events: auto;
+  position: absolute;
+  /* left/top 由JS动态设置 */
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 让SVG自适应容器 */
+.hotspot-svg {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* 移动端优化 */
+@media (max-width: 600px) {
+  .app-img {
+    width: 100vw;
+    max-width: 100vw;
+    height: auto;
+    min-height: 0;
+    object-fit: cover;
+  }
+  #app {
+    min-height: 100vh;
+    height: auto;
+    overflow-y: auto;
+  }
+  .hotspot-svg-container {
+    width: 22vw;
+    height: 22vw;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 70px;
+    max-height: 70px;
+  }
+  .modal-content {
+    width: 95vw;
+    max-width: 95vw;
+    padding: 0.5em;
+  }
+  .modal-img {
+    max-height: 120px;
+  }
+  #modal-text {
+    font-size: 1em;
+  }
+}
+
+.flex-filler {
+  flex-grow: 1;
+  min-height: 0;
+}
