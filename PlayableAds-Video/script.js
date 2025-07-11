@@ -24,6 +24,8 @@ async function initPlayableAd(configPath) {
     const displayMode = config.displayMode !== undefined ? config.displayMode : 'portrait';
     const topImage = document.getElementById('top-image');
     const bottomImage = document.getElementById('bottom-image');
+    const preRotateTip = document.getElementById('pre-rotate-tip');
+    let waitingForPreRotateClick = false;
 
     // 设置视频时间间隔，用于检查时间
     let interval = 0.05;
@@ -250,14 +252,44 @@ async function initPlayableAd(configPath) {
     function startCheckRotate() {
         if (rotateCheckInterval) return;
         const checkRotate = () => {
-            if (video.currentTime >= config.rotateConfig.time - interval &&
-                video.currentTime < config.rotateConfig.time + interval) {
+            // 提前0.5秒弹出即将旋转提示
+            if (
+                video.currentTime >= config.rotateConfig.time - interval &&
+                video.currentTime < config.rotateConfig.time &&
+                !waitingForPreRotateClick
+            ) {
+                clearInterval(rotateCheckInterval);
+                video.pause();
+                if (preRotateTip) {
+                    preRotateTip.style.display = 'flex';
+                    waitingForPreRotateClick = true;
+                }
+                return;
+            }
+
+            // 原有旋转逻辑，只有在用户点击后才执行
+            if (
+                video.currentTime >= config.rotateConfig.time - interval &&
+                video.currentTime < config.rotateConfig.time + interval &&
+                !waitingForPreRotateClick
+            ) {
                 clearInterval(rotateCheckInterval);
                 container.setAttribute('data-rotate', isPortraitRotateMode());
                 removeBanners();
             }
         }
         rotateCheckInterval = setInterval(checkRotate, 50);
+    }
+
+    // 移到这里：即将旋转提示点击事件
+    if (preRotateTip) {
+        preRotateTip.addEventListener('click', () => {
+            preRotateTip.style.display = 'none';
+            waitingForPreRotateClick = false;
+            container.setAttribute('data-rotate', displayMode === 'rotate');
+            removeBanners();
+            video.play();
+        });
     }
 
     // 启动结尾检测的函数
@@ -267,11 +299,6 @@ async function initPlayableAd(configPath) {
             if (video.currentTime >= config.completionTime - interval &&
                 video.currentTime < config.completionTime + interval) {
                 clearInterval(checkEndTimeInterval);
-                // 替换原有百分比定位
-                // ctaButton.style.left = config.cat_button.x * 100 + '%';
-                // ctaButton.style.top = config.cat_button.y * 100 + '%';
-                // ctaButton.style.width = config.cat_button.width * 100 + '%';
-                // ctaButton.style.height = config.cat_button.height * 100 + '%';
                 ctaButton.style.display = 'block';
                 setCTAButtonPosition(ctaButton, video, config.cat_button);
             }
@@ -354,20 +381,11 @@ async function initPlayableAd(configPath) {
                         guideImage.src = point.guideImage;
                         guideImage.style.width = `${point.guideSize.width}px`;
                         guideImage.style.height = `${point.guideSize.height}px`;
-                        // 替换 fingerIcon 位置设置
-                        // fingerIcon.style.left = `${point.guidePosition.x * 100}%`;
-                        // fingerIcon.style.top = `${point.guidePosition.y * 100}%`;
                         setGuidePosition(fingerIcon, video, point.guidePosition.x, point.guidePosition.y);
                         currentGuideX = point.guidePosition.x;
                         currentGuideY = point.guidePosition.y;
 
                         // 确保手指图标在视口内
-                        const maxX = 0.9; // 防止图标滑出右侧
-                        const maxY = 0.9; // 防止图标滑出底部
-                        // const posX = Math.min(point.guidePosition.x, maxX);
-                        // const posY = Math.min(point.guidePosition.y, maxY);
-                        // fingerIcon.style.left = `${posX * 100}%`;
-                        // fingerIcon.style.top = `${posY * 100}%`;
                         setGuidePosition(fingerIcon, video, Math.min(point.guidePosition.x, 0.9), Math.min(point.guidePosition.y, 0.9));
 
                         // 设置动画方向
@@ -395,9 +413,6 @@ async function initPlayableAd(configPath) {
                         if (guideTip) {
                             guideTip.style.display = 'block';
                             guideTip.textContent = point.guideTip;
-                            // 替换 guideTip 位置设置
-                            // guideTip.style.left = (point.guideTipPosition.x * 100) + '%';
-                            // guideTip.style.top = (point.guideTipPosition.y * 100) + '%';
                             if (point.guideTipPosition) {
                                 setGuidePosition(guideTip, video, point.guideTipPosition.x, point.guideTipPosition.y);
                                 currentTipX = point.guideTipPosition.x;
@@ -555,8 +570,6 @@ function getVideoContentRect(video) {
     }
     return { width, height, left, top };
 }
-
-
 
 // 初始化
 document.addEventListener('DOMContentLoaded', function () {
