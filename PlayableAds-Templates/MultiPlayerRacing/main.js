@@ -6,15 +6,15 @@ const CHARACTERS = [
   { id: 'c4', name: '维迦', img: 'assets/characters/12.png', width: 48, height: 48 }
 ];
 const NPCS = [
-  { id: 'n1', name: '嘉文四世', img: 'assets/npcs/3.png', effect: 'positive', speedBoost: 1.2, x: window.innerWidth * 0.2, y: window.innerHeight * 0.6 },
-  { id: 'n2', name: '安妮', img: 'assets/npcs/4.png', effect: 'negative', speedBoost: 0.7, x: window.innerWidth * 0.4, y: window.innerHeight * 0.5 },
-  { id: 'n3', name: '厄斐琉斯', img: 'assets/npcs/5.png', effect: 'positive', speedBoost: 1.2, x: window.innerWidth * 0.6, y: window.innerHeight * 0.4 },
-  { id: 'n4', name: '佛耶戈', img: 'assets/npcs/6.png', effect: 'negative', speedBoost: 0.7, x: window.innerWidth * 0.8, y: window.innerHeight * 0.3 },
-  { id: 'n5', name: '吉格斯', img: 'assets/npcs/13.png', effect: 'positive', speedBoost: 1.2, x: window.innerWidth * 0.3, y: window.innerHeight * 0.7 },
-  { id: 'n6', name: '可酷伯', img: 'assets/npcs/14.png', effect: 'positive', speedBoost: 1.2, x: window.innerWidth * 0.7, y: window.innerHeight * 0.2 },
+  { id: 'n1', name: '嘉文四世', img: 'assets/npcs/3.png', speedBoost: 1.2, x: window.innerWidth * 0.2, y: window.innerHeight * 0.6 },
+  { id: 'n2', name: '安妮', img: 'assets/npcs/4.png', speedBoost: 1.2, x: window.innerWidth * 0.4, y: window.innerHeight * 0.5 },
+  { id: 'n3', name: '厄斐琉斯', img: 'assets/npcs/5.png', speedBoost: 1.2, x: window.innerWidth * 0.6, y: window.innerHeight * 0.4 },
+  { id: 'n4', name: '佛耶戈', img: 'assets/npcs/6.png', speedBoost: 1.2, x: window.innerWidth * 0.8, y: window.innerHeight * 0.3 },
+  { id: 'n5', name: '吉格斯', img: 'assets/npcs/13.png', speedBoost: 0.7, x: window.innerWidth * 0.3, y: window.innerHeight * 0.7 },
+  { id: 'n6', name: '可酷伯', img: 'assets/npcs/14.png', speedBoost: 0.7, x: window.innerWidth * 0.7, y: window.innerHeight * 0.2 },
   // 添加特殊NPC - 提供更高的加速效果
-  { id: 'n7', name: '金铲铲', img: 'assets/npcs/s1.png', effect: 'positive', speedBoost: 1.5, x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, isSpecial: true },
-  { id: 'n8', name: '金铲铲', img: 'assets/npcs/s2.png', effect: 'positive', speedBoost: 1.5, x: window.innerWidth * 0.4, y: window.innerHeight * 0.4, isSpecial: true }
+  { id: 'n7', name: '金铲铲', img: 'assets/npcs/s1.png', speedBoost: 1.5, x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, isSpecial: true },
+  { id: 'n8', name: '金铲铲', img: 'assets/npcs/s2.png', speedBoost: 1.5, x: window.innerWidth * 0.5, y: window.innerHeight * 0.5, isSpecial: true }
 ];
 const OBSTACLES = [
   { id: 'o1', img: 'assets/obstacles/tree.png', width: 78, height: 100 },
@@ -548,13 +548,13 @@ function gameLoop() {
         if (bond === 'positive') {
           player.effect = 'positive';
           player.effectTimer = EFFECT_DURATION;
-          player.speedBoost = n.speedBoost || ACCELERATE;
+          player.speedBoost = n.speedBoost;
           player.tip = n.isSpecial ? '超级加速！' : '加速！';
           player.tipTimer = 60;
         } else if (bond === 'negative') {
           player.effect = 'negative';
           player.effectTimer = EFFECT_DURATION;
-          player.speedBoost = n.speedBoost || DECELERATE;
+          player.speedBoost = n.speedBoost;
           player.tip = '减速！';
           player.tipTimer = 60;
         }
@@ -781,13 +781,13 @@ function gameLoop() {
         if (bond === 'positive') {
           c.effect = 'positive';
           c.effectTimer = EFFECT_DURATION;
-          c.speedBoost = n.speedBoost || ACCELERATE;
+          c.speedBoost = n.speedBoost;
           c.tip = '加速！';
           c.tipTimer = 60;
         } else if (bond === 'negative') {
           c.effect = 'negative';
           c.effectTimer = EFFECT_DURATION;
-          c.speedBoost = n.speedBoost || DECELERATE;
+          c.speedBoost = n.speedBoost;
           c.tip = '减速！';
           c.tipTimer = 60;
         }

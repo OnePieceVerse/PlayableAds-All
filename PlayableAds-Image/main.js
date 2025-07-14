@@ -5,6 +5,9 @@ const fingerSvg = `
 fetch('config.json')
     .then(response => response.json())
     .then(config => {
+        if (config.title) {
+            document.title = config.title;
+        }
         const app = document.getElementById('app');
         // 渲染 app 下的图片和对应热点
         (config.appImgs || []).forEach((src, idx) => {
@@ -24,9 +27,7 @@ fetch('config.json')
             wrapper.appendChild(img);
 
             // 渲染属于该图片的热点
-            console.log(config.hotspots);
             (config.hotspots || []).forEach(spot => {
-                console.log(spot.imgIndex, idx);
                 if (spot.imgIndex === idx) {
                     const div = document.createElement('div');
                     div.className = 'hotspot-svg-container';
