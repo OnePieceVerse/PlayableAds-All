@@ -52,7 +52,7 @@
         <div class="user-info" id="user-info">正在加载用户信息...</div>
         <button class="logout-btn" id="logout-btn">退出登录</button>
     </div>
-    <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="102796919"
+    <script src="https://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="xxx"
         data-redirecturi="https://playableall.com/admin.html" charset="utf-8"></script>
     <script type="module">
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
@@ -91,13 +91,13 @@
         window.addEventListener('DOMContentLoaded', () => {
             if (loginType == 'google' || loginType == 'facebook' || loginType == 'twitter') {
                 const firebaseConfig = {
-                    apiKey: "AIzaSyBNE_XZhiF6ARuOB_G_4-sP21M0rr3Ozc8",
+                    apiKey: "xxx",
                     authDomain: "playableads-1f632.firebaseapp.com",
                     projectId: "playableads-1f632",
                     storageBucket: "playableads-1f632.firebasestorage.app",
-                    messagingSenderId: "660151343958",
-                    appId: "1:660151343958:web:bf397369a0f9b261b554f7",
-                    measurementId: "G-CM986RS9XC"
+                    messagingSenderId: "xxx",
+                    appId: "xxx",
+                    measurementId: "xxx"
                 };
                 const app = initializeApp(firebaseConfig);
                 auth = getAuth(app);

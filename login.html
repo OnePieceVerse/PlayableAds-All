@@ -70,13 +70,13 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
         import { getAuth, GoogleAuthProvider, FacebookAuthProvider, TwitterAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
         const firebaseConfig = {
-            apiKey: "AIzaSyBNE_XZhiF6ARuOB_G_4-sP21M0rr3Ozc8",
+            apiKey: "xxx",
             authDomain: "playableads-1f632.firebaseapp.com",
             projectId: "playableads-1f632",
             storageBucket: "playableads-1f632.firebasestorage.app",
-            messagingSenderId: "660151343958",
-            appId: "1:660151343958:web:bf397369a0f9b261b554f7",
-            measurementId: "G-CM986RS9XC"
+            messagingSenderId: "xxx",
+            appId: "xxx",
+            measurementId: "xxx"
         };
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
@@ -150,7 +150,7 @@
         // QQ登陆
         document.querySelector('.social-btn.qq').onclick = function () {
             QC.Login.showPopup({
-                appId: "102796919",
+                appId: "xxx",
                 redirectURI: "https://playableall.com/admin.html"
             });
             localStorage.setItem('loginType', 'qq');
