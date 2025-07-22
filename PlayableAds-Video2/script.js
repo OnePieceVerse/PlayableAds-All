@@ -257,18 +257,17 @@ video.addEventListener('timeupdate', checkInteractionPoints);
 // 视频结束处理
 video.addEventListener('ended', () => {
   hasStarted = false;
+  // 不显示点击重播提示
   // clickLayer.style.display = 'flex';
   // clickTip.textContent = getText('click_to_replay');
   rotateHighlight.style.display = 'none';
+  
+  // 清除引导层内容
   guideContainer.innerHTML = '';
+  currentInteractionPoint = null;
   
   // 显示CTA按钮
   createCTAButton();
-  
-  if (!isPortrait) {
-    video.classList.remove('rotated');
-    guideLayer.classList.remove('rotated');
-  }
 });
 
 // 点击事件处理
@@ -286,7 +285,7 @@ window.addEventListener('resize', () => {
   isPortrait = window.innerHeight > window.innerWidth;
   
   // 如果方向确实发生了变化
-  if (wasPortrait !== isPortrait && hasStarted) {
+  if (wasPortrait !== isPortrait) {
     // 先隐藏引导元素
     guideContainer.classList.add('rotating');
     
@@ -300,22 +299,24 @@ window.addEventListener('resize', () => {
       guideLayer.classList.remove('rotated');
     }
     
-    // 提前显示引导元素
+    // 等待旋转动画完成后再显示引导元素
     setTimeout(() => {
-      // 如果视频已结束，重新创建CTA按钮
+      // 如果视频已结束，显示CTA按钮
       if (video.ended) {
         createCTAButton();
       }
-      // 如果当前有交互点，重新创建引导元素以适应新方向
-      else if (currentInteractionPoint) {
+      // 如果视频正在播放且有交互点，显示引导元素
+      else if (hasStarted && currentInteractionPoint) {
         createGuideElements(currentInteractionPoint);
       }
-      // 移除旋转中状态，显示引导元素
+      // 如果视频还未开始，显示开始提示
+      else if (!hasStarted) {
+        checkOrientation();
+      }
+      // 移除旋转中状态
       guideContainer.classList.remove('rotating');
     }, 300);
   }
-  
-  checkOrientation();
 });
 
 // 视频错误处理
