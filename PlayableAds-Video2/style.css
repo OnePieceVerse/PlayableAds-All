@@ -17,33 +17,91 @@ html, body {
   background: #000;
   overflow: hidden;
   z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .ad-video {
-  max-width: 100vw;
-  max-height: 100vh;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   background: #000;
-  transition: transform 0.3s;
-  display: block;
-  margin: 0 auto;
+  transition: transform 1s ease;
 }
+
+/* 旋转状态 */
 .ad-video.rotated {
-  /* 旋转90度，居中适配 */
-  transform: rotate(90deg) scale(calc(100vw / 100vh), calc(100vh / 100vw));
-  max-width: 100vh;
-  max-height: 100vw;
+  transform: rotate(90deg);
+  transform-origin: center;
+  object-fit: contain;
+  width: 100vh;
+  height: 100vw;
 }
-/* Canvas层 */
-#ad-canvas {
+
+/* 点击提示层 */
+.click-layer {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  cursor: pointer;
+  gap: 20px;
+}
+
+/* 旋转提示图标 */
+.rotate-icon {
+  width: 60px;
+  height: 60px;
+  border: 3px solid white;
+  border-radius: 10px;
+  position: relative;
+  margin: 20px;
+  animation: rotatePhone 2s infinite;
+}
+
+@keyframes rotatePhone {
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(90deg); }
+  100% { transform: rotate(90deg); }
+}
+
+/* 提示文本 */
+.click-tip {
+  color: white;
+  font-size: 18px;
+  padding: 15px 30px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  backdrop-filter: blur(5px);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.click-tip .highlight {
+  color: #FFD700;
+  font-weight: bold;
+  font-size: 20px;
   display: block;
-  background: #000;
-  margin: 0;
-  padding: 0;
-  max-width: 100vw;
-  max-height: 100vh;
-  object-fit: contain;
+  margin-top: 10px;
+}
+
+/* 横屏模式隐藏旋转提示 */
+@media (orientation: landscape) {
+  .rotate-icon {
+    display: none;
+  }
+  
+  .click-tip .highlight {
+    display: none;
+  }
 }
 
 /* UI控制层 */
@@ -53,7 +111,7 @@ html, body {
   left: 0;
   width: 100vw;
   height: 100vh;
-  pointer-events: none; /* 允许点击穿透到canvas */
+  pointer-events: none;
   z-index: 1;
 }
 
@@ -65,7 +123,7 @@ html, body {
   transform: translateX(-50%);
   display: flex;
   gap: 10px;
-  pointer-events: auto; /* 恢复按钮点击 */
+  pointer-events: auto;
 }
 
 /* 通用按钮样式 */
@@ -94,6 +152,7 @@ html, body {
 @media (orientation: portrait) {
   .controls {
     bottom: 40px;
+    transform: translateX(-50%) rotate(90deg);
   }
   
   .control-btn {
@@ -101,4 +160,157 @@ html, body {
     height: 36px;
     font-size: 14px;
   }
+}
+
+/* 视频比例变量 (1920x1080 = 16:9) */
+:root {
+  --video-ratio: calc(1920 / 1080);  /* 约等于1.7778 */
+  --video-ratio-inverse: calc(1080 / 1920);  /* 约等于0.5625 */
+}
+
+.guide-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.1s;
+}
+
+.guide-container.rotating {
+  opacity: 0;
+}
+
+.ad-video {
+  transition: transform 0.5s ease;
+}
+
+/* 竖屏模式下的旋转 */
+.guide-layer.rotated .guide-container {
+  transform: translate(-50%, -50%) rotate(90deg);
+  width: calc(100vh * var(--video-ratio));
+  height: calc(100vw * var(--video-ratio-inverse));
+}
+
+/* 横屏模式 */
+@media (orientation: landscape) {
+  .guide-container {
+    width: calc(100vh * var(--video-ratio));
+    height: 100%;
+    max-width: 100%;
+  }
+}
+
+/* 竖屏模式 */
+@media (orientation: portrait) {
+  .guide-container {
+    width: 100%;
+    height: calc(100vw * var(--video-ratio-inverse));
+    max-height: 100%;
+  }
+}
+
+/* 按钮和引导图片样式 */
+.button-image {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.5s ease;
+}
+
+.button-image:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.guide-image {
+  position: absolute;
+  pointer-events: none;
+  transition: transform 0.5s ease;
+}
+
+/* 缩放动画 */
+@keyframes scaleGuide {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.2); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* 角度移动动画 */
+@keyframes moveGuide {
+  0% { transform: translate(-50%, -50%); }
+  50% { transform: translate(calc(-50% + var(--move-x)), calc(-50% + var(--move-y))); }
+  100% { transform: translate(-50%, -50%); }
+}
+
+.guide-image.scale-animation {
+  animation: scaleGuide 1.5s infinite;
+}
+
+.guide-image.angle-animation {
+  animation: moveGuide 1.5s infinite;
+}
+
+/* 交互区域 */
+.interaction-area {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.interaction-area:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.cta-button {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: transform 0.3s ease;
+  display: none; /* 默认隐藏 */
+}
+
+.cta-button.visible {
+  display: block;
+  animation: ctaScale 1.5s ease-in-out infinite;
+  opacity: 1;
+}
+
+.cta-button:hover {
+  animation: none;
+}
+
+/* 缩放动画 */
+@keyframes ctaScale {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+/* 竖屏模式下的样式 */
+.guide-layer.rotated .guide-container .cta-button {
+  transform-origin: center;
+}
+
+.guide-layer.rotated .guide-container .cta-button.visible {
+  animation: ctaScaleRotated 1.5s ease-in-out infinite;
+}
+
+.guide-layer.rotated .guide-container .cta-button:hover {
+  animation: none;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+@keyframes ctaScaleRotated {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
 }

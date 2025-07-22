@@ -1,183 +1,331 @@
 const config = window.PLAYABLE_CONFIG;
-if (config.title) document.title = config.title;
 const images = window.PLAYABLE_IMAGES;
+const lang = window.PLAYABLE_LANG;
 
-// 检查视频格式并获取URL
-let videoUrl = config.videoUrl;
-const videoExt = videoUrl.split('.').pop().toLowerCase();
-if (videoExt === 'mov') {
-  // 如果是MOV格式，使用转换后的MP4文件名
-  videoUrl = videoUrl.replace(/\.mov$/, '.mp4');
-}
+// 当前语言，可以根据需要切换
+let currentLang = config.lang || 'en';
+
+// 获取视频源
+const videoUrl = config.videoUrl;
 const base64Video = window.PLAYABLE_VIDEOS[videoUrl];
 
-if (!base64Video) {
-  console.error('视频文件未找到:', videoUrl);
-  // 显示错误信息给用户
-  const errorDiv = document.createElement('div');
-  errorDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:white;background:rgba(0,0,0,0.8);padding:20px;border-radius:10px;text-align:center;';
-  errorDiv.textContent = '视频加载失败，请检查文件格式或重试';
-  document.body.appendChild(errorDiv);
-}
-
 // DOM元素
-const canvas = document.getElementById('ad-canvas');
-const ctx = canvas.getContext('2d');
-const playPauseBtn = document.getElementById('playPauseBtn');
-const tryAgainBtn = document.getElementById('tryAgainBtn');
+const video = document.getElementById('ad-video');
+const clickLayer = document.getElementById('clickLayer');
+const clickTip = clickLayer.querySelector('.click-tip');
+const rotateHighlight = clickTip.querySelector('.highlight');
+const guideLayer = document.getElementById('guideLayer');
+const guideContainer = document.getElementById('guideContainer');
 
 // 状态变量
-let playing = false;
-let rafId = null;
+let isPortrait = window.innerHeight > window.innerWidth;
+let hasStarted = false;
+let currentInteractionPoint = null;
+let lastTime = 0; // 记录上一次的时间
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  canvas.style.width = window.innerWidth + 'px';
-  canvas.style.height = window.innerHeight + 'px';
-}
+// 检查屏幕方向并显示相应提示
+function checkOrientation() {
+  isPortrait = window.innerHeight > window.innerWidth;
 
-// 创建隐藏video
-const video = document.createElement('video');
-video.src = base64Video;
-video.crossOrigin = 'anonymous';
-video.playsInline = true;
-video.muted = true;
-video.style.display = 'none';
-document.body.appendChild(video);
-
-// 视频错误处理
-video.addEventListener('error', (e) => {
-  console.error('视频加载错误:', e.target.error);
-  let errorMessage = '视频加载失败: ';
-  switch (e.target.error.code) {
-    case MediaError.MEDIA_ERR_ABORTED:
-      errorMessage += '加载被中断';
-      break;
-    case MediaError.MEDIA_ERR_NETWORK:
-      errorMessage += '网络错误';
-      break;
-    case MediaError.MEDIA_ERR_DECODE:
-      errorMessage += '解码失败';
-      break;
-    case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-      errorMessage += '视频格式不支持';
-      break;
-    default:
-      errorMessage += '未知错误';
-  }
-  
-  const errorDiv = document.createElement('div');
-  errorDiv.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:white;background:rgba(0,0,0,0.8);padding:20px;border-radius:10px;text-align:center;';
-  errorDiv.textContent = errorMessage;
-  document.body.appendChild(errorDiv);
-});
-
-function drawFrame() {
-  if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
-    resizeCanvas();
-  }
-  
-  const isPortrait = window.innerHeight > window.innerWidth;
-  ctx.save();
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-  const vw = video.videoWidth;
-  const vh = video.videoHeight;
-  if (vw && vh) {
+  if (!hasStarted) {
+    clickLayer.style.display = 'flex';
     if (isPortrait) {
-      // 竖屏：旋转+cover
-      ctx.translate(canvas.width / 2, canvas.height / 2);
-      ctx.rotate(Math.PI / 2);
-      // 目标宽高互换
-      const targetW = canvas.height;
-      const targetH = canvas.width;
-      const scale = Math.max(targetW / vw, targetH / vh);
-      const drawW = vw * scale;
-      const drawH = vh * scale;
-      ctx.drawImage(
-        video,
-        -drawW / 2,
-        -drawH / 2,
-        drawW,
-        drawH
-      );
+      rotateHighlight.style.display = 'block';
     } else {
-      // 横屏：正常cover
-      const targetW = canvas.width;
-      const targetH = canvas.height;
-      const scale = Math.max(targetW / vw, targetH / vh);
-      const drawW = vw * scale;
-      const drawH = vh * scale;
-      ctx.drawImage(
-        video,
-        (canvas.width - drawW) / 2,
-        (canvas.height - drawH) / 2,
-        drawW,
-        drawH
-      );
+      rotateHighlight.style.display = 'none';
     }
   }
-  ctx.restore();
-  
-  if (playing && !video.paused && !video.ended) {
-    rafId = requestAnimationFrame(drawFrame);
+}
+
+// 创建引导元素
+function createGuideElements(point) {
+  // 检查资源是否存在
+  if (!images || !images[point.buttonImage] || !images[point.guideImage]) {
+    console.error(getText('resource_not_found'), point.buttonImage, point.guideImage);
+    return;
+  }
+
+  // 获取当前屏幕方向的配置
+  const orientation = isPortrait ? 'portrait' : 'landscape';
+
+  // 清除现有引导
+  guideContainer.innerHTML = '';
+
+  // 创建按钮
+  const buttonImage = document.createElement('img');
+  buttonImage.src = images[point.buttonImage];
+  buttonImage.className = 'button-image';
+
+  // 使用对应方向的按钮尺寸和位置
+  const buttonSize = point.buttonSize[orientation];
+  buttonImage.style.width = buttonSize.width + 'px';
+  buttonImage.style.height = buttonSize.height + 'px';
+
+  const buttonPosition = point.buttonPosition[orientation];
+  const buttonX = buttonPosition.x * 100 + '%';
+  const buttonY = buttonPosition.y * 100 + '%';
+  buttonImage.style.left = buttonX;
+  buttonImage.style.top = buttonY;
+
+  // 创建引导图片
+  const guideImage = document.createElement('img');
+  guideImage.src = images[point.guideImage];
+  guideImage.className = 'guide-image';
+
+  // 使用对应方向的引导尺寸和位置
+  const guideSize = point.guideSize[orientation];
+  guideImage.style.width = guideSize.width + 'px';
+  guideImage.style.height = guideSize.height + 'px';
+
+  const guidePosition = point.guidePosition[orientation];
+  const guideX = guidePosition.x * 100 + '%';
+  const guideY = guidePosition.y * 100 + '%';
+  guideImage.style.left = guideX;
+  guideImage.style.top = guideY;
+
+  // 添加动画
+  const swipeConfig = point.swipeDirection;
+  if (typeof swipeConfig === 'string' && swipeConfig === 'scale') {
+    guideImage.classList.add('scale-animation');
+  } else if (typeof swipeConfig === 'object' && swipeConfig.type === 'angle') {
+    guideImage.classList.add('angle-animation');
+    const angle = swipeConfig.value * Math.PI / 180;
+    const distance = parseInt(swipeConfig.distance);
+    const moveX = Math.cos(angle) * distance;
+    const moveY = Math.sin(angle) * distance;
+    guideImage.style.setProperty('--move-x', moveX + 'px');
+    guideImage.style.setProperty('--move-y', moveY + 'px');
+  }
+
+  // 添加按钮点击事件
+  buttonImage.addEventListener('click', () => {
+    guideContainer.innerHTML = '';
+    playVideo();
+  });
+
+  // 添加到引导容器
+  guideContainer.appendChild(buttonImage);
+  guideContainer.appendChild(guideImage);
+
+  // 处理竖屏旋转
+  if (isPortrait && video.classList.contains('rotated')) {
+    guideLayer.classList.add('rotated');
+  } else {
+    guideLayer.classList.remove('rotated');
   }
 }
 
-function playVideo() {
-  video.play().then(() => {
-    playing = true;
-    playPauseBtn.textContent = '暂停';
-    drawFrame();
-  }).catch(error => {
-    console.error('播放失败:', error);
+// 创建CTA按钮
+function createCTAButton() {
+  // 清除现有的CTA按钮
+  const existingCTA = guideContainer.querySelector('.cta-button');
+  if (existingCTA) {
+    existingCTA.remove();
+  }
+
+  // 获取当前屏幕方向的配置
+  const orientation = isPortrait ? 'portrait' : 'landscape';
+  const ctaConfig = config.cta_button;
+  
+  // 创建按钮
+  const ctaButton = document.createElement('img');
+  ctaButton.className = 'cta-button';
+  ctaButton.src = images[ctaConfig.buttonImage];
+  
+  // 设置尺寸
+  const buttonSize = ctaConfig.buttonSize[orientation];
+  ctaButton.style.width = buttonSize.width + 'px';
+  ctaButton.style.height = buttonSize.height + 'px';
+  
+  // 设置位置
+  const buttonPosition = ctaConfig.buttonPosition[orientation];
+  ctaButton.style.left = buttonPosition.x * 100 + '%';
+  ctaButton.style.top = buttonPosition.y * 100 + '%';
+  
+  // 添加点击事件
+  ctaButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = config.cta_button.url;
+  });
+  
+  // 添加到容器
+  guideContainer.appendChild(ctaButton);
+  
+  // 延迟一帧后添加显示类名，触发动画
+  requestAnimationFrame(() => {
+    ctaButton.classList.add('visible');
   });
 }
 
-function pauseVideo() {
-  video.pause();
-  playing = false;
-  playPauseBtn.textContent = '播放';
-  if (rafId) {
-    cancelAnimationFrame(rafId);
-    rafId = null;
+// 检查交互点
+function checkInteractionPoints() {
+  if (!config.interactionPoints) return;
+  
+  const currentTime = video.currentTime;
+  
+  // 遍历所有交互点
+  for (const point of config.interactionPoints) {
+    // 如果当前时间和上一次时间跨过了交互点时间，说明需要暂停
+    if (currentTime >= point.time && lastTime < point.time && currentInteractionPoint !== point) {
+      // 将视频时间设置到精确的交互点时间
+      video.currentTime = point.time;
+      video.pause();
+      currentInteractionPoint = point;
+      createGuideElements(point);
+      break;
+    }
+  }
+  
+  lastTime = currentTime;
+}
+
+// 播放控制
+function playVideo() {
+  lastTime = video.currentTime;
+  
+  video.play().then(() => {
+    hasStarted = true;
+    clickLayer.style.display = 'none';
+    currentInteractionPoint = null;
+    
+    if (isPortrait) {
+      // 先隐藏引导元素
+      guideContainer.classList.add('rotating');
+      
+      setTimeout(() => {
+        video.classList.add('rotated');
+        guideLayer.classList.add('rotated');
+        
+        // 提前显示引导元素
+        setTimeout(() => {
+          guideContainer.classList.remove('rotating');
+        }, 300); // 提前到300ms显示
+      }, 500);
+    }
+  }).catch(error => {
+    console.error(getText('play_failed'), error);
+    video.muted = true;
+    video.play().catch(e => {
+      console.error(getText('play_failed'), e);
+      clickTip.textContent = getText('play_failed');
+      rotateHighlight.style.display = 'none';
+    });
+  });
+}
+
+// 获取翻译文本
+function getText(key) {
+  const keys = key.split('.');
+  let text = lang[currentLang];
+  for (const k of keys) {
+    text = text[k];
+    if (!text) return key; // 如果找不到翻译，返回key
+  }
+  return text;
+}
+
+// 更新页面文本
+function updatePageText() {
+  // 更新所有带data-lang属性的元素
+  document.querySelectorAll('[data-lang]').forEach(el => {
+    const key = el.getAttribute('data-lang');
+    el.textContent = getText(key);
+  });
+
+  // 更新document title
+  document.title = getText('title');
+}
+
+// 切换语言
+function switchLanguage(newLang) {
+  if (lang[newLang]) {
+    currentLang = newLang;
+    updatePageText();
   }
 }
 
-function resetVideo() {
-  video.currentTime = 0;
-  if (!playing) {
-    playVideo();
-  }
-}
+// 初始化语言
+updatePageText();
 
-// 事件监听
-playPauseBtn.addEventListener('click', () => {
-  if (video.paused) {
-    playVideo();
-  } else {
-    pauseVideo();
-  }
-});
+// 初始化视频
+video.src = base64Video;
+video.load();
 
-tryAgainBtn.addEventListener('click', resetVideo);
+// 视频时间更新事件
+video.addEventListener('timeupdate', checkInteractionPoints);
 
-// 屏幕旋转时重新计算尺寸
-window.addEventListener('resize', () => {
-  resizeCanvas();
-  drawFrame();
-});
-
-// 视频加载完成后自动播放
-video.addEventListener('canplay', playVideo);
-
-// 视频结束时重置按钮状态
+// 视频结束处理
 video.addEventListener('ended', () => {
-  pauseVideo();
-  playPauseBtn.textContent = '重新播放';
+  hasStarted = false;
+  // clickLayer.style.display = 'flex';
+  // clickTip.textContent = getText('click_to_replay');
+  rotateHighlight.style.display = 'none';
+  guideContainer.innerHTML = '';
+  
+  // 显示CTA按钮
+  createCTAButton();
+  
+  if (!isPortrait) {
+    video.classList.remove('rotated');
+    guideLayer.classList.remove('rotated');
+  }
+});
+
+// 点击事件处理
+clickLayer.addEventListener('click', () => {
+  if (video.ended) {
+    video.currentTime = 0;
+    lastTime = 0; // 重置上一次时间
+  }
+  playVideo();
+});
+
+// 屏幕旋转处理
+window.addEventListener('resize', () => {
+  const wasPortrait = isPortrait;
+  isPortrait = window.innerHeight > window.innerWidth;
+  
+  // 如果方向确实发生了变化
+  if (wasPortrait !== isPortrait && hasStarted) {
+    // 先隐藏引导元素
+    guideContainer.classList.add('rotating');
+    
+    if (isPortrait) {
+      // 竖屏：添加旋转
+      video.classList.add('rotated');
+      guideLayer.classList.add('rotated');
+    } else {
+      // 横屏：移除旋转
+      video.classList.remove('rotated');
+      guideLayer.classList.remove('rotated');
+    }
+    
+    // 提前显示引导元素
+    setTimeout(() => {
+      // 如果视频已结束，重新创建CTA按钮
+      if (video.ended) {
+        createCTAButton();
+      }
+      // 如果当前有交互点，重新创建引导元素以适应新方向
+      else if (currentInteractionPoint) {
+        createGuideElements(currentInteractionPoint);
+      }
+      // 移除旋转中状态，显示引导元素
+      guideContainer.classList.remove('rotating');
+    }, 300);
+  }
+  
+  checkOrientation();
+});
+
+// 视频错误处理
+video.addEventListener('error', (e) => {
+  console.error(getText('loading_failed'), e.target.error);
+  clickLayer.style.display = 'flex';
+  clickTip.textContent = getText('loading_failed');
+  rotateHighlight.style.display = 'none';
 });
 
 // 初始化
-resizeCanvas();
+checkOrientation();
 

@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Playable互动广告</title>
+    <title data-lang="title"></title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="ad-container">
-    <canvas id="ad-canvas"></canvas>
-    <!-- UI控制层 -->
-    <div class="ui-layer">
-        <div class="controls">
-            <button class="control-btn" id="playPauseBtn">播放</button>
-            <button class="control-btn" id="tryAgainBtn">重新开始</button>
+    <video class="ad-video" id="ad-video" playsinline></video>
+    <div class="click-layer" id="clickLayer">
+        <div class="rotate-icon"></div>
+        <div class="click-tip">
+            <span data-lang="click_to_play"></span>
+            <span class="highlight" data-lang="rotate_tip"></span>
         </div>
+    </div>
+    <div class="guide-layer" id="guideLayer">
+        <div class="guide-container" id="guideContainer"></div>
     </div>
 </div>
 <script src="images.js"></script>
 <script src="videos.js"></script>
+<script src="lang.js"></script>
 <script src="config-test-zh.js"></script>
 <script src="script.js"></script>
 </body>
