@@ -1,6 +1,7 @@
 window.PLAYABLE_CONFIG = {
   "lang": "zh",
-  "videoUrl": "jcc.mp4",
+  "videoUrl": "jcc2.mp4",
+  "rotateTime": 1.4,
   "interactionPoints": [
     {
       "time": 3,

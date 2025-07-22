@@ -27,14 +27,15 @@ let lastTime = 0; // 记录上一次的时间
 function checkOrientation() {
   isPortrait = window.innerHeight > window.innerWidth;
 
-  if (!hasStarted) {
-    clickLayer.style.display = 'flex';
-    if (isPortrait) {
-      rotateHighlight.style.display = 'block';
-    } else {
-      rotateHighlight.style.display = 'none';
-    }
-  }
+  // 暂时注释，因为视频播放时，会自动显示引导元素
+  // if (!hasStarted) {
+  //   clickLayer.style.display = 'flex';
+  //   if (isPortrait) {
+  //     rotateHighlight.style.display = 'block';
+  //   } else {
+  //     rotateHighlight.style.display = 'none';
+  //   }
+  // }
 }
 
 // 创建引导元素
@@ -204,7 +205,7 @@ function playVideo() {
         setTimeout(() => {
           guideContainer.classList.remove('rotating');
         }, 300); // 提前到300ms显示
-      }, 500);
+      }, config.rotateTime * 1000);
     }
   }).catch(error => {
     console.error(getText('play_failed'), error);
@@ -260,10 +261,8 @@ video.addEventListener('timeupdate', checkInteractionPoints);
 
 // 视频结束处理
 video.addEventListener('ended', () => {
-  hasStarted = false;
+  // hasStarted = false;
   // 不显示点击重播提示
-  // clickLayer.style.display = 'flex';
-  // clickTip.textContent = getText('click_to_replay');
   rotateHighlight.style.display = 'none';
   
   // 清除引导层内容
@@ -274,13 +273,20 @@ video.addEventListener('ended', () => {
   createCTAButton();
 });
 
-// 点击事件处理
-clickLayer.addEventListener('click', () => {
-  if (video.ended) {
-    video.currentTime = 0;
-    lastTime = 0; // 重置上一次时间
+// 点击事件处理，暂时未使用，因为视频播放时，会自动显示引导元素
+// clickLayer.addEventListener('click', () => {
+//   if (video.ended) {
+//     video.currentTime = 0;
+//     lastTime = 0; // 重置上一次时间
+//   }
+//   playVideo();
+// });
+
+// 添加直接点击屏幕播放
+document.addEventListener('click', () => {
+  if (!hasStarted) {
+    playVideo();
   }
-  playVideo();
 });
 
 // 屏幕旋转处理
