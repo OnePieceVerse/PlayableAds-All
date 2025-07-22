@@ -145,7 +145,11 @@ function createCTAButton() {
   // 添加点击事件
   ctaButton.addEventListener('click', (e) => {
     e.preventDefault();
-    window.location.href = config.cta_button.url;
+    if (window.mraid && typeof window.mraid.open === 'function') {
+      window.mraid.open(config.cta_button.url);
+    } else {
+      window.open(config.cta_button.url, '_blank');
+    }
   });
   
   // 添加到容器
