@@ -247,7 +247,7 @@ html, body {
   100% { transform: translate(-50%, -50%); }
 }
 
-.guide-image.scale-animation {
+.button-image.scale-animation {
   animation: scaleGuide 1.5s infinite;
 }
 

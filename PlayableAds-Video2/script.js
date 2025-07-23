@@ -68,14 +68,13 @@ function createGuideElements(point) {
 
   // 使用对应方向的按钮尺寸和位置
   const buttonSize = point.buttonSize[orientation];
-  buttonImage.style.width = buttonSize.width + 'px';
-  buttonImage.style.height = buttonSize.height + 'px';
-
   const buttonPosition = point.buttonPosition[orientation];
-  const buttonX = buttonPosition.x * 100 + '%';
-  const buttonY = buttonPosition.y * 100 + '%';
-  buttonImage.style.left = buttonX;
-  buttonImage.style.top = buttonY;
+
+  setButtonSizeAndPosition(buttonImage, buttonSize, buttonPosition, video);
+
+  if (point.buttonEffect === 'scale') {
+    buttonImage.classList.add('scale-animation');
+  }
 
   // 创建引导图片
   const guideImage = document.createElement('img');
@@ -84,15 +83,9 @@ function createGuideElements(point) {
 
   // 使用对应方向的引导尺寸和位置
   const guideSize = point.guideSize[orientation];
-  guideImage.style.width = guideSize.width + 'px';
-  guideImage.style.height = guideSize.height + 'px';
 
   const guidePosition = point.guidePosition[orientation];
-  const guideX = guidePosition.x * 100 + '%';
-  const guideY = guidePosition.y * 100 + '%';
-  guideImage.style.left = guideX;
-  guideImage.style.top = guideY;
-
+  setButtonSizeAndPosition(guideImage, guideSize, guidePosition, video);
   // 添加动画
   const swipeConfig = point.swipeDirection;
   if (typeof swipeConfig === 'string' && swipeConfig === 'scale') {
@@ -123,7 +116,7 @@ function createGuideElements(point) {
   // 添加按钮点击事件
   buttonImage.addEventListener('click', (e) => {
     if (point.clickEffectImage) {
-      playClickSparkEffect(point);
+      // playClickSparkEffect(point);
       setTimeout(() => {
         guideContainer.innerHTML = '';
         if (video.currentTime < point.time + point.duration) {
@@ -152,6 +145,23 @@ function createGuideElements(point) {
   }
 }
 
+function setButtonSizeAndPosition(btn, sizePercent, posPercent, container) {
+  const containerRect = container.getBoundingClientRect();
+  let targetWidth = containerRect.width * sizePercent.width;
+  const img = new window.Image();
+  img.src = btn.src;
+  img.onload = function() {
+    const imgRatio = img.width / img.height;
+    let targetHeight = targetWidth / imgRatio;
+    btn.style.width = targetWidth + 'px';
+    btn.style.height = targetHeight + 'px';
+  };
+  btn.style.position = 'absolute';
+  btn.style.left = (posPercent.x * 100) + '%';
+  btn.style.top = (posPercent.y * 100) + '%';
+  // 不再设置transform，交由CSS控制
+}
+
 // 创建CTA开始按钮
 function createCTAStartButton() {
   ctaStartButtonVisible = true;
@@ -171,18 +181,10 @@ function createCTAStartButton() {
   ctaButton.className = 'cta-start-button';
   ctaButton.src = images[ctaConfig.buttonImage];
 
-  // 设置尺寸
+  // 设置尺寸和位置
   const buttonSize = ctaConfig.buttonSize[orientation];
-  ctaButton.style.width = buttonSize.width + 'px';
-  ctaButton.style.height = buttonSize.height + 'px';
-
-  // 设置位置
   const buttonPosition = ctaConfig.buttonPosition[orientation];
-  ctaButton.style.position = 'absolute';
-  ctaButton.style.left = buttonPosition.x * 100 + '%';
-  ctaButton.style.top = buttonPosition.y * 100 + '%';
-
-  // 添加点击事件
+  setButtonSizeAndPosition(ctaButton, buttonSize, buttonPosition, video);
   ctaButton.addEventListener('click', (e) => {
     e.preventDefault();
     console.log('cta click', ctaConfig.url);
@@ -195,11 +197,7 @@ function createCTAStartButton() {
       }
     }
   });
-
-  // 添加到独立容器
   ctaStartContainer.appendChild(ctaButton);
-
-  // 延迟一帧后添加显示类名，触发动画
   requestAnimationFrame(() => {
     ctaButton.classList.add('visible');
   });
@@ -232,15 +230,10 @@ function createCTAEndButton() {
 
   // 设置尺寸
   const buttonSize = ctaConfig.buttonSize[orientation];
-  ctaButton.style.width = buttonSize.width + 'px';
-  ctaButton.style.height = buttonSize.height + 'px';
 
   // 设置位置
   const buttonPosition = ctaConfig.buttonPosition[orientation];
-  ctaButton.style.position = 'absolute';
-  ctaButton.style.left = buttonPosition.x * 100 + '%';
-  ctaButton.style.top = buttonPosition.y * 100 + '%';
-
+  setButtonSizeAndPosition(ctaButton, buttonSize, buttonPosition, video);
   // 添加点击事件
   ctaButton.addEventListener('click', (e) => {
     e.preventDefault();
@@ -307,7 +300,6 @@ function playVideo() {
     hasStarted = true;
     clickLayer.style.display = 'none';
     currentInteractionPoint = null;
-    // createCTAStartButton(); // 播放后显示cta_start_button
 
     if (isPortrait) {
       // 先隐藏引导元素
@@ -396,24 +388,12 @@ video.addEventListener('timeupdate', checkInteractionPoints);
 
 // 视频结束处理
 video.addEventListener('ended', () => {
-  // hasStarted = false;
-  // 不显示点击重播提示
   rotateHighlight.style.display = 'none';
 
   // 清除引导层内容
   guideContainer.innerHTML = '';
   currentInteractionPoint = null;
-
-  // 显示CTA按钮
-  // createCTAButton();
 });
-
-// // 视频暂停时显示cta_start_button
-// video.addEventListener('pause', () => {
-//   if (hasStarted) {
-//     createCTAStartButton();
-//   }
-// });
 
 // 在指定时间点显示ctaEndButton
 video.addEventListener('timeupdate', () => {
@@ -526,4 +506,27 @@ function unrotatePortrait() {
   guideLayer.classList.remove('rotated');
   syncCTAContainersRotation();
 }
+
+function syncCTAContainerToGuide(container) {
+  const guideRect = guideContainer.getBoundingClientRect();
+  if (guideRect.width === 0 || guideRect.height === 0) {
+    setTimeout(() => syncCTAContainerToGuide(container), 50);
+    return;
+  }
+  container.style.position = 'fixed';
+  container.style.left = guideRect.left + 'px';
+  container.style.top = guideRect.top + 'px';
+  container.style.width = guideRect.width + 'px';
+  container.style.height = guideRect.height + 'px';
+  container.style.pointerEvents = 'none'; // 只让按钮本身可点
+}
+
+function syncAllCTAContainers() {
+  syncCTAContainerToGuide(ctaStartContainer);
+  syncCTAContainerToGuide(ctaEndContainer);
+}
+
+window.addEventListener('resize', syncAllCTAContainers);
+video.addEventListener('loadedmetadata', syncAllCTAContainers);
+syncAllCTAContainers();
 

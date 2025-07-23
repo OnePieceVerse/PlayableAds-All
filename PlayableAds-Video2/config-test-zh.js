@@ -1,72 +1,48 @@
 window.PLAYABLE_CONFIG = {
   "lang": "zh",
-  "videoUrl": "jcc2.mp4",
+  "videoUrl": "jcc-prod.mp4",
   "rotateTime": 1.4,
   "interactionPoints": [
     {
       "time": 2,
       "duration": 3,
       "buttonImage": "start_button.png",
+      "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
-          "width": 150,
-          "height": 40
+          "width": 0.3
         },
         "portrait": {
-          "width": 200,
-          "height": 80
+          "width": 0.54
         }
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.48,
-          "y": 0.87
+          "x": 0.5,
+          "y": 0.73
         },
         "portrait": {
-          "x": 0.49,
-          "y": 1.03
-        }
-      },
-      "clickEffectImage": "click_spark.gif",
-      "clickEffectSize": {
-        "landscape": {
-          "width": 120,
-          "height": 120
-        },
-        "portrait": {
-          "width": 64,
-          "height": 64
-        }
-      },
-      "clickEffectPosition": {
-        "landscape": {
-          "x": 0.42,
-          "y": 0.70
-        },
-        "portrait": {
-          "x": 0.52,
-          "y": 1.03
+          "x": 0.5,
+          "y": 0.9
         }
       },
       "guideImage": "guide.png",
       "guideSize": {
         "landscape": {
-          "width": 50,
-          "height": 50
+          "width": 0.1
         },
         "portrait": {
-          "width": 50,
-          "height": 50
+          "width": 0.2
         }
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.54,
-          "y": 0.86
+          "x": 0.56,
+          "y": 0.72
         },
         "portrait": {
           "x": 0.54,
-          "y": 1.21
+          "y": 0.93
         }
       },
       "swipeDirection": "slide-bounce"
@@ -77,49 +53,45 @@ window.PLAYABLE_CONFIG = {
     "buttonImage": "cta_start_button.png",
     "buttonSize": {
       "landscape": {
-        "width": 100,
-        "height": 35
+        "width": 0.15,
       },
       "portrait": {
-        "width": 100,
-        "height": 35
+        "width": 0.15,
       }
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.03,
-        "y": 0.83
+        "x": 0.1,
+        "y": 0.9
       },
       "portrait": {
-        "x": 0.24,
-        "y": 1.23
+        "x": -0.2,
+        "y": 0.72
       }
     },
-    "url": "https://apps.apple.com/us/app/tft-teamfight-tactics/id1480616748"
+    "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
   },
   "cta_end_button": {
-    "displayTime": 25,
+    "displayTime": 21,
     "buttonImage": "cta_end_button.png",
     "buttonSize": {
       "landscape": {
-        "width": 200,
-        "height": 51
+        "width": 0.3,
       },
       "portrait": {
-        "width": 200,
-        "height": 51
+        "width": 0.4,
       }
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.35,
-        "y": 0.66
+        "x": 0.5,
+        "y": 0.75
       },
       "portrait": {
-        "x": 0.58,
-        "y": 1.03
+        "x": 0.52,
+        "y": 0.64
       }
     },
-    "url": "https://apps.apple.com/us/app/tft-teamfight-tactics/id1480616748"
+    "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
   }
 };
