@@ -27,6 +27,27 @@ window.PLAYABLE_CONFIG = {
           "y": 1.03
         }
       },
+      "clickEffectImage": "click_spark.gif",
+      "clickEffectSize": {
+        "landscape": {
+          "width": 120,
+          "height": 120
+        },
+        "portrait": {
+          "width": 64,
+          "height": 64
+        }
+      },
+      "clickEffectPosition": {
+        "landscape": {
+          "x": 0.42,
+          "y": 0.70
+        },
+        "portrait": {
+          "x": 0.52,
+          "y": 1.03
+        }
+      },
       "guideImage": "guide.png",
       "guideSize": {
         "landscape": {
@@ -40,15 +61,15 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.61,
-          "y": 0.93
+          "x": 0.54,
+          "y": 0.86
         },
         "portrait": {
           "x": 0.54,
           "y": 1.21
         }
       },
-      "swipeDirection": "scale"
+      "swipeDirection": "slide-bounce"
     },
   ],
   "cta_start_button": {

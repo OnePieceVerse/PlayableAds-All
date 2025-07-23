@@ -230,6 +230,7 @@ html, body {
   position: absolute;
   pointer-events: none;
   transition: transform 0.5s ease;
+  z-index: 10;
 }
 
 /* 缩放动画 */
@@ -252,6 +253,41 @@ html, body {
 
 .guide-image.angle-animation {
   animation: moveGuide 1.5s infinite;
+}
+
+@keyframes bounceY {
+  0%   { transform: translateY(0); }
+  20%  { transform: translateY(-8px); }
+  50%  { transform: translateY(0); }
+  70%  { transform: translateY(8px); }
+  100% { transform: translateY(0); }
+}
+
+.guide-image.bounce-y {
+  animation: bounceY 0.7s ease-in-out infinite;
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(200px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-8px);
+  }
+  80% {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.guide-image.slide-in-right {
+  animation: slideInRight 2s cubic-bezier(0.4,0,0.2,1) 1;
 }
 
 /* 交互区域 */
@@ -313,6 +349,18 @@ html, body {
   0% { transform: translate(-50%, -50%) scale(1); }
   50% { transform: translate(-50%, -50%) scale(1.1); }
   100% { transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes scaleBounce {
+  0% { transform: scale(1); }
+  20% { transform: scale(1.15); }
+  50% { transform: scale(1); }
+  70% { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+.cta-end-button.scale-bounce {
+  animation: scaleBounce 0.8s cubic-bezier(0.4,0,0.2,1) infinite;
 }
 
 #ctaStartContainer.rotated,

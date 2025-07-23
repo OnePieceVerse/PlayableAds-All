@@ -97,7 +97,20 @@ function createGuideElements(point) {
   const swipeConfig = point.swipeDirection;
   if (typeof swipeConfig === 'string' && swipeConfig === 'scale') {
     guideImage.classList.add('scale-animation');
-  } else if (typeof swipeConfig === 'object' && swipeConfig.type === 'angle') {
+  } else if (typeof swipeConfig === 'string' && swipeConfig === 'bounce') {
+    guideImage.classList.add('bounce-y');
+  } else if (typeof swipeConfig === 'string' && swipeConfig === 'slide-bounce') {
+    guideImage.classList.add('slide-in-right');
+    // 动画结束后加上 bounce-y
+    guideImage.addEventListener('animationend', function handler(e) {
+      if (e.animationName === 'slideInRight') {
+        guideImage.classList.remove('slide-in-right');
+        guideImage.classList.add('bounce-y');
+        guideImage.removeEventListener('animationend', handler);
+      }
+    });
+  }
+  else if (typeof swipeConfig === 'object' && swipeConfig.type === 'angle') {
     guideImage.classList.add('angle-animation');
     const angle = swipeConfig.value * Math.PI / 180;
     const distance = parseInt(swipeConfig.distance);
@@ -107,18 +120,24 @@ function createGuideElements(point) {
     guideImage.style.setProperty('--move-y', moveY + 'px');
   }
 
-  // 添加guideImage点击特效
-  buttonImage.addEventListener('click', (e) => {
-    playClickSparkEffect(buttonImage);
-  });
-
   // 添加按钮点击事件
-  buttonImage.addEventListener('click', () => {
-    guideContainer.innerHTML = '';
-    if (video.currentTime < point.time + point.duration) {
-      video.currentTime = point.time + point.duration;
+  buttonImage.addEventListener('click', (e) => {
+    if (point.clickEffectImage) {
+      playClickSparkEffect(point);
+      setTimeout(() => {
+        guideContainer.innerHTML = '';
+        if (video.currentTime < point.time + point.duration) {
+          video.currentTime = point.time + point.duration;
+        }
+        playVideo();
+      }, 1000);
+    } else {
+      guideContainer.innerHTML = '';
+      if (video.currentTime < point.time + point.duration) {
+        video.currentTime = point.time + point.duration;
+      }
+      playVideo();
     }
-    playVideo();
   });
 
   // 添加到引导容器
@@ -208,7 +227,7 @@ function createCTAEndButton() {
 
   // 创建按钮
   const ctaButton = document.createElement('img');
-  ctaButton.className = 'cta-end-button';
+  ctaButton.className = 'cta-end-button scale-bounce';
   ctaButton.src = images[ctaConfig.buttonImage];
 
   // 设置尺寸
@@ -317,23 +336,21 @@ function playVideo() {
 }
 
 // 播放点击特效
-function playClickSparkEffect(targetElement) {
+function playClickSparkEffect(point) {
+  const orientation = isPortrait ? 'portrait' : 'landscape';
   const spark = document.createElement('img');
-  spark.src = 'assets/images/click_spark.gif';
+  spark.src = images[point.clickEffectImage];
   spark.style.position = 'absolute';
   spark.style.pointerEvents = 'none';
-  spark.style.zIndex = 99;
+  spark.style.zIndex = 1;
 
-  // 获取目标元素的中心点
-  const rect = targetElement.getBoundingClientRect();
-  const parentRect = guideContainer.getBoundingClientRect();
-  spark.style.left = (rect.left - parentRect.left + rect.width / 2 - 32) + 'px'; // 32为特效宽高一半
-  spark.style.top = (rect.top - parentRect.top + rect.height / 2 - 32) + 'px';
-  spark.style.width = '64px';
-  spark.style.height = '64px';
-
+  // 计算位置
+  spark.style.width = point.clickEffectSize[orientation].width + 'px';
+  spark.style.height = point.clickEffectSize[orientation].height + 'px';
+  spark.style.left = point.clickEffectPosition[orientation].x * 100 + '%';
+  spark.style.top = point.clickEffectPosition[orientation].y * 100 + '%';
   guideContainer.appendChild(spark);
-  setTimeout(() => spark.remove(), 1800); // 动画时长
+  setTimeout(() => spark.remove(), 500);
 }
 
 // 获取翻译文本
