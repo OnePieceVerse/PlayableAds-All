@@ -168,7 +168,7 @@ html, body {
   --video-ratio-inverse: calc(1080 / 1920);  /* 约等于0.5625 */
 }
 
-.guide-container {
+.guide-layer {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -180,16 +180,41 @@ html, body {
   transition: opacity 0.1s;
 }
 
-.guide-container.rotating {
+.guide-layer.rotating {
   opacity: 0;
 }
 
-.ad-video {
-  transition: transform 0.5s ease;
+/* CTA按钮样式 */
+.cta-button {
+  position: absolute;
+  pointer-events: auto;
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  transition: all 0.3s ease;
+  display: none; /* 默认隐藏 */
+  z-index: 10;
+}
+
+.cta-button.visible {
+  display: block;
+  animation: ctaScale 1.5s ease-in-out infinite;
+  opacity: 1;
+}
+
+.cta-button:hover {
+  animation: none;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* 缩放动画 */
+@keyframes ctaScale {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+  100% { transform: translate(-50%, -50%) scale(1); }
 }
 
 /* 竖屏模式下的旋转 */
-.guide-layer.rotated .guide-container {
+.guide-layer.rotated {
   transform: translate(-50%, -50%) rotate(90deg);
   width: calc(100vh * var(--video-ratio));
   height: calc(100vw * var(--video-ratio-inverse));
@@ -197,7 +222,7 @@ html, body {
 
 /* 横屏模式 */
 @media (orientation: landscape) {
-  .guide-container {
+  .guide-layer {
     width: calc(100vh * var(--video-ratio));
     height: 100%;
     max-width: 100%;
@@ -206,7 +231,7 @@ html, body {
 
 /* 竖屏模式 */
 @media (orientation: portrait) {
-  .guide-container {
+  .guide-layer {
     width: 100%;
     height: calc(100vw * var(--video-ratio-inverse));
     max-height: 100%;
@@ -305,13 +330,15 @@ html, body {
   background: rgba(255, 255, 255, 0.2);
 }
 
+/* CTA按钮基础样式 */
 .cta-button {
   position: absolute;
   pointer-events: auto;
   cursor: pointer;
   transform: translate(-50%, -50%);
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
   display: none; /* 默认隐藏 */
+  z-index: 10;
 }
 
 .cta-button.visible {
@@ -322,6 +349,7 @@ html, body {
 
 .cta-button:hover {
   animation: none;
+  transform: translate(-50%, -50%) scale(1.1);
 }
 
 /* 缩放动画 */

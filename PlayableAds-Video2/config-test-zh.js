@@ -13,7 +13,7 @@ window.PLAYABLE_CONFIG = {
           "width": 0.3
         },
         "portrait": {
-          "width": 0.54
+          "width": 0.8
         }
       },
       "buttonPosition": {
@@ -32,7 +32,7 @@ window.PLAYABLE_CONFIG = {
           "width": 0.1
         },
         "portrait": {
-          "width": 0.2
+          "width": 0.3
         }
       },
       "guidePosition": {
@@ -41,8 +41,8 @@ window.PLAYABLE_CONFIG = {
           "y": 0.72
         },
         "portrait": {
-          "x": 0.54,
-          "y": 0.93
+          "x": 0.53,
+          "y": 0.88  // 调整引导图位置
         }
       },
       "swipeDirection": "slide-bounce"
@@ -56,7 +56,7 @@ window.PLAYABLE_CONFIG = {
         "width": 0.15,
       },
       "portrait": {
-        "width": 0.15,
+        "width": 0.4,  // 增加竖屏模式下的按钮大小
       }
     },
     "buttonPosition": {
@@ -65,8 +65,8 @@ window.PLAYABLE_CONFIG = {
         "y": 0.9
       },
       "portrait": {
-        "x": -0.2,
-        "y": 0.72
+        "x": 0.31,  // 修正竖屏模式下的x坐标，确保按钮可见
+        "y": 1.25
       }
     },
     "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
@@ -79,17 +79,17 @@ window.PLAYABLE_CONFIG = {
         "width": 0.3,
       },
       "portrait": {
-        "width": 0.4,
+        "width": 0.8,
       }
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.5,
-        "y": 0.75
+        "x": 0.36,
+        "y": 0.69
       },
       "portrait": {
-        "x": 0.52,
-        "y": 0.64
+        "x": 0.45,
+        "y": 0.8
       }
     },
     "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
