@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-SRC='aseets'
+SRC='assets'
 DIST='.'
 
 # 检查ffmpeg是否安装

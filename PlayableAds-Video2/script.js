@@ -17,11 +17,20 @@ const rotateHighlight = clickTip.querySelector('.highlight');
 const guideLayer = document.getElementById('guideLayer');
 const guideContainer = document.getElementById('guideContainer');
 
+// 新增获取ctaStartContainer
+const ctaStartContainer = document.getElementById('ctaStartContainer');
+
+// 新增获取ctaEndContainer
+const ctaEndContainer = document.getElementById('ctaEndContainer');
+
 // 状态变量
 let isPortrait = window.innerHeight > window.innerWidth;
 let hasStarted = false;
 let currentInteractionPoint = null;
 let lastTime = 0; // 记录上一次的时间
+
+let ctaStartButtonVisible = false;
+let ctaEndButtonVisible = false;
 
 // 检查屏幕方向并显示相应提示
 function checkOrientation() {
@@ -98,9 +107,17 @@ function createGuideElements(point) {
     guideImage.style.setProperty('--move-y', moveY + 'px');
   }
 
+  // 添加guideImage点击特效
+  buttonImage.addEventListener('click', (e) => {
+    playClickSparkEffect(buttonImage);
+  });
+
   // 添加按钮点击事件
   buttonImage.addEventListener('click', () => {
     guideContainer.innerHTML = '';
+    if (video.currentTime < point.time + point.duration) {
+      video.currentTime = point.time + point.duration;
+    }
     playVideo();
   });
 
@@ -116,91 +133,172 @@ function createGuideElements(point) {
   }
 }
 
-// 创建CTA按钮
-function createCTAButton() {
+// 创建CTA开始按钮
+function createCTAStartButton() {
+  ctaStartButtonVisible = true;
   // 清除现有的CTA按钮
-  const existingCTA = guideContainer.querySelector('.cta-button');
+  const existingCTA = ctaStartContainer.querySelector('.cta-start-button');
   if (existingCTA) {
     existingCTA.remove();
   }
 
   // 获取当前屏幕方向的配置
   const orientation = isPortrait ? 'portrait' : 'landscape';
-  const ctaConfig = config.cta_button;
-  
+  const ctaConfig = config.cta_start_button;
+  if (!ctaConfig) return;
+
   // 创建按钮
   const ctaButton = document.createElement('img');
-  ctaButton.className = 'cta-button';
+  ctaButton.className = 'cta-start-button';
   ctaButton.src = images[ctaConfig.buttonImage];
-  
+
   // 设置尺寸
   const buttonSize = ctaConfig.buttonSize[orientation];
   ctaButton.style.width = buttonSize.width + 'px';
   ctaButton.style.height = buttonSize.height + 'px';
-  
+
   // 设置位置
   const buttonPosition = ctaConfig.buttonPosition[orientation];
+  ctaButton.style.position = 'absolute';
   ctaButton.style.left = buttonPosition.x * 100 + '%';
   ctaButton.style.top = buttonPosition.y * 100 + '%';
-  
+
   // 添加点击事件
   ctaButton.addEventListener('click', (e) => {
     e.preventDefault();
+    console.log('cta click', ctaConfig.url);
     if (window.mraid && typeof window.mraid.open === 'function') {
-      window.mraid.open(config.cta_button.url);
-    } else {
-      window.open(config.cta_button.url, '_blank');
+      window.mraid.open(ctaConfig.url);
+    } else if (ctaConfig.url) {
+      const win = window.open(ctaConfig.url, '_blank');
+      if (!win) {
+        window.location.href = ctaConfig.url;
+      }
     }
   });
-  
-  // 添加到容器
-  guideContainer.appendChild(ctaButton);
-  
+
+  // 添加到独立容器
+  ctaStartContainer.appendChild(ctaButton);
+
   // 延迟一帧后添加显示类名，触发动画
   requestAnimationFrame(() => {
     ctaButton.classList.add('visible');
   });
 }
 
+function hideCTAStartButton() {
+  ctaStartButtonVisible = false;
+  const existingCTA = ctaStartContainer.querySelector('.cta-start-button');
+  if (existingCTA) existingCTA.remove();
+}
+
+// 创建CTA结束按钮
+function createCTAEndButton() {
+  ctaEndButtonVisible = true;
+  hideCTAStartButton(); // 出现end按钮时自动隐藏start按钮
+  const existingCTA = ctaEndContainer.querySelector('.cta-end-button');
+  if (existingCTA) {
+    existingCTA.remove();
+  }
+
+  // 获取当前屏幕方向的配置
+  const orientation = isPortrait ? 'portrait' : 'landscape';
+  const ctaConfig = config.cta_end_button;
+  if (!ctaConfig) return;
+
+  // 创建按钮
+  const ctaButton = document.createElement('img');
+  ctaButton.className = 'cta-end-button';
+  ctaButton.src = images[ctaConfig.buttonImage];
+
+  // 设置尺寸
+  const buttonSize = ctaConfig.buttonSize[orientation];
+  ctaButton.style.width = buttonSize.width + 'px';
+  ctaButton.style.height = buttonSize.height + 'px';
+
+  // 设置位置
+  const buttonPosition = ctaConfig.buttonPosition[orientation];
+  ctaButton.style.position = 'absolute';
+  ctaButton.style.left = buttonPosition.x * 100 + '%';
+  ctaButton.style.top = buttonPosition.y * 100 + '%';
+
+  // 添加点击事件
+  ctaButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    console.log('cta end click', ctaConfig.url);
+    if (window.mraid && typeof window.mraid.open === 'function') {
+      window.mraid.open(ctaConfig.url);
+    } else if (ctaConfig.url) {
+      const win = window.open(ctaConfig.url, '_blank');
+      if (!win) {
+        window.location.href = ctaConfig.url;
+      }
+    }
+  });
+
+  // 添加到独立容器
+  ctaEndContainer.appendChild(ctaButton);
+
+  // 延迟一帧后添加显示类名，触发动画
+  requestAnimationFrame(() => {
+    ctaButton.classList.add('visible');
+  });
+}
+
+function hideCTAEndButton() {
+  ctaEndButtonVisible = false;
+  const existingCTA = ctaEndContainer.querySelector('.cta-end-button');
+  if (existingCTA) existingCTA.remove();
+}
+
 // 检查交互点
 function checkInteractionPoints() {
+  if (video.currentTime >= config.cta_start_button.displayTime && lastTime < config.cta_start_button.displayTime) {
+    createCTAStartButton();
+  }
+  if (video.currentTime >= config.cta_end_button.displayTime && lastTime < config.cta_end_button.displayTime) {
+    createCTAEndButton();
+  }
   if (!config.interactionPoints) return;
-  
+
   const currentTime = video.currentTime;
-  
+
   // 遍历所有交互点
   for (const point of config.interactionPoints) {
-    // 如果当前时间和上一次时间跨过了交互点时间，说明需要暂停
+    // 如果当前时间大于等于交互点时间，并且上一次时间小于交互点时间，说明需要显示引导元素
     if (currentTime >= point.time && lastTime < point.time && currentInteractionPoint !== point) {
-      // 将视频时间设置到精确的交互点时间
-      video.currentTime = point.time;
-      video.pause();
       currentInteractionPoint = point;
       createGuideElements(point);
+    }
+    // 如果当前时间和上一次时间跨过了交互点时间，说明需要暂停
+    if (currentTime >= (point.time + point.duration) && lastTime < (point.time + point.duration) && currentInteractionPoint == point) {
+      video.pause();
       break;
     }
   }
-  
+
   lastTime = currentTime;
 }
 
 // 播放控制
 function playVideo() {
   lastTime = video.currentTime;
-  
+
   video.play().then(() => {
     hasStarted = true;
     clickLayer.style.display = 'none';
     currentInteractionPoint = null;
-    
+    // createCTAStartButton(); // 播放后显示cta_start_button
+
     if (isPortrait) {
       // 先隐藏引导元素
       guideContainer.classList.add('rotating');
-      
+
       setTimeout(() => {
         video.classList.add('rotated');
         guideLayer.classList.add('rotated');
-        
+        syncCTAContainersRotation();
+
         // 提前显示引导元素
         setTimeout(() => {
           guideContainer.classList.remove('rotating');
@@ -216,6 +314,26 @@ function playVideo() {
       rotateHighlight.style.display = 'none';
     });
   });
+}
+
+// 播放点击特效
+function playClickSparkEffect(targetElement) {
+  const spark = document.createElement('img');
+  spark.src = 'assets/images/click_spark.gif';
+  spark.style.position = 'absolute';
+  spark.style.pointerEvents = 'none';
+  spark.style.zIndex = 99;
+
+  // 获取目标元素的中心点
+  const rect = targetElement.getBoundingClientRect();
+  const parentRect = guideContainer.getBoundingClientRect();
+  spark.style.left = (rect.left - parentRect.left + rect.width / 2 - 32) + 'px'; // 32为特效宽高一半
+  spark.style.top = (rect.top - parentRect.top + rect.height / 2 - 32) + 'px';
+  spark.style.width = '64px';
+  spark.style.height = '64px';
+
+  guideContainer.appendChild(spark);
+  setTimeout(() => spark.remove(), 1800); // 动画时长
 }
 
 // 获取翻译文本
@@ -264,13 +382,31 @@ video.addEventListener('ended', () => {
   // hasStarted = false;
   // 不显示点击重播提示
   rotateHighlight.style.display = 'none';
-  
+
   // 清除引导层内容
   guideContainer.innerHTML = '';
   currentInteractionPoint = null;
-  
+
   // 显示CTA按钮
-  createCTAButton();
+  // createCTAButton();
+});
+
+// // 视频暂停时显示cta_start_button
+// video.addEventListener('pause', () => {
+//   if (hasStarted) {
+//     createCTAStartButton();
+//   }
+// });
+
+// 在指定时间点显示ctaEndButton
+video.addEventListener('timeupdate', () => {
+  if (
+    config.cta_end_time !== undefined &&
+    video.currentTime >= config.cta_end_time &&
+    !ctaEndContainer.querySelector('.cta-end-button')
+  ) {
+    createCTAEndButton();
+  }
 });
 
 // 点击事件处理，暂时未使用，因为视频播放时，会自动显示引导元素
@@ -293,27 +429,29 @@ document.addEventListener('click', () => {
 window.addEventListener('resize', () => {
   const wasPortrait = isPortrait;
   isPortrait = window.innerHeight > window.innerWidth;
-  
+
   // 如果方向确实发生了变化
   if (wasPortrait !== isPortrait) {
     // 先隐藏引导元素
     guideContainer.classList.add('rotating');
-    
+
     if (isPortrait) {
       // 竖屏：添加旋转
       video.classList.add('rotated');
       guideLayer.classList.add('rotated');
+      syncCTAContainersRotation();
     } else {
       // 横屏：移除旋转
       video.classList.remove('rotated');
       guideLayer.classList.remove('rotated');
+      syncCTAContainersRotation();
     }
-    
+
     // 等待旋转动画完成后再显示引导元素
     setTimeout(() => {
       // 如果视频已结束，显示CTA按钮
       if (video.ended) {
-        createCTAButton();
+        createCTAEndButton(); // 确保ctaEndButton也显示
       }
       // 如果视频正在播放且有交互点，显示引导元素
       else if (hasStarted && currentInteractionPoint) {
@@ -327,6 +465,15 @@ window.addEventListener('resize', () => {
       guideContainer.classList.remove('rotating');
     }, 300);
   }
+  // 屏幕旋转时也保持显示cta_start_button
+  // createCTAStartButton(); // 移除此行，因为cta_start_button已移至playVideo
+
+  if (ctaStartButtonVisible) {
+    createCTAStartButton();
+  }
+  if (ctaEndButtonVisible) {
+    createCTAEndButton();
+  }
 });
 
 // 视频错误处理
@@ -339,4 +486,27 @@ video.addEventListener('error', (e) => {
 
 // 初始化
 checkOrientation();
+
+function syncCTAContainersRotation() {
+  if (isPortrait && video.classList.contains('rotated')) {
+    ctaStartContainer.classList.add('rotated');
+    ctaEndContainer.classList.add('rotated');
+  } else {
+    ctaStartContainer.classList.remove('rotated');
+    ctaEndContainer.classList.remove('rotated');
+  }
+}
+
+// 在所有video/guideLayer加/去rotated的地方同步调用
+// 1. 竖屏旋转时
+function rotatePortrait() {
+  video.classList.add('rotated');
+  guideLayer.classList.add('rotated');
+  syncCTAContainersRotation();
+}
+function unrotatePortrait() {
+  video.classList.remove('rotated');
+  guideLayer.classList.remove('rotated');
+  syncCTAContainersRotation();
+}
 
