@@ -41,6 +41,28 @@ function checkOrientation() {
   // }
 }
 
+function setButtonSizeAndPosition(btn, sizePercent, posPercent) {
+  // 获取guide-layer的尺寸
+  const containerRect = guideLayer.getBoundingClientRect();
+  
+  // 计算按钮尺寸
+  let targetWidth = containerRect.width * sizePercent.width;
+  const img = new window.Image();
+  img.src = btn.src;
+  img.onload = function() {
+    const imgRatio = img.width / img.height;
+    let targetHeight = targetWidth / imgRatio;
+    btn.style.width = targetWidth + 'px';
+    btn.style.height = targetHeight + 'px';
+  };
+
+  // 设置按钮位置
+  btn.style.position = 'absolute';
+  btn.style.left = (posPercent.x * 100) + '%';
+  btn.style.top = (posPercent.y * 100) + '%';
+  btn.style.transform = 'translate(-50%, -50%)';
+}
+
 // 创建引导元素
 function createGuideElements(point) {
   // 检查资源是否存在
@@ -142,28 +164,6 @@ function createGuideElements(point) {
   } else {
     guideLayer.classList.remove('rotated');
   }
-}
-
-function setButtonSizeAndPosition(btn, sizePercent, posPercent) {
-  // 获取guide-layer的尺寸
-  const containerRect = guideLayer.getBoundingClientRect();
-  
-  // 计算按钮尺寸
-  let targetWidth = containerRect.width * sizePercent.width;
-  const img = new window.Image();
-  img.src = btn.src;
-  img.onload = function() {
-    const imgRatio = img.width / img.height;
-    let targetHeight = targetWidth / imgRatio;
-    btn.style.width = targetWidth + 'px';
-    btn.style.height = targetHeight + 'px';
-  };
-
-  // 设置按钮位置
-  btn.style.position = 'absolute';
-  btn.style.left = (posPercent.x * 100) + '%';
-  btn.style.top = (posPercent.y * 100) + '%';
-  btn.style.transform = 'translate(-50%, -50%)';
 }
 
 // 创建CTA开始按钮，在视频开始时显示
@@ -309,12 +309,11 @@ function playVideo() {
       setTimeout(() => {
         video.classList.add('rotated');
         guideLayer.classList.add('rotated');
-        // syncCTAContainersRotation(); // 移除此行
 
         // 提前显示引导元素
         setTimeout(() => {
           guideLayer.classList.remove('rotating');
-        }, 300); // 提前到300ms显示
+        }, 300); 
       }, config.rotateTime * 1000);
     }
   }).catch(error => {
@@ -326,24 +325,6 @@ function playVideo() {
       rotateHighlight.style.display = 'none';
     });
   });
-}
-
-// 播放点击特效
-function playClickSparkEffect(point) {
-  const orientation = isPortrait ? 'portrait' : 'landscape';
-  const spark = document.createElement('img');
-  spark.src = images[point.clickEffectImage];
-  spark.style.position = 'absolute';
-  spark.style.pointerEvents = 'none';
-  spark.style.zIndex = 1;
-
-  // 计算位置
-  spark.style.width = point.clickEffectSize[orientation].width + 'px';
-  spark.style.height = point.clickEffectSize[orientation].height + 'px';
-  spark.style.left = point.clickEffectPosition[orientation].x * 100 + '%';
-  spark.style.top = point.clickEffectPosition[orientation].y * 100 + '%';
-  guideContainer.appendChild(spark);
-  setTimeout(() => spark.remove(), 500);
 }
 
 // 获取翻译文本
