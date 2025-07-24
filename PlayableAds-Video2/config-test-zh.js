@@ -1,5 +1,5 @@
 window.PLAYABLE_CONFIG = {
-  "lang": "en",
+  "lang": "th",
   "videoUrl": "jcc-prod2.mp4",
   "rotateTime": 0,
   "start_screen": {
@@ -26,9 +26,9 @@ window.PLAYABLE_CONFIG = {
   },
   "interactionPoints": [
     {
-      "time": 0.6,
+      "time": 0.2,
       "duration": 3,
-      "buttonImage": "start_button2.png",
+      "buttonImage": "start_button.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
