@@ -2,6 +2,9 @@
 set -e
 SRC='assets'
 DIST='.'
+# 在脚本开头定义要处理的图片名列表，留空表示全部图片
+IMG_LIST=("start_landscape.webp" "start_portrait.webp" "start_button.png"  "guide.png" "cta_start_button2.png")
+VIDEO_LIST=("jcc-prod2.mp4")
 
 # 检查ffmpeg是否安装
 if ! command -v ffmpeg &> /dev/null; then
@@ -12,7 +15,17 @@ fi
 # 生成 PLAYABLE_IMAGES 变量
 echo "window.PLAYABLE_IMAGES = {" > $DIST/images.js
 first=1
-for img in $SRC/images/*; do
+if [ ${#IMG_LIST[@]} -eq 0 ]; then
+  # 获取所有图片名（兼容 macOS）
+  IMG_LIST=()
+  for f in "$SRC/images/"*; do
+    [ -f "$f" ] || continue
+    IMG_LIST+=("$(basename "$f")")
+  done
+fi
+
+for fname in "${IMG_LIST[@]}"; do
+  img="$SRC/images/$fname"
   [ -f "$img" ] || continue
   fname=$(basename "$img")
   ext="${img##*.}"
@@ -37,7 +50,16 @@ trap 'rm -rf "$TEMP_DIR"' EXIT
 # 生成 PLAYABLE_VIDEOS 变量
 echo "window.PLAYABLE_VIDEOS = {" > $DIST/videos.js
 first=1
-for video in $SRC/videos/*; do
+if [ ${#VIDEO_LIST[@]} -eq 0 ]; then
+  # 获取所有图片名（兼容 macOS）
+  VIDEO_LIST=()
+  for f in "$SRC/videos/"*; do
+    [ -f "$f" ] || continue
+    VIDEO_LIST+=("$(basename "$f")")
+  done
+fi
+for fname in "${VIDEO_LIST[@]}"; do
+  video="$SRC/videos/$fname"
   [ -f "$video" ] || continue
   fname=$(basename "$video")
   ext="${video##*.}"
