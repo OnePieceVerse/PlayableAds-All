@@ -4,11 +4,14 @@ set -e
 # 业务，可配置
 BUSINESS='test'
 # 语言，可配置
-LANGUAGE='zh'
+LANGUAGE='en-v2'
 # 目标配置文件，注意index.html中默认的配置，若不是config-test-zh.js，会替换失败
 CONFIG="config-${BUSINESS}-${LANGUAGE}.js"
 TARGET='index-applovin.html'
 tmpfile=$(mktemp)
+
+
+sh image_video_to_base_64.sh
 
 awk '
   /<link rel="stylesheet" href="style.css">/ {

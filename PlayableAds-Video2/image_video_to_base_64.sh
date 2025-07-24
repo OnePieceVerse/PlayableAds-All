@@ -3,8 +3,9 @@ set -e
 SRC='assets'
 DIST='.'
 # 在脚本开头定义要处理的图片名列表，留空表示全部图片
-IMG_LIST=("start_landscape.webp" "start_portrait.webp" "start_button.png"  "guide.png" "cta_start_button2.png")
-VIDEO_LIST=("jcc-prod2.mp4")
+# IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button.png"  "guide.png" "cta_start_button.png" "cta_end_button.png")
+IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button.png"  "guide.png" "cta_start_button3.png")
+VIDEO_LIST=("jcc-prod-v2-c.mp4")
 
 # 检查ffmpeg是否安装
 if ! command -v ffmpeg &> /dev/null; then

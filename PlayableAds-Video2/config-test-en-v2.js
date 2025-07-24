@@ -1,10 +1,10 @@
 window.PLAYABLE_CONFIG = {
-  "lang": "zh",
-  "videoUrl": "jcc-prod2.mp4",
+  "lang": "en",
+  "videoUrl": "jcc-prod-v2-c.mp4",
   "rotateTime": 0,
   "start_screen": {
     "landscape": {
-      "image": "start_landscape.webp",
+      "image": "start_landscape2.webp",
       "size": {
         "width": 1
       },
@@ -14,7 +14,7 @@ window.PLAYABLE_CONFIG = {
       }
     },
     "portrait": {
-      "image": "start_portrait.webp",
+      "image": "start_portrait2.webp",
       "size": {
         "width": 1
       },
@@ -40,12 +40,12 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.5,
-          "y": 0.73
+          "x": 0.34,
+          "y": 0.7
         },
         "portrait": {
-          "x": 0.5,
-          "y": 0.9
+          "x": 0.44,
+          "y": 0.83
         }
       },
       "guideImage": "guide.png",
@@ -71,11 +71,11 @@ window.PLAYABLE_CONFIG = {
     },
   ],
   "cta_start_button": {
-    "displayTime": 1.4,
-    "buttonImage": "cta_start_button2.png",
+    "displayTime": 0.2,
+    "buttonImage": "cta_start_button3.png",
     "buttonSize": {
       "landscape": {
-        "width": 0.15,
+        "width": 0.1,
       },
       "portrait": {
         "width": 0.4,
@@ -95,18 +95,18 @@ window.PLAYABLE_CONFIG = {
   },
   "cta_end_button": {
     "displayTime": 20,
-    "buttonImage": "cta_start_button2.png",
+    "buttonImage": "cta_start_button3.png",
     "buttonSize": {
       "landscape": {
-        "width": 0.3,
+        "width": 0.2,
       },
       "portrait": {
-        "width": 0.8,
+        "width": 0.6,
       }
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.36,
+        "x": 0.41,
         "y": 0.69
       },
       "portrait": {

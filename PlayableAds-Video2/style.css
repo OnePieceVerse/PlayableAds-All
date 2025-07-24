@@ -65,7 +65,7 @@ html, body {
 /* 横屏模式下的位置 */
 @media (orientation: landscape) {
   .click-layer {
-    padding-top: 30%;
+    padding-top: 35%;
   }
   
   .rotate-icon {
@@ -303,9 +303,23 @@ html, body {
 
 /* 缩放动画 */
 @keyframes scaleGuide {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.2); }
-  100% { transform: translate(-50%, -50%) scale(1); }
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+@keyframes scaleGuideRotated {
+  0% { transform: scale(1);}
+  50% { transform: scale(1.2);}
+  100% { transform: scale(1);}
+}
+
+.button-image.scale-animation {
+  animation: scaleGuide 1.5s infinite;
+}
+
+.guide-layer.rotated .button-image.scale-animation {
+  animation: scaleGuideRotated 1.5s infinite;
 }
 
 /* 角度移动动画 */
@@ -313,10 +327,6 @@ html, body {
   0% { transform: translate(-50%, -50%); }
   50% { transform: translate(calc(-50% + var(--move-x)), calc(-50% + var(--move-y))); }
   100% { transform: translate(-50%, -50%); }
-}
-
-.button-image.scale-animation {
-  animation: scaleGuide 1.5s infinite;
 }
 
 .guide-image.angle-animation {
