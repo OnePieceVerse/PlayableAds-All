@@ -1,12 +1,12 @@
 window.PLAYABLE_CONFIG = {
   "lang": "zh",
-  "videoUrl": "jcc-prod.mp4",
+  "videoUrl": "jcc-prod2.mp4",
   "rotateTime": 1.4,
   "interactionPoints": [
     {
-      "time": 2,
+      "time": 0.6,
       "duration": 3,
-      "buttonImage": "start_button.png",
+      "buttonImage": "start_button2.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -50,13 +50,13 @@ window.PLAYABLE_CONFIG = {
   ],
   "cta_start_button": {
     "displayTime": 1.4,
-    "buttonImage": "cta_start_button.png",
+    "buttonImage": "cta_start_button2.png",
     "buttonSize": {
       "landscape": {
         "width": 0.15,
       },
       "portrait": {
-        "width": 0.4,  // 增加竖屏模式下的按钮大小
+        "width": 0.4,
       }
     },
     "buttonPosition": {
@@ -65,15 +65,15 @@ window.PLAYABLE_CONFIG = {
         "y": 0.9
       },
       "portrait": {
-        "x": 0.31,  // 修正竖屏模式下的x坐标，确保按钮可见
+        "x": 0.27,
         "y": 1.25
       }
     },
     "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
   },
   "cta_end_button": {
-    "displayTime": 21,
-    "buttonImage": "cta_end_button.png",
+    "displayTime": 20,
+    "buttonImage": "cta_start_button2.png",
     "buttonSize": {
       "landscape": {
         "width": 0.3,
