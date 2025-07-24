@@ -3,7 +3,7 @@ window.PLAYABLE_CONFIG = {
   "videoUrl": "jcc-prod-v3-c2.mp4",
   "rotateTime": 0,
   "start_screen": {
-    "enable": true,
+    "enable": false,
     "landscape": {
       "image": "start_landscape2.webp",
       "size": {
@@ -27,8 +27,8 @@ window.PLAYABLE_CONFIG = {
   },
   "interactionPoints": [
     {
-      "time": 0.2,
-      "duration": 3,
+      "time": 0,
+      "duration": 0,
       "buttonImage": "start_button.png",
       "buttonEffect": "scale",
       "buttonSize": {
@@ -72,7 +72,7 @@ window.PLAYABLE_CONFIG = {
     },
   ],
   "cta_start_button": {
-    "displayTime": 0.2,
+    "displayTime": 0,
     "buttonImage": "cta_start_button.png",
     "buttonSize": {
       "landscape": {

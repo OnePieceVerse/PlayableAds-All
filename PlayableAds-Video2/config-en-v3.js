@@ -3,6 +3,7 @@ window.PLAYABLE_CONFIG = {
   "videoUrl": "jcc-prod-v3-c2.mp4",
   "rotateTime": 0,
   "start_screen": {
+    "enable": true,
     "landscape": {
       "image": "start_landscape2.webp",
       "size": {
