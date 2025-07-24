@@ -8,7 +8,7 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "资源未找到"
   },
   "en": {
-    "title": "Game Ad",
+    "title": "Teamfight Tactics Playable Ads",
     "click_to_play": "Tap to continue",
     "rotate_tip": "Screen will rotate",
     "loading_failed": "Loading failed",
