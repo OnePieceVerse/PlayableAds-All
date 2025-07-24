@@ -68,6 +68,11 @@ function checkOrientation() {
 function setButtonSizeAndPosition(btn, sizePercent, posPercent) {
   // 获取guide-layer的尺寸
   const containerRect = guideLayer.getBoundingClientRect();
+  if (containerRect.width === 0 || containerRect.height === 0) {
+    // 容器还没准备好，下一帧再试
+    requestAnimationFrame(() => setButtonSizeAndPosition(btn, sizePercent, posPercent));
+    return;
+  }
   // 计算按钮尺寸
   let targetWidth = containerRect.width * sizePercent.width;
   const img = new window.Image();
@@ -77,13 +82,11 @@ function setButtonSizeAndPosition(btn, sizePercent, posPercent) {
     let targetHeight = targetWidth / imgRatio;
     btn.style.width = targetWidth + 'px';
     btn.style.height = targetHeight + 'px';
+    // 图片加载好后再设置位置
+    btn.style.left = (posPercent.x * 100) + '%';
+    btn.style.top = (posPercent.y * 100) + '%';
+    btn.style.transform = 'translate(-50%, -50%)';
   };
-
-  // 设置按钮位置
-  btn.style.position = 'absolute';
-  btn.style.left = (posPercent.x * 100) + '%';
-  btn.style.top = (posPercent.y * 100) + '%';
-  btn.style.transform = 'translate(-50%, -50%)';
 }
 
 // 创建引导元素

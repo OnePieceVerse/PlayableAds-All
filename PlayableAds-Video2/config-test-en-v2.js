@@ -1,6 +1,6 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
-  "videoUrl": "jcc-prod-v2-c.mp4",
+  "videoUrl": "jcc-prod-v3-c2.mp4",
   "rotateTime": 0,
   "start_screen": {
     "landscape": {
@@ -28,24 +28,24 @@ window.PLAYABLE_CONFIG = {
     {
       "time": 0.2,
       "duration": 3,
-      "buttonImage": "start_button.png",
+      "buttonImage": "start_button2.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
-          "width": 0.3
+          "width": 0.22
         },
         "portrait": {
-          "width": 0.8
+          "width": 0.65
         }
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.34,
-          "y": 0.7
+          "x": 0.39,
+          "y": 0.68
         },
         "portrait": {
           "x": 0.44,
-          "y": 0.83
+          "y": 0.8
         }
       },
       "guideImage": "guide.png",
@@ -78,17 +78,17 @@ window.PLAYABLE_CONFIG = {
         "width": 0.1,
       },
       "portrait": {
-        "width": 0.4,
+        "width": 0.3,
       }
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.1,
-        "y": 0.9
+        "x": 0.08,
+        "y": 0.90
       },
       "portrait": {
-        "x": 0.27,
-        "y": 1.25
+        "x": 0.26,
+        "y": 1.21
       }
     },
     "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
@@ -110,7 +110,7 @@ window.PLAYABLE_CONFIG = {
         "y": 0.69
       },
       "portrait": {
-        "x": 0.45,
+        "x": 0.47,
         "y": 0.8
       }
     },
