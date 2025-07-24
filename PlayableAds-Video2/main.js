@@ -71,6 +71,7 @@ function setButtonSizeAndPosition(btn, sizePercent, posPercent) {
   if (containerRect.width === 0 || containerRect.height === 0) {
     // 容器还没准备好，下一帧再试
     requestAnimationFrame(() => setButtonSizeAndPosition(btn, sizePercent, posPercent));
+    console.log('containerRect', containerRect);
     return;
   }
   // 计算按钮尺寸
@@ -86,6 +87,7 @@ function setButtonSizeAndPosition(btn, sizePercent, posPercent) {
     btn.style.left = (posPercent.x * 100) + '%';
     btn.style.top = (posPercent.y * 100) + '%';
     btn.style.transform = 'translate(-50%, -50%)';
+    btn.classList.add('visible');
   };
 }
 
@@ -226,9 +228,6 @@ function createCTAStartButton() {
   });
   
   guideLayer.appendChild(ctaButton);
-  requestAnimationFrame(() => {
-    ctaButton.classList.add('visible');
-  });
   ctaStartButtonVisible = true;
 }
 

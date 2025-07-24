@@ -6,8 +6,8 @@ DIST='.'
 IMG_LIST=()
 VIDEO_LIST=()
 # IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button.png"  "guide.png" "cta_start_button.png" "cta_end_button.png")
-# IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button.png"  "guide.png" "cta_start_button.png")
-# VIDEO_LIST=("jcc-prod-v3-c2.mp4")
+# IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button2.png"  "guide.png" "cta_start_button3.png")
+VIDEO_LIST=("jcc-prod-v3-c2.mp4")
 
 # 检查ffmpeg是否安装
 if ! command -v ffmpeg &> /dev/null; then

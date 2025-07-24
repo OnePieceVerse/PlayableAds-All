@@ -226,15 +226,15 @@ html, body {
 .guide-layer.rotating {
   opacity: 0;
 }
+/* 
 
-/* CTA按钮样式 */
 .cta-button {
   position: absolute;
   pointer-events: auto;
   cursor: pointer;
   transform: translate(-50%, -50%);
   transition: all 0.3s ease;
-  display: none; /* 默认隐藏 */
+  display: none;
   z-index: 10;
 }
 
@@ -249,12 +249,12 @@ html, body {
   transform: translate(-50%, -50%) scale(1.1);
 }
 
-/* 缩放动画 */
+
 @keyframes ctaScale {
   0% { transform: translate(-50%, -50%) scale(1); }
   50% { transform: translate(-50%, -50%) scale(1.1); }
   100% { transform: translate(-50%, -50%) scale(1); }
-}
+} */
 
 /* 竖屏模式下的旋转 */
 .guide-layer.rotated {
