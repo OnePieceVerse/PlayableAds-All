@@ -26,25 +26,48 @@ let lastTime = 0; // 记录上一次的时间
 let ctaStartButtonVisible = false;
 let ctaEndButtonVisible = false;
 
+// 显示开始屏幕
+function showStartScreen() {
+  // 清除现有内容
+  guideLayer.innerHTML = '';
+  
+  // 获取当前屏幕方向的配置
+  const orientation = isPortrait ? 'portrait' : 'landscape';
+  const startConfig = config.start_screen[orientation];
+  
+  // 创建开始屏幕图片
+  const startImage = document.createElement('img');
+  startImage.src = images[startConfig.image];
+  startImage.className = 'start-screen-image';
+  // 设置图片尺寸和位置
+  setButtonSizeAndPosition(startImage, startConfig.size, startConfig.position);
+  
+  // 添加到引导层
+  guideLayer.appendChild(startImage);
+  
+  // 显示点击层
+  clickLayer.style.display = 'flex';
+  
+  // 如果是竖屏，显示旋转提示
+  if (isPortrait) {
+    rotateHighlight.style.display = 'block';
+  } else {
+    rotateHighlight.style.display = 'none';
+  }
+}
+
 // 检查屏幕方向并显示相应提示
 function checkOrientation() {
   isPortrait = window.innerHeight > window.innerWidth;
-
-  // 暂时注释，因为视频播放时，会自动显示引导元素
-  // if (!hasStarted) {
-  //   clickLayer.style.display = 'flex';
-  //   if (isPortrait) {
-  //     rotateHighlight.style.display = 'block';
-  //   } else {
-  //     rotateHighlight.style.display = 'none';
-  //   }
-  // }
+  
+  if (!hasStarted) {
+    showStartScreen();
+  }
 }
 
 function setButtonSizeAndPosition(btn, sizePercent, posPercent) {
   // 获取guide-layer的尺寸
   const containerRect = guideLayer.getBoundingClientRect();
-  
   // 计算按钮尺寸
   let targetWidth = containerRect.width * sizePercent.width;
   const img = new window.Image();
@@ -297,6 +320,12 @@ function checkInteractionPoints() {
 function playVideo() {
   lastTime = video.currentTime;
 
+  // 移除开始屏幕图片
+  const startImage = guideLayer.querySelector('.start-screen-image');
+  if (startImage) {
+    startImage.remove();
+  }
+
   video.play().then(() => {
     hasStarted = true;
     clickLayer.style.display = 'none';
@@ -313,7 +342,7 @@ function playVideo() {
         // 提前显示引导元素
         setTimeout(() => {
           guideLayer.classList.remove('rotating');
-        }, 300); 
+        }, 300);
       }, config.rotateTime * 1000);
     }
   }).catch(error => {
@@ -412,6 +441,12 @@ window.addEventListener('resize', () => {
 
   // 如果方向确实发生了变化
   if (wasPortrait !== isPortrait) {
+    // 如果还没开始播放，更新开始屏幕
+    if (!hasStarted) {
+      showStartScreen();
+      return;
+    }
+
     // 先隐藏引导元素
     guideLayer.classList.add('rotating');
 
@@ -434,10 +469,6 @@ window.addEventListener('resize', () => {
       // 如果视频正在播放且有交互点，显示引导元素
       else if (hasStarted && currentInteractionPoint) {
         createGuideElements(currentInteractionPoint);
-      }
-      // 如果视频还未开始，显示开始提示
-      else if (!hasStarted) {
-        checkOrientation();
       }
       // 移除旋转中状态
       guideLayer.classList.remove('rotating');

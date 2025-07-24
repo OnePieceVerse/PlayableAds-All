@@ -1,20 +1,18 @@
 window.PLAYABLE_LANG = {
-    'zh': {
-        'title': 'Playable互动广告',
-        'click_to_play': '点击屏幕开始体验',
-        'rotate_tip': '即将旋转获得最佳体验',
-        'play_failed': '播放失败，请重试',
-        'click_to_replay': '点击重新播放',
-        'loading_failed': '视频加载失败，请重试',
-        'resource_not_found': '资源未找到',
-    },
-    'en': {
-        'title': 'Playable Interactive Ad',
-        'click_to_play': 'Click to Start',
-        'rotate_tip': 'Rotating for Better Experience',
-        'play_failed': 'Play Failed, Try Again',
-        'click_to_replay': 'Click to Replay',
-        'loading_failed': 'Video Loading Failed, Try Again',
-        'resource_not_found': 'Resource Not Found',
-    }
+  "zh": {
+    "title": "游戏广告",
+    "click_to_play": "点击屏幕继续",
+    "rotate_tip": "屏幕即将旋转",
+    "loading_failed": "加载失败",
+    "play_failed": "播放失败",
+    "resource_not_found": "资源未找到"
+  },
+  "en": {
+    "title": "Game Ad",
+    "click_to_play": "Tap to continue",
+    "rotate_tip": "Screen will rotate",
+    "loading_failed": "Loading failed",
+    "play_failed": "Play failed",
+    "resource_not_found": "Resource not found"
+  }
 }; 

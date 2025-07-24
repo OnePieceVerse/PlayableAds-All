@@ -1,7 +1,29 @@
 window.PLAYABLE_CONFIG = {
-  "lang": "zh",
+  "lang": "en",
   "videoUrl": "jcc-prod2.mp4",
-  "rotateTime": 1.4,
+  "rotateTime": 0,
+  "start_screen": {
+    "landscape": {
+      "image": "start_landscape.png",
+      "size": {
+        "width": 1
+      },
+      "position": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "portrait": {
+      "image": "start_portrait.png",
+      "size": {
+        "width": 1
+      },
+      "position": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
   "interactionPoints": [
     {
       "time": 0.6,
