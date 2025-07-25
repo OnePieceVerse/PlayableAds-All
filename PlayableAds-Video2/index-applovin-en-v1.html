@@ -577,7 +577,7 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "资源未找到"
   },
   "en": {
-    "title": "Game Ad",
+    "title": "Teamfight Tactics Playable Ads",
     "click_to_play": "Tap to continue",
     "rotate_tip": "Screen will rotate",
     "loading_failed": "Loading failed",
@@ -599,7 +599,9 @@ window.PLAYABLE_CONFIG = {
   "lang": "en",
   "videoUrl": "jcc-prod-v3-c2.mp4",
   "rotateTime": 0,
+  "volume": 0.2,
   "start_screen": {
+    "enable": true,
     "landscape": {
       "image": "start_landscape2.webp",
       "size": {
@@ -744,6 +746,10 @@ let lastTime = 0; // 记录上一次的时间
 let ctaStartButtonVisible = false;
 let ctaEndButtonVisible = false;
 
+function isDisplayStartScreen() {
+  return config.start_screen && config.start_screen.enable;
+}
+
 // 显示开始屏幕
 function showStartScreen() {
   // 清除现有内容
@@ -778,7 +784,7 @@ function showStartScreen() {
 function checkOrientation() {
   isPortrait = window.innerHeight > window.innerWidth;
   
-  if (!hasStarted) {
+  if (!hasStarted && isDisplayStartScreen() === true) {
     showStartScreen();
   }
 }
@@ -789,7 +795,6 @@ function setButtonSizeAndPosition(btn, sizePercent, posPercent) {
   if (containerRect.width === 0 || containerRect.height === 0) {
     // 容器还没准备好，下一帧再试
     requestAnimationFrame(() => setButtonSizeAndPosition(btn, sizePercent, posPercent));
-    console.log('containerRect', containerRect);
     return;
   }
   // 计算按钮尺寸
@@ -830,9 +835,13 @@ function createGuideElements(point) {
   buttonImage.className = 'button-image';
 
   // 使用对应方向的按钮尺寸和位置
-  const buttonSize = point.buttonSize[orientation];
-  const buttonPosition = point.buttonPosition[orientation];
-
+  let buttonSize = point.buttonSize[orientation];
+  let buttonPosition = point.buttonPosition[orientation];
+  // 为了适配竖屏时，没有首页图片时，CTA按钮的位置
+  if (isPortrait && !hasStarted && isDisplayStartScreen() === false) {
+    buttonSize = point.buttonSize['landscape'];
+    buttonPosition = point.buttonPosition['landscape'];
+  }
   setButtonSizeAndPosition(buttonImage, buttonSize, buttonPosition);
 
   if (point.buttonEffect === 'scale') {
@@ -845,8 +854,13 @@ function createGuideElements(point) {
   guideImage.className = 'guide-image';
 
   // 使用对应方向的引导尺寸和位置
-  const guideSize = point.guideSize[orientation];
-  const guidePosition = point.guidePosition[orientation];
+  let guideSize = point.guideSize[orientation];
+  let guidePosition = point.guidePosition[orientation];
+  // 为了适配竖屏时，没有首页图片时，CTA按钮的位置
+  if (isPortrait && !hasStarted && isDisplayStartScreen() === false) {
+    guideSize = point.guideSize['landscape'];
+    guidePosition = point.guidePosition['landscape'];
+  }
   setButtonSizeAndPosition(guideImage, guideSize, guidePosition);
 
   // 添加动画
@@ -928,13 +942,17 @@ function createCTAStartButton() {
   ctaButton.src = images[ctaConfig.buttonImage];
 
   // 设置尺寸和位置
-  const buttonSize = ctaConfig.buttonSize[orientation];
-  const buttonPosition = ctaConfig.buttonPosition[orientation];
+  let buttonSize = ctaConfig.buttonSize[orientation];
+  let buttonPosition = ctaConfig.buttonPosition[orientation];
+  // 为了适配竖屏时，没有首页图片时，CTA按钮的位置
+  if (isPortrait && !hasStarted && isDisplayStartScreen() === false) {
+    buttonSize = ctaConfig.buttonSize['landscape'];
+    buttonPosition = ctaConfig.buttonPosition['landscape'];
+  }
   setButtonSizeAndPosition(ctaButton, buttonSize, buttonPosition);
   
   ctaButton.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('cta click', ctaConfig.url);
     if (window.mraid && typeof window.mraid.open === 'function') {
       window.mraid.open(ctaConfig.url);
     } else if (ctaConfig.url) {
@@ -981,7 +999,6 @@ function createCTAEndButton() {
   
   ctaButton.addEventListener('click', (e) => {
     e.preventDefault();
-    console.log('cta end click', ctaConfig.url);
     if (window.mraid && typeof window.mraid.open === 'function') {
       window.mraid.open(ctaConfig.url);
     } else if (ctaConfig.url) {
@@ -1009,10 +1026,14 @@ function hideCTAEndButton() {
 
 // 检查交互点
 function checkInteractionPoints() {
-  if (video.currentTime >= config.cta_start_button.displayTime && lastTime < config.cta_start_button.displayTime) {
+
+  // 适配checkDisplayStartScreen() === false 时，CTA 按钮的lastTime < 改为 <= 没有关系, 因为视频开始时，lastTime为0，所以需要<=
+  if (video.currentTime >= config.cta_start_button.displayTime && lastTime <= config.cta_start_button.displayTime) {
+
     createCTAStartButton();
   }
-  if (video.currentTime >= config.cta_end_button.displayTime && lastTime < config.cta_end_button.displayTime) {
+  // 适配checkDisplayStartScreen() === false 时，CTA 按钮的lastTime < 改为 <= 没有关系, 因为视频开始时，lastTime为0，所以需要<=
+  if (video.currentTime >= config.cta_end_button.displayTime && lastTime <= config.cta_end_button.displayTime) {
     createCTAEndButton();
   }
   if (!config.interactionPoints) return;
@@ -1022,7 +1043,8 @@ function checkInteractionPoints() {
   // 遍历所有交互点
   for (const point of config.interactionPoints) {
     // 如果当前时间大于等于交互点时间，并且上一次时间小于交互点时间，说明需要显示引导元素
-    if (currentTime >= point.time && lastTime < point.time && currentInteractionPoint !== point) {
+    // 适配checkDisplayStartScreen() === false 时，lastTime < point.time的条件修改增加不需要首页图片时的判断(checkDisplayStartScreen() === false && currentTime === 0 && lastTime <= point.time))
+    if (currentTime >= point.time && (lastTime < point.time || (isDisplayStartScreen() === false && currentTime === 0 && lastTime <= point.time)) && currentInteractionPoint !== point) {
       currentInteractionPoint = point;
       createGuideElements(point);
     }
@@ -1112,6 +1134,7 @@ updatePageText();
 
 // 初始化视频
 video.src = base64Video;
+video.volume = config.volume;
 video.load();
 
 // 视频时间更新事件
@@ -1158,11 +1181,10 @@ document.addEventListener('click', () => {
 window.addEventListener('resize', () => {
   const wasPortrait = isPortrait;
   isPortrait = window.innerHeight > window.innerWidth;
-
   // 如果方向确实发生了变化
   if (wasPortrait !== isPortrait) {
     // 如果还没开始播放，更新开始屏幕
-    if (!hasStarted) {
+    if (!hasStarted && isDisplayStartScreen() === true) {
       showStartScreen();
       return;
     }
@@ -1170,7 +1192,10 @@ window.addEventListener('resize', () => {
     // 先隐藏引导元素
     guideLayer.classList.add('rotating');
 
-    if (isPortrait) {
+    if(!hasStarted && isDisplayStartScreen() === false) {
+      createGuideElements(currentInteractionPoint);
+    }
+    if (isPortrait && hasStarted) {
       // 竖屏：添加旋转
       video.classList.add('rotated');
       guideLayer.classList.add('rotated');

@@ -577,7 +577,7 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "资源未找到"
   },
   "en": {
-    "title": "Game Ad",
+    "title": "Teamfight Tactics Playable Ads",
     "click_to_play": "Tap to continue",
     "rotate_tip": "Screen will rotate",
     "loading_failed": "Loading failed",
@@ -599,6 +599,7 @@ window.PLAYABLE_CONFIG = {
   "lang": "en",
   "videoUrl": "jcc-prod-v3-c2.mp4",
   "rotateTime": 0,
+  "volume": 0.2,
   "start_screen": {
     "enable": false,
     "landscape": {
@@ -749,16 +750,6 @@ function isDisplayStartScreen() {
   return config.start_screen && config.start_screen.enable;
 }
 
-// function getButtonSizeAndPosition(point, orientation) {
-//   const containerRect = guideLayer.getBoundingClientRect();
-//   if (containerRect.width > containerRect.width)
-//   let buttonSize = point.buttonSize[orientation];
-//   let buttonPosition = point.buttonPosition[orientation];
-//   if (isPortrait && !hasStarted && checkDisplayStartScreen() === false) {
-//     buttonSize = point.buttonSize['landscape'];
-//     buttonPosition = point.buttonPosition['landscape'];
-//   }
-// }
 // 显示开始屏幕
 function showStartScreen() {
   // 清除现有内容
@@ -1036,11 +1027,12 @@ function hideCTAEndButton() {
 // 检查交互点
 function checkInteractionPoints() {
 
-  // CTA 按钮的lastTime < 改为 <= 没有关系, 因为视频开始时，lastTime为0，所以需要<=
+  // 适配checkDisplayStartScreen() === false 时，CTA 按钮的lastTime < 改为 <= 没有关系, 因为视频开始时，lastTime为0，所以需要<=
   if (video.currentTime >= config.cta_start_button.displayTime && lastTime <= config.cta_start_button.displayTime) {
 
     createCTAStartButton();
   }
+  // 适配checkDisplayStartScreen() === false 时，CTA 按钮的lastTime < 改为 <= 没有关系, 因为视频开始时，lastTime为0，所以需要<=
   if (video.currentTime >= config.cta_end_button.displayTime && lastTime <= config.cta_end_button.displayTime) {
     createCTAEndButton();
   }
@@ -1051,7 +1043,7 @@ function checkInteractionPoints() {
   // 遍历所有交互点
   for (const point of config.interactionPoints) {
     // 如果当前时间大于等于交互点时间，并且上一次时间小于交互点时间，说明需要显示引导元素
-    // lastTime < point.time的条件修改增加不需要首页图片时的判断(checkDisplayStartScreen() === false && currentTime === 0 && lastTime <= point.time))
+    // 适配checkDisplayStartScreen() === false 时，lastTime < point.time的条件修改增加不需要首页图片时的判断(checkDisplayStartScreen() === false && currentTime === 0 && lastTime <= point.time))
     if (currentTime >= point.time && (lastTime < point.time || (isDisplayStartScreen() === false && currentTime === 0 && lastTime <= point.time)) && currentInteractionPoint !== point) {
       currentInteractionPoint = point;
       createGuideElements(point);
@@ -1142,11 +1134,11 @@ updatePageText();
 
 // 初始化视频
 video.src = base64Video;
+video.volume = config.volume;
 video.load();
 
 // 视频时间更新事件
 video.addEventListener('timeupdate', checkInteractionPoints);
-// checkInteractionPoints();
 
 // 视频结束处理
 video.addEventListener('ended', () => {

@@ -414,6 +414,7 @@ updatePageText();
 
 // 初始化视频
 video.src = base64Video;
+video.volume = config.volume;
 video.load();
 
 // 视频时间更新事件
