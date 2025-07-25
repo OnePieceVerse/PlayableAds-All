@@ -1,8 +1,8 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
-  "videoUrl": "jcc-prod-v3-c2.mp4",
+  "videoUrl": "jcc-prod-v3-c2-vol5.mp4",
   "rotateTime": 0,
-  "volume": 0.02,
+  "volume": 0.2,
   "start_screen": {
     "enable": false,
     "landscape": {
