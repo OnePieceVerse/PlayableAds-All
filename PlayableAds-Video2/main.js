@@ -341,7 +341,7 @@ function checkInteractionPoints() {
 // 播放控制
 function playVideo() {
   lastTime = video.currentTime;
-
+  video.volume = config.volume;
   // 移除开始屏幕图片
   const startImage = guideLayer.querySelector('.start-screen-image');
   if (startImage) {
@@ -414,7 +414,6 @@ updatePageText();
 
 // 初始化视频
 video.src = base64Video;
-video.volume = config.volume;
 video.load();
 
 // 视频时间更新事件

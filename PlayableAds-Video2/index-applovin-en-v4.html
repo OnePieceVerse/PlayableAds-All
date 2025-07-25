@@ -599,7 +599,7 @@ window.PLAYABLE_CONFIG = {
   "lang": "en",
   "videoUrl": "jcc-prod-v3-c2.mp4",
   "rotateTime": 0,
-  "volume": 0.05,
+  "volume": 0.02,
   "start_screen": {
     "enable": false,
     "landscape": {
@@ -1061,7 +1061,7 @@ function checkInteractionPoints() {
 // 播放控制
 function playVideo() {
   lastTime = video.currentTime;
-
+  video.volume = config.volume;
   // 移除开始屏幕图片
   const startImage = guideLayer.querySelector('.start-screen-image');
   if (startImage) {
@@ -1134,7 +1134,6 @@ updatePageText();
 
 // 初始化视频
 video.src = base64Video;
-video.volume = config.volume;
 video.load();
 
 // 视频时间更新事件
