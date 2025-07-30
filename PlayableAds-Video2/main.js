@@ -431,6 +431,9 @@ video.load();
 // 视频时间更新事件
 video.addEventListener('timeupdate', checkInteractionPoints);
 
+// apple设备上需要主动调用一次，否则无法触发timeupdate事件
+checkInteractionPoints();
+
 // 视频结束处理
 video.addEventListener('ended', () => {
   rotateHighlight.style.display = 'none';
@@ -463,7 +466,8 @@ function startVideoDirectly() {
 
 // 添加直接点击屏幕播放
 document.addEventListener('click', () => {
-  if (!hasStarted && !startVideoDirectly()) {
+  // if (!hasStarted && !startVideoDirectly()) {
+  if (!hasStarted) {
     playVideo();
   }
 });
@@ -483,7 +487,7 @@ window.addEventListener('resize', () => {
     // 先隐藏引导元素
     guideLayer.classList.add('rotating');
 
-    if (!hasStarted && isDisplayStartScreen() === false) {
+    if (!hasStarted && isDisplayStartScreen() === false && currentInteractionPoint) {
       createGuideElements(currentInteractionPoint);
     }
     if (isPortrait && isLandscapeVideo() && hasStarted) {

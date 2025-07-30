@@ -110,7 +110,7 @@ window.PLAYABLE_CONFIG = {
           "y": 0.22
         },
         "portrait": {
-          "x": 0.72,
+          "x": 0.71,
           "y": 0.08
         }
       },
@@ -222,8 +222,8 @@ window.PLAYABLE_CONFIG = {
         "y": 0.9
       },
       "portrait": {
-        "x": 0,
-        "y": 0
+        "x": 0.72,
+        "y": 1.25
       }
     },
     "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
