@@ -2,7 +2,7 @@
 set -e
 
 # 语言，可配置
-VERSION='en-v6'
+VERSION='en-v4'
 # 目标配置文件，注意index.html中默认的配置，若不是config-test-zh.js，会替换失败
 CONFIG="config-${VERSION}.js"
 TARGET="index-applovin-${VERSION}.html"
