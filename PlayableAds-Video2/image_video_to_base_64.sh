@@ -7,10 +7,14 @@ DIST='.'
 IMG_LIST=()
 # IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button.png"  "guide.png" "cta_start_button.png" "cta_end_button.png")
 # IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button2.png"  "guide.png" "cta_start_button3.png")
-IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button2.png"  "guide.png" "cta_start_button2.png")
+# IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button2.png"  "guide.png" "cta_start_button2.png")
+# IMG_LIST=("start_landscape2.webp" "start_portrait2.webp" "start_button.png"  "guide.png" "cta_start_button.png" "cta_end_button.png")
+IMG_LIST=("start_button_transparent.png"  "guide.png" "cta_start_button.png" "cta_end_button.png")
 
-# VIDEO_LIST=()
-VIDEO_LIST=("jcc-prod-v3-c2-vol5.mp4")
+VIDEO_LIST=()
+# VIDEO_LIST=("t-10s.mp4")
+# VIDEO_LIST=("jcc-prod-v3-c2-vol5.mp4")
+VIDEO_LIST=("jcc-prod-three-star.mp4")
 
 # 检查ffmpeg是否安装
 if ! command -v ffmpeg &> /dev/null; then

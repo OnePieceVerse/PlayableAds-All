@@ -1,7 +1,7 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "landscape",
-  "videoUrl": "jcc-prod-v3-c2-vol5.mp4",
+  "videoUrl": "jcc-prod-three-star.mp4",
   "rotateTime": 0,
   "volume": 1,
   "start_screen": {
@@ -31,7 +31,7 @@ window.PLAYABLE_CONFIG = {
     {
       "time": 0,
       "duration": 0,
-      "buttonImage": "start_button.png",
+      "buttonImage": "start_button_transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -43,8 +43,8 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.34,
-          "y": 0.7
+          "x": 0.69,
+          "y": 0.22
         },
         "portrait": {
           "x": 0.44,
@@ -62,12 +62,100 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.56,
-          "y": 0.72
+          "x": 0.86,
+          "y": 0.22
         },
         "portrait": {
           "x": 0.53,
           "y": 0.88  // 调整引导图位置
+        }
+      },
+      "swipeDirection": "slide-bounce"
+    },
+    {
+      "time": 1.7,
+      "duration": 0,
+      "buttonImage": "start_button_transparent.png",
+      "buttonEffect": "scale",
+      "buttonSize": {
+        "landscape": {
+          "width": 0.3
+        },
+        "portrait": {
+          "width": 0.8
+        }
+      },
+      "buttonPosition": {
+        "landscape": {
+          "x": 0.19,
+          "y": 0.22
+        },
+        "portrait": {
+          "x": 0.35,
+          "y": 0.0
+        }
+      },
+      "guideImage": "guide.png",
+      "guideSize": {
+        "landscape": {
+          "width": 0.1
+        },
+        "portrait": {
+          "width": 0.3
+        }
+      },
+      "guidePosition": {
+        "landscape": {
+          "x": 0.26,
+          "y": 0.22
+        },
+        "portrait": {
+          "x": 0.38,
+          "y": 0
+        }
+      },
+      "swipeDirection": "slide-bounce"
+    },
+    {
+      "time": 4.7,
+      "duration": 0,
+      "buttonImage": "start_button_transparent.png",
+      "buttonEffect": "scale",
+      "buttonSize": {
+        "landscape": {
+          "width": 0.3
+        },
+        "portrait": {
+          "width": 0.8
+        }
+      },
+      "buttonPosition": {
+        "landscape": {
+          "x": -0.06,
+          "y": 0.22
+        },
+        "portrait": {
+          "x": 0.22,
+          "y": 0
+        }
+      },
+      "guideImage": "guide.png",
+      "guideSize": {
+        "landscape": {
+          "width": 0.1
+        },
+        "portrait": {
+          "width": 0.3
+        }
+      },
+      "guidePosition": {
+        "landscape": {
+          "x": 0.06,
+          "y": 0.22
+        },
+        "portrait": {
+          "x": 0.27,
+          "y": 0
         }
       },
       "swipeDirection": "slide-bounce"
@@ -86,35 +174,35 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.1,
+        "x": 0.9,
         "y": 0.9
       },
       "portrait": {
-        "x": 0.27,
+        "x": 0.72,
         "y": 1.25
       }
     },
     "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
   },
   "cta_end_button": {
-    "displayTime": 20,
+    "displayTime": 9,
     "buttonImage": "cta_end_button.png",
     "buttonSize": {
       "landscape": {
         "width": 0.3,
       },
       "portrait": {
-        "width": 0.8,
+        "width": 0.9,
       }
     },
     "buttonPosition": {
       "landscape": {
         "x": 0.36,
-        "y": 0.69
+        "y": 0.78
       },
       "portrait": {
         "x": 0.45,
-        "y": 0.8
+        "y": 1
       }
     },
     "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
