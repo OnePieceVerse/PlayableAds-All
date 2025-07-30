@@ -43,8 +43,8 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.35,
-          "y": 0.72
+          "x": 0.4,
+          "y": 0.78
         },
         "portrait": {
           "x": 0,
@@ -62,8 +62,8 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.50,
-          "y": 0.73
+          "x": 0.56,
+          "y": 0.8
         },
         "portrait": {
           "x": 0,
@@ -219,11 +219,11 @@ window.PLAYABLE_CONFIG = {
     "buttonPosition": {
       "landscape": {
         "x": 0.9,
-        "y": 0.84
+        "y": 0.9
       },
       "portrait": {
-        "x": 0.72,
-        "y": 1.25
+        "x": 0,
+        "y": 0
       }
     },
     "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
