@@ -1,7 +1,7 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "landscape",
-  "videoUrl": "jcc-prod-three-star-v3-vol5.mp4",
+  "videoUrl": "jcc-prod-three-star-v3-vol20.mp4",
   "rotateTime": 0,
   "volume": 1,
   "start_screen": {
@@ -117,7 +117,7 @@ window.PLAYABLE_CONFIG = {
       "swipeDirection": "slide-bounce"
     },
     {
-      "time": 2.5,
+      "time": 2.6,
       "duration": 0,
       "buttonImage": "start_button_transparent.png",
       "buttonEffect": "scale",
