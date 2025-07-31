@@ -16,7 +16,8 @@ VIDEO_LIST=()
 # VIDEO_LIST=("t-10s.mp4")
 # VIDEO_LIST=("jcc-prod-v3-c2-vol5.mp4")
 # VIDEO_LIST=("jcc-prod-three-star.mp4")
-VIDEO_LIST=("jcc-prod-three-star-v3.mp4")
+# VIDEO_LIST=("jcc-prod-three-star-v3.mp4")
+VIDEO_LIST=("jcc-prod-three-star-v3-vol5.mp4")
 
 # 检查ffmpeg是否安装
 if ! command -v ffmpeg &> /dev/null; then

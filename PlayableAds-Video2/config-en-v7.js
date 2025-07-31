@@ -1,7 +1,7 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "landscape",
-  "videoUrl": "jcc-prod-three-star-v3.mp4",
+  "videoUrl": "jcc-prod-three-star-v3-vol5.mp4",
   "rotateTime": 0,
   "volume": 1,
   "start_screen": {
@@ -218,7 +218,7 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.9,
+        "x": 0.81,
         "y": 0.9
       },
       "portrait": {
