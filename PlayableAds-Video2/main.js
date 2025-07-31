@@ -136,7 +136,6 @@ function createGuideElements(point) {
   if (point.buttonEffect === 'scale') {
     buttonImage.classList.add('scale-animation');
   }
-
   // 添加按钮点击事件
   buttonImage.addEventListener('click', (e) => {
     if (point.clickEffectImage) {
@@ -329,13 +328,14 @@ function checkInteractionPoints() {
   if (!config.interactionPoints) return;
 
   const currentTime = video.currentTime;
-
+  console.log('currentTime', currentTime);
   // 遍历所有交互点
   for (const point of config.interactionPoints) {
     // 如果当前时间大于等于交互点时间，并且上一次时间小于交互点时间，说明需要显示引导元素
     // 适配checkDisplayStartScreen() === false 时，lastTime < point.time的条件修改增加不需要首页图片时的判断(checkDisplayStartScreen() === false && currentTime === 0 && lastTime <= point.time))
     if (currentTime >= point.time && (lastTime < point.time || (currentTime === 0 && lastTime <= point.time)) && currentInteractionPoint !== point) {
       currentInteractionPoint = point;
+      console.log('currentTime', currentTime, 'point.time', point.time, 'lastTime', lastTime);
       createGuideElements(point);
     }
     // 如果当前时间和上一次时间跨过了交互点时间，说明需要暂停
