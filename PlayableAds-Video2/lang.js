@@ -8,7 +8,7 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "资源未找到"
   },
   "en": {
-    "title": "Teamfight Tactics Playable Ads",
+    "title": "Golden spatula Playable Ads",
     "click_to_play": "Tap to continue",
     "rotate_tip": "Screen will rotate",
     "loading_failed": "Loading failed",
@@ -16,7 +16,7 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "Resource not found"
   },
   "th": {
-    "title": "โฆษณาแบบโต้ตอบของเกม Spatula Wars",
+    "title": "โฆษณาที่เล่นได้ของ Golden Spatula",
     "click_to_play": "คลิกบนหน้าจอเพื่อดำเนินการต่อ",
     "rotate_tip": "หน้าจอกำลังจะหมุน",
     "loading_failed": "การโหลดล้มเหลว",

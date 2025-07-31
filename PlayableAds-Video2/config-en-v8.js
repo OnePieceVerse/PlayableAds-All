@@ -1,7 +1,7 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "landscape",
-  "videoUrl": "jcc-prod-three-star.mp4",
+  "videoUrl": "jcc-prod-three-star-v4-vol20.mp4",
   "rotateTime": 0,
   "volume": 1,
   "start_screen": {
@@ -43,12 +43,56 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
+          "x": 0.4,
+          "y": 0.78
+        },
+        "portrait": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "guideImage": "guide.png",
+      "guideSize": {
+        "landscape": {
+          "width": 0.1
+        },
+        "portrait": {
+          "width": 0.3
+        }
+      },
+      "guidePosition": {
+        "landscape": {
+          "x": 0.56,
+          "y": 0.8
+        },
+        "portrait": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "swipeDirection": "slide-bounce"
+    },
+    {
+      "time": 0.5,
+      "duration": 0,
+      "buttonImage": "start_button_transparent.png",
+      "buttonEffect": "scale",
+      "buttonSize": {
+        "landscape": {
+          "width": 0.3
+        },
+        "portrait": {
+          "width": 0.8
+        }
+      },
+      "buttonPosition": {
+        "landscape": {
           "x": 0.69,
           "y": 0.22
         },
         "portrait": {
-          "x": 0.44,
-          "y": 0.83
+          "x": 0.64,
+          "y": 0.03
         }
       },
       "guideImage": "guide.png",
@@ -66,14 +110,14 @@ window.PLAYABLE_CONFIG = {
           "y": 0.22
         },
         "portrait": {
-          "x": 0.53,
-          "y": 0.88  // 调整引导图位置
+          "x": 0.71,
+          "y": 0.08
         }
       },
       "swipeDirection": "slide-bounce"
     },
     {
-      "time": 1.7,
+      "time": 2.7,
       "duration": 0,
       "buttonImage": "start_button_transparent.png",
       "buttonEffect": "scale",
@@ -117,7 +161,7 @@ window.PLAYABLE_CONFIG = {
       "swipeDirection": "slide-bounce"
     },
     {
-      "time": 4.7,
+      "time": 5.8,
       "duration": 0,
       "buttonImage": "start_button_transparent.png",
       "buttonEffect": "scale",
@@ -174,7 +218,7 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.9,
+        "x": 0.81,
         "y": 0.9
       },
       "portrait": {
@@ -185,7 +229,7 @@ window.PLAYABLE_CONFIG = {
     "url": "https://apps.apple.com/th/app/golden-spatula/id6661023265"
   },
   "cta_end_button": {
-    "displayTime": 9,
+    "displayTime": 10,
     "buttonImage": "cta_end_button.png",
     "buttonSize": {
       "landscape": {

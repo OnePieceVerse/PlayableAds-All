@@ -226,7 +226,7 @@ window.PLAYABLE_CONFIG = {
         "y": 1.25
       }
     },
-    "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
+    "url": "https://apps.apple.com/th/app/golden-spatula/id6661023265"
   },
   "cta_end_button": {
     "displayTime": 10,
@@ -249,6 +249,6 @@ window.PLAYABLE_CONFIG = {
         "y": 1
       }
     },
-    "url": "https://apps.apple.com/th/app/tft-teamfight-tactics/id1480616748?l=th"
+    "url": "https://apps.apple.com/th/app/golden-spatula/id6661023265"
   }
 };
