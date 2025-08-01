@@ -1,15 +1,43 @@
 #!/bin/bash
-set -e
+# set -e
+ENV='dev'
+# ENV='prod'
+# PARTNER_NAME="abyss-voyage"
+PARTNER_NAME="golden-spatula"
+LANG="en"
+VERSION="v1"
+MEDIA='applovin'
 
-# 语言，可配置
-VERSION='en-v8'
-# 目标配置文件，注意index.html中默认的配置，若不是config-test-zh.js，会替换失败
-CONFIG="config-${VERSION}.js"
-TARGET="index-applovin-${VERSION}.html"
+# 生成图片、视频的base64编码
+PARTNER_PATH="partners/${PARTNER_NAME}"
+CONFIG_FILE="${PARTNER_PATH}/configs/config-${LANG}-${VERSION}.js"
+
+# 检测操作系统并选择合适的 sed 命令
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    # macOS - 兼容两种格式：config-*.js 和 partners/*/configs/config-*.js
+    sed -i '' "s#<script src=\"\(config-[^\"]*\.js\|partners/[^/]*/configs/config-[^\"]*\.js\)\"></script>#<script src=\"${CONFIG_FILE}\"></script>#g" index.html
+else
+    # Linux - 兼容两种格式：config-*.js 和 partners/*/configs/config-*.js
+    sed -i "s#<script src=\"\(config-[^\"]*\.js\|partners/[^/]*/configs/config-[^\"]*\.js\)\"></script>#<script src=\"${CONFIG_FILE}\"></script>#g" index.html
+fi
+
+sh base64_assets.sh $PARTNER_PATH $CONFIG_FILE
+
+if [ "$1" == "prod" ]; then
+   ENV='prod'
+fi
+
+# 开发环境不生成html文件
+if [ "$ENV" == "dev" ]; then
+  python -m http.server 8000
+  exit 0
+fi
+
+# 生成html文件
+DIST="${PARTNER_PATH}/platforms/${MEDIA}"
+TARGET="${DIST}/index-${LANG}-${VERSION}.html"
 tmpfile=$(mktemp)
-
-
-sh image_video_to_base_64.sh
+mkdir -p $DIST
 
 awk '
   /<link rel="stylesheet" href="style.css">/ {
@@ -33,7 +61,7 @@ awk '
     print "  </script>"
     next
   }
-  /<script src="config-[^"]*"><\/script>/ {
+  /<script src="(config-[^"]*\.js|partners\/[^\/]*\/configs\/config-[^"]*\.js)"><\/script>/ {
     print "  <script>"
     while ((getline line < config_js_file) > 0) print line
     close(config_js_file)
@@ -59,7 +87,7 @@ awk '
   css_file="style.css" \
   images_js_file="images.js" \
   videos_js_file="videos.js" \
-  config_js_file="$CONFIG" \
+  config_js_file="$CONFIG_FILE" \
   lang_js_file="lang.js" \
   main_js_file="main.js" \
   index.html > $tmpfile
@@ -67,4 +95,4 @@ awk '
 mv $tmpfile $TARGET
 # npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true $tmpfile -o $TARGET
 
-echo "✅ Applovin单页面已生成：$TARGET, 配置：$CONFIG"
+echo "✅ Applovin单页面已生成：$TARGET, 配置：$CONFIG_FILE"

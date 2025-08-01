@@ -1,13 +1,13 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "landscape",
-  "videoUrl": "jcc-prod-three-star-v2.mp4",
+  "videoUrl": "golden-spatula-three-star-v2.mp4",
   "rotateTime": 0,
   "volume": 1,
   "start_screen": {
     "enable": false,
     "landscape": {
-      "image": "start_landscape2.webp",
+      "image": "golden-spatula-start-landscape.webp",
       "size": {
         "width": 1
       },
@@ -17,7 +17,7 @@ window.PLAYABLE_CONFIG = {
       }
     },
     "portrait": {
-      "image": "start_portrait2.webp",
+      "image": "golden-spatula-start-portrait.webp",
       "size": {
         "width": 1
       },
@@ -31,7 +31,7 @@ window.PLAYABLE_CONFIG = {
     {
       "time": 0,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -75,7 +75,7 @@ window.PLAYABLE_CONFIG = {
     {
       "time": 0.35,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -119,7 +119,7 @@ window.PLAYABLE_CONFIG = {
     {
       "time": 2,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -163,7 +163,7 @@ window.PLAYABLE_CONFIG = {
     {
       "time": 5,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -207,7 +207,7 @@ window.PLAYABLE_CONFIG = {
   ],
   "cta_start_button": {
     "displayTime": 0,
-    "buttonImage": "cta_start_button.png",
+    "buttonImage": "cta-start-button-v1.png",
     "buttonSize": {
       "landscape": {
         "width": 0.15,
@@ -230,7 +230,7 @@ window.PLAYABLE_CONFIG = {
   },
   "cta_end_button": {
     "displayTime": 9.3,
-    "buttonImage": "cta_end_button.png",
+    "buttonImage": "cta-end-button-v1.png",
     "buttonSize": {
       "landscape": {
         "width": 0.3,

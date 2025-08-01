@@ -1,13 +1,13 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "landscape",
-  "videoUrl": "jcc-prod-v3-c2-vol5.mp4",
+  "videoUrl": "golden-spatula-v3-c2-vol5.mp4",
   "rotateTime": 0,
   "volume": 1,
   "start_screen": {
-    "enable": false,
+    "enable": true,
     "landscape": {
-      "image": "start_landscape2.webp",
+      "image": "golden-spatula-start-landscape.webp",
       "size": {
         "width": 1
       },
@@ -17,7 +17,7 @@ window.PLAYABLE_CONFIG = {
       }
     },
     "portrait": {
-      "image": "start_portrait2.webp",
+      "image": "golden-spatula-start-portrait.webp",
       "size": {
         "width": 1
       },
@@ -29,26 +29,26 @@ window.PLAYABLE_CONFIG = {
   },
   "interactionPoints": [
     {
-      "time": 0,
-      "duration": 0,
-      "buttonImage": "start_button.png",
+      "time": 0.2,
+      "duration": 3,
+      "buttonImage": "start-button-v2.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
-          "width": 0.3
+          "width": 0.22
         },
         "portrait": {
-          "width": 0.8
+          "width": 0.65
         }
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.34,
-          "y": 0.7
+          "x": 0.39,
+          "y": 0.68
         },
         "portrait": {
           "x": 0.44,
-          "y": 0.83
+          "y": 0.8
         }
       },
       "guideImage": "guide.png",
@@ -74,46 +74,46 @@ window.PLAYABLE_CONFIG = {
     },
   ],
   "cta_start_button": {
-    "displayTime": 0,
-    "buttonImage": "cta_start_button.png",
+    "displayTime": 0.2,
+    "buttonImage": "cta_start-button-v2.png",
     "buttonSize": {
       "landscape": {
-        "width": 0.15,
+        "width": 0.1,
       },
       "portrait": {
-        "width": 0.4,
+        "width": 0.3,
       }
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.1,
-        "y": 0.9
+        "x": 0.08,
+        "y": 0.90
       },
       "portrait": {
-        "x": 0.27,
-        "y": 1.25
+        "x": 0.26,
+        "y": 1.21
       }
     },
     "url": "https://apps.apple.com/th/app/golden-spatula/id6661023265"
   },
   "cta_end_button": {
     "displayTime": 20,
-    "buttonImage": "cta_end_button.png",
+    "buttonImage": "cta_start-button-v2.png",
     "buttonSize": {
       "landscape": {
-        "width": 0.3,
+        "width": 0.2,
       },
       "portrait": {
-        "width": 0.8,
+        "width": 0.6,
       }
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.36,
+        "x": 0.41,
         "y": 0.69
       },
       "portrait": {
-        "x": 0.45,
+        "x": 0.47,
         "y": 0.8
       }
     },

@@ -1,102 +1,81 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
-  "type": "portrait",
-  "videoUrl": "abyss-voyage-v3.mp4",
-  "rotateTime": -1,
+  "type": "landscape",
+  "videoUrl": "golden-spatula-three-star-v3-vol20.mp4",
+  "rotateTime": 0,
   "volume": 1,
+  "start_screen": {
+    "enable": false,
+    "landscape": {
+      "image": "golden-spatula-start-landscape.webp",
+      "size": {
+        "width": 1
+      },
+      "position": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    "portrait": {
+      "image": "golden-spatula-start-portrait.webp",
+      "size": {
+        "width": 1
+      },
+      "position": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    }
+  },
   "interactionPoints": [
     {
       "time": 0,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
-          "width": 0.25
+          "width": 0.3
         },
         "portrait": {
-          "width": 0.5
+          "width": 0.8
         }
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.41,
-          "y": 0.59
+          "x": 0.4,
+          "y": 0.78
         },
         "portrait": {
-          "x": 0.46,
-          "y": 0.8
+          "x": 0,
+          "y": 0
         }
       },
       "guideImage": "guide.png",
       "guideSize": {
         "landscape": {
-          "width": 0.08
+          "width": 0.1
         },
         "portrait": {
-          "width": 0.15
+          "width": 0.3
         }
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.55,
-          "y": 0.59
+          "x": 0.56,
+          "y": 0.8
         },
         "portrait": {
-          "x": 0.65,
-          "y": 0.86
+          "x": 0,
+          "y": 0
         }
       },
       "swipeDirection": "slide-bounce"
     },
     {
-      "time": 0.4,
+      "time": 0.5,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
-      "buttonEffect": "scale",
-      "buttonSize": {
-        "landscape": {
-          "width": 0.2
-        },
-        "portrait": {
-          "width": 0.8
-        }
-      },
-      "buttonPosition": {
-        "landscape": {
-          "x": 0.38,
-          "y": 0.78
-        },
-        "portrait": {
-          "x": 0.08,
-          "y": 1.35
-        }
-      },
-      "guideImage": "guide.png",
-      "guideSize": {
-        "landscape": {
-          "width": 0.08
-        },
-        "portrait": {
-          "width": 0.15
-        }
-      },
-      "guidePosition": {
-        "landscape": {
-          "x": 0.49,
-          "y": 0.78
-        },
-        "portrait": {
-          "x": 0.53,
-          "y": 1.45
-        }
-      },
-      "swipeDirection": "bounce"
-    },
-    {
-      "time": 2.3,
-      "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -108,39 +87,83 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
+          "x": 0.69,
+          "y": 0.22
+        },
+        "portrait": {
+          "x": 0.64,
+          "y": 0.03
+        }
+      },
+      "guideImage": "guide.png",
+      "guideSize": {
+        "landscape": {
+          "width": 0.1
+        },
+        "portrait": {
+          "width": 0.3
+        }
+      },
+      "guidePosition": {
+        "landscape": {
+          "x": 0.86,
+          "y": 0.22
+        },
+        "portrait": {
+          "x": 0.71,
+          "y": 0.08
+        }
+      },
+      "swipeDirection": "slide-bounce"
+    },
+    {
+      "time": 2.6,
+      "duration": 0,
+      "buttonImage": "start-button-v1-transparent.png",
+      "buttonEffect": "scale",
+      "buttonSize": {
+        "landscape": {
+          "width": 0.3
+        },
+        "portrait": {
+          "width": 0.8
+        }
+      },
+      "buttonPosition": {
+        "landscape": {
+          "x": 0.19,
+          "y": 0.22
+        },
+        "portrait": {
           "x": 0.35,
-          "y": 0.66
-        },
-        "portrait": {
-          "x": 0.1,
-          "y": 1.06
+          "y": 0.0
         }
       },
       "guideImage": "guide.png",
       "guideSize": {
         "landscape": {
-          "width": 0.08
+          "width": 0.1
         },
         "portrait": {
-          "width": 0.15
+          "width": 0.3
         }
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.5,
-          "y": 0.7
+          "x": 0.26,
+          "y": 0.22
         },
         "portrait": {
-          "x": 0.51,
-          "y": 1.11
+          "x": 0.38,
+          "y": 0
         }
       },
-      "swipeDirection": "bounce"
+      "swipeDirection": "slide-bounce"
     },
     {
-      "time": 5.9,
+      "time": 5.2,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -152,65 +175,42 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.45,
-          "y": 0.5
+          "x": -0.06,
+          "y": 0.22
         },
         "portrait": {
-          "x": 0.17,
-          "y": 0.67
+          "x": 0.22,
+          "y": 0
         }
       },
       "guideImage": "guide.png",
       "guideSize": {
         "landscape": {
-          "width": 0.08
+          "width": 0.1
         },
         "portrait": {
-          "width": 0.15
+          "width": 0.3
         }
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.58,
-          "y": 0.57
+          "x": 0.06,
+          "y": 0.22
         },
         "portrait": {
-          "x": 0.77,
-          "y": 0.77
+          "x": 0.27,
+          "y": 0
         }
       },
-      "swipeDirection": "bounce"
+      "swipeDirection": "slide-bounce"
     },
   ],
   "cta_start_button": {
     "displayTime": 0,
-    "buttonImage": "cta_start_button3.png",
+    "buttonImage": "cta-start-button-v1.png",
     "buttonSize": {
       "landscape": {
-        "width": 0.1,
-      },
-      "portrait": {
-        "width": 0.2,
-      }
-    },
-    "buttonPosition": {
-      "landscape": {
-        "x": 0.1,
-        "y": 0.9
-      },
-      "portrait": {
-        "x": 0.12,
-        "y": 1.69
-      }
-    },
-    "url": "https://test.trovo.live/"
-  },
-  "cta_end_button": {
-    "displayTime": 11,
-    "buttonImage": "cta_start_button3.png",
-    "buttonSize": {
-      "landscape": {
-        "width": 0.2,
+        "width": 0.15,
       },
       "portrait": {
         "width": 0.4,
@@ -218,14 +218,37 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.4,
-        "y": 0.61
+        "x": 0.81,
+        "y": 0.9
       },
       "portrait": {
-        "x": 0.3,
-        "y": 1.03
+        "x": 0.72,
+        "y": 1.25
       }
     },
-    "url": "https://test.trovo.live/"
+    "url": "https://apps.apple.com/th/app/golden-spatula/id6661023265"
+  },
+  "cta_end_button": {
+    "displayTime": 10,
+    "buttonImage": "cta-end-button-v1.png",
+    "buttonSize": {
+      "landscape": {
+        "width": 0.3,
+      },
+      "portrait": {
+        "width": 0.9,
+      }
+    },
+    "buttonPosition": {
+      "landscape": {
+        "x": 0.36,
+        "y": 0.78
+      },
+      "portrait": {
+        "x": 0.45,
+        "y": 1
+      }
+    },
+    "url": "https://apps.apple.com/th/app/golden-spatula/id6661023265"
   }
 };

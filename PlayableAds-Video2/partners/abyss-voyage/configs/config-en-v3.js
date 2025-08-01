@@ -1,14 +1,14 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "portrait",
-  "videoUrl": "abyss-voyage-v2.mp4",
+  "videoUrl": "abyss-voyage-v3.mp4",
   "rotateTime": -1,
   "volume": 1,
   "interactionPoints": [
     {
       "time": 0,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -50,9 +50,9 @@ window.PLAYABLE_CONFIG = {
       "swipeDirection": "slide-bounce"
     },
     {
-      "time": 0.6,
+      "time": 0.4,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -94,9 +94,53 @@ window.PLAYABLE_CONFIG = {
       "swipeDirection": "bounce"
     },
     {
-      "time": 4.6,
+      "time": 2.3,
       "duration": 0,
-      "buttonImage": "start_button_transparent.png",
+      "buttonImage": "start-button-v1-transparent.png",
+      "buttonEffect": "scale",
+      "buttonSize": {
+        "landscape": {
+          "width": 0.3
+        },
+        "portrait": {
+          "width": 0.8
+        }
+      },
+      "buttonPosition": {
+        "landscape": {
+          "x": 0.35,
+          "y": 0.66
+        },
+        "portrait": {
+          "x": 0.1,
+          "y": 1.06
+        }
+      },
+      "guideImage": "guide.png",
+      "guideSize": {
+        "landscape": {
+          "width": 0.08
+        },
+        "portrait": {
+          "width": 0.15
+        }
+      },
+      "guidePosition": {
+        "landscape": {
+          "x": 0.5,
+          "y": 0.7
+        },
+        "portrait": {
+          "x": 0.51,
+          "y": 1.11
+        }
+      },
+      "swipeDirection": "bounce"
+    },
+    {
+      "time": 5.9,
+      "duration": 0,
+      "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
@@ -140,7 +184,7 @@ window.PLAYABLE_CONFIG = {
   ],
   "cta_start_button": {
     "displayTime": 0,
-    "buttonImage": "cta_start_button3.png",
+    "buttonImage": "cta-start-button-v3.png",
     "buttonSize": {
       "landscape": {
         "width": 0.1,
@@ -156,14 +200,14 @@ window.PLAYABLE_CONFIG = {
       },
       "portrait": {
         "x": 0.12,
-        "y": 1.72
+        "y": 1.69
       }
     },
     "url": "https://test.trovo.live/"
   },
   "cta_end_button": {
-    "displayTime": 8.6,
-    "buttonImage": "cta_start_button3.png",
+    "displayTime": 11,
+    "buttonImage": "cta-start-button-v3.png",
     "buttonSize": {
       "landscape": {
         "width": 0.2,
