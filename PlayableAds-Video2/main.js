@@ -1,6 +1,26 @@
 const config = window.PLAYABLE_CONFIG;
 const images = window.PLAYABLE_IMAGES;
-const lang = window.PLAYABLE_LANG;
+
+// 合并公共语言和合作伙伴特定语言
+const publicLang = window.PLAYABLE_LANG || {};
+const partnerLang = window.PARTNER_LANG || {};
+
+// 合并语言配置，合作伙伴配置优先
+const lang = {};
+for (const langKey in publicLang) {
+  lang[langKey] = { ...publicLang[langKey] };
+  // 如果合作伙伴有该语言的配置，则覆盖公共配置
+  if (partnerLang[langKey]) {
+    lang[langKey] = { ...lang[langKey], ...partnerLang[langKey] };
+  }
+}
+
+// 添加合作伙伴独有的语言
+for (const langKey in partnerLang) {
+  if (!lang[langKey]) {
+    lang[langKey] = { ...partnerLang[langKey] };
+  }
+}
 
 // 当前语言，可以根据需要切换
 let currentLang = config.lang || 'en';

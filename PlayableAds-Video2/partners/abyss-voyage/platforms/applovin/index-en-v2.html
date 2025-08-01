@@ -233,35 +233,6 @@ html, body {
 .guide-layer.rotating {
   opacity: 0;
 }
-/* 
-
-.cta-button {
-  position: absolute;
-  pointer-events: auto;
-  cursor: pointer;
-  transform: translate(-50%, -50%);
-  transition: all 0.3s ease;
-  display: none;
-  z-index: 10;
-}
-
-.cta-button.visible {
-  display: block;
-  animation: ctaScale 1.5s ease-in-out infinite;
-  opacity: 1;
-}
-
-.cta-button:hover {
-  animation: none;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-
-@keyframes ctaScale {
-  0% { transform: translate(-50%, -50%) scale(1); }
-  50% { transform: translate(-50%, -50%) scale(1.1); }
-  100% { transform: translate(-50%, -50%) scale(1); }
-} */
 
 /* 竖屏模式下的旋转 */
 .guide-layer.rotated {
@@ -562,7 +533,7 @@ window.PLAYABLE_VIDEOS = {
   <script>
 window.PLAYABLE_LANG = {
   "zh": {
-    "title": "金铲铲之战游戏互动广告",
+    "title": "游戏互动广告",
     "click_to_play": "点击屏幕继续",
     "rotate_tip": "屏幕即将旋转",
     "loading_failed": "加载失败",
@@ -570,7 +541,7 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "资源未找到"
   },
   "en": {
-    "title": "Golden spatula Playable Ads",
+    "title": "Playable Ads",
     "click_to_play": "Tap to continue",
     "rotate_tip": "Screen will rotate",
     "loading_failed": "Loading failed",
@@ -578,12 +549,25 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "Resource not found"
   },
   "th": {
-    "title": "โฆษณาที่เล่นได้ของ Golden Spatula",
+    "title": "โฆษณาที่เล่นได้",
     "click_to_play": "คลิกบนหน้าจอเพื่อดำเนินการต่อ",
     "rotate_tip": "หน้าจอกำลังจะหมุน",
     "loading_failed": "การโหลดล้มเหลว",
     "play_failed": "การเล่นล้มเหลว",
     "resource_not_found": "ไม่พบทรัพยากร"
+  }
+}; 
+  </script>
+  <script>
+window.PARTNER_LANG = {
+  "zh": {
+    "title": "深渊之旅游戏互动广告"
+  },
+  "en": {
+    "title": "Abyss Voyage Playable Ads"
+  },
+  "th": {
+    "title": "โฆษณาที่เล่นได้ของ Abyss Voyage"
   }
 }; 
   </script>
@@ -779,7 +763,27 @@ window.PLAYABLE_CONFIG = {
   <script>
 const config = window.PLAYABLE_CONFIG;
 const images = window.PLAYABLE_IMAGES;
-const lang = window.PLAYABLE_LANG;
+
+// 合并公共语言和合作伙伴特定语言
+const publicLang = window.PLAYABLE_LANG || {};
+const partnerLang = window.PARTNER_LANG || {};
+
+// 合并语言配置，合作伙伴配置优先
+const lang = {};
+for (const langKey in publicLang) {
+  lang[langKey] = { ...publicLang[langKey] };
+  // 如果合作伙伴有该语言的配置，则覆盖公共配置
+  if (partnerLang[langKey]) {
+    lang[langKey] = { ...lang[langKey], ...partnerLang[langKey] };
+  }
+}
+
+// 添加合作伙伴独有的语言
+for (const langKey in partnerLang) {
+  if (!lang[langKey]) {
+    lang[langKey] = { ...partnerLang[langKey] };
+  }
+}
 
 // 当前语言，可以根据需要切换
 let currentLang = config.lang || 'en';

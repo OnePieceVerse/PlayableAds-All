@@ -2,8 +2,8 @@
 # set -e
 ENV='dev'
 # ENV='prod'
-# PARTNER_NAME="abyss-voyage"
-PARTNER_NAME="golden-spatula"
+PARTNER_NAME="abyss-voyage"
+# PARTNER_NAME="golden-spatula"
 LANG="en"
 VERSION="v1"
 MEDIA='applovin'
@@ -11,14 +11,17 @@ MEDIA='applovin'
 # 生成图片、视频的base64编码
 PARTNER_PATH="partners/${PARTNER_NAME}"
 CONFIG_FILE="${PARTNER_PATH}/configs/config-${LANG}-${VERSION}.js"
+PARTNER_LANG_FILE="${PARTNER_PATH}/lang.js"
 
 # 检测操作系统并选择合适的 sed 命令
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    # macOS - 兼容两种格式：config-*.js 和 partners/*/configs/config-*.js
-    sed -i '' "s#<script src=\"\(config-[^\"]*\.js\|partners/[^/]*/configs/config-[^\"]*\.js\)\"></script>#<script src=\"${CONFIG_FILE}\"></script>#g" index.html
+    # macOS - 直接替换任何合作伙伴路径
+    sed -i '' "s#partners/[^/]*/lang.js#${PARTNER_LANG_FILE}#g" index.html
+    sed -i '' "s#partners/[^/]*/configs/config-[^/]*\.js#${CONFIG_FILE}#g" index.html
 else
-    # Linux - 兼容两种格式：config-*.js 和 partners/*/configs/config-*.js
-    sed -i "s#<script src=\"\(config-[^\"]*\.js\|partners/[^/]*/configs/config-[^\"]*\.js\)\"></script>#<script src=\"${CONFIG_FILE}\"></script>#g" index.html
+    # Linux - 直接替换任何合作伙伴路径
+    sed -i "s#partners/[^/]*/lang.js#${PARTNER_LANG_FILE}#g" index.html
+    sed -i "s#partners/[^/]*/configs/config-[^/]*\.js#${CONFIG_FILE}#g" index.html
 fi
 
 sh base64_assets.sh $PARTNER_PATH $CONFIG_FILE
@@ -75,6 +78,13 @@ awk '
     print "  </script>"
     next
   }
+    /<script src="(partners\/[^\/]*\/lang.js)"><\/script>/ {
+    print "  <script>"
+    while ((getline line < partner_lang_file) > 0) print line
+    close(partner_lang_file)
+    print "  </script>"
+    next
+  }
   /<script src="main.js"><\/script>/ {
     print "  <script>"
     while ((getline line < main_js_file) > 0) print line
@@ -89,6 +99,7 @@ awk '
   videos_js_file="videos.js" \
   config_js_file="$CONFIG_FILE" \
   lang_js_file="lang.js" \
+  partner_lang_file="$PARTNER_LANG_FILE" \
   main_js_file="main.js" \
   index.html > $tmpfile
   

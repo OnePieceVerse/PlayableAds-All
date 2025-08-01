@@ -1,6 +1,6 @@
 window.PLAYABLE_LANG = {
   "zh": {
-    "title": "金铲铲之战游戏互动广告",
+    "title": "游戏互动广告",
     "click_to_play": "点击屏幕继续",
     "rotate_tip": "屏幕即将旋转",
     "loading_failed": "加载失败",
@@ -8,7 +8,7 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "资源未找到"
   },
   "en": {
-    "title": "Golden spatula Playable Ads",
+    "title": "Playable Ads",
     "click_to_play": "Tap to continue",
     "rotate_tip": "Screen will rotate",
     "loading_failed": "Loading failed",
@@ -16,7 +16,7 @@ window.PLAYABLE_LANG = {
     "resource_not_found": "Resource not found"
   },
   "th": {
-    "title": "โฆษณาที่เล่นได้ของ Golden Spatula",
+    "title": "โฆษณาที่เล่นได้",
     "click_to_play": "คลิกบนหน้าจอเพื่อดำเนินการต่อ",
     "rotate_tip": "หน้าจอกำลังจะหมุน",
     "loading_failed": "การโหลดล้มเหลว",

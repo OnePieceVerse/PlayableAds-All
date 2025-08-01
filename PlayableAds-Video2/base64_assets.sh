@@ -79,10 +79,10 @@ if [ ! -f "$CONFIG_FILE" ]; then
 fi
 
 # 提取所有图片文件（.png, .jpg, .jpeg, .webp等）
-IMG_LIST=($(grep -Eoi '"*image": *"[^"]+\.(png|jpg|jpeg|webp|gif|bmp)"' "$CONFIG_FILE" | awk -F'"' '{print $3}'))
+IMG_LIST=($(grep -Eoi '"*image": *"[^"]+\.(png|jpg|jpeg|webp|gif|bmp)"' "$CONFIG_FILE" | awk -F':' '{print $2}' | tr -d '"')) 
 
 # 提取所有视频文件（.mp4, .mov, .avi等）
-VIDEO_LIST=($(grep -Eo '"videoUrl": *"[^"]+\.(mp4|mov|avi|mkv|flv|webm)"' "$CONFIG_FILE" | awk -F'"' '{print $4}'))
+VIDEO_LIST=($(grep -Eo '"videoUrl": *"[^"]+\.(mp4|mov|avi|mkv|flv|webm)"' "$CONFIG_FILE" | awk -F':' '{print $2}' | tr -d '"')) 
 
 # 对图片列表进行去重
 IMG_LIST=($(deduplicate_array "${IMG_LIST[@]}"))

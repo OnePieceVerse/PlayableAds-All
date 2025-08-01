@@ -1,7 +1,7 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "landscape",
-  "videoUrl": "golden-spatula-v3-c2-vol5.mp4",
+  "videoUrl": "golden-spatula-v1-vol5.mp4",
   "rotateTime": 0,
   "volume": 1,
   "start_screen": {
