@@ -247,7 +247,7 @@ html, body {
 @media (orientation: portrait) {
   .guide-layer {
     width: 100%;
-    height: calc(100vw * var(--video-ratio-inverse));
+    /* height: calc(100vw * var(--video-ratio-inverse)); */
     max-height: 100%;
   }
 }

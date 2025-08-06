@@ -5,7 +5,7 @@ ENV='dev'
 PARTNER_NAME="abyss-voyage"
 # PARTNER_NAME="golden-spatula"
 LANG="en"
-VERSION="v1"
+VERSION="v5"
 MEDIA='applovin'
 
 # 生成图片、视频的base64编码

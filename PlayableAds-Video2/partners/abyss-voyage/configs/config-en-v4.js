@@ -1,7 +1,7 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "portrait",
-  "videoUrl": "abyss-voyage-v1.mp4",
+  "videoUrl": "abyss-voyage-v4.mp4",
   "rotateTime": -1,
   "volume": 1,
   "interactionPoints": [
@@ -12,7 +12,7 @@ window.PLAYABLE_CONFIG = {
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
-          "width": 0.25
+          "width": 0.2
         },
         "portrait": {
           "width": 0.5
@@ -20,18 +20,18 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.37,
-          "y": 0.31
+          "x": 0.38,
+          "y": 0.79
         },
         "portrait": {
-          "x": 0.12,
-          "y": 0
+          "x": 0.28,
+          "y": 0.81
         }
       },
       "guideImage": "guide.png",
       "guideSize": {
         "landscape": {
-          "width": 0.08
+          "width": 0.06
         },
         "portrait": {
           "width": 0.15
@@ -39,18 +39,18 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.43,
-          "y": 0.33
+          "x": 0.5,
+          "y": 0.81
         },
         "portrait": {
-          "x": 0.33,
-          "y": 0.05
+          "x": 0.5,
+          "y": 0.82
         }
       },
       "swipeDirection": "slide-bounce"
     },
     {
-      "time": 1,
+      "time": 2,
       "duration": 0,
       "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
@@ -64,18 +64,18 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.38,
-          "y": 0.78
+          "x": 0.35,
+          "y": 0.55
         },
         "portrait": {
-          "x": 0.08,
-          "y": 1.35
+          "x": 0.1,
+          "y": 0.58
         }
       },
       "guideImage": "guide.png",
       "guideSize": {
         "landscape": {
-          "width": 0.08
+          "width": 0.06
         },
         "portrait": {
           "width": 0.15
@@ -83,24 +83,24 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.49,
-          "y": 0.78
+          "x": 0.5,
+          "y": 0.58
         },
         "portrait": {
-          "x": 0.53,
-          "y": 1.45
+          "x": 0.51,
+          "y": 0.6
         }
       },
       "swipeDirection": "bounce"
     },
     {
-      "time": 5.1,
+      "time": 5,
       "duration": 0,
       "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
-          "width": 0.3
+          "width": 0.2
         },
         "portrait": {
           "width": 0.8
@@ -108,18 +108,18 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.34,
-          "y": 0.26
+          "x": 0.45,
+          "y": 0.46
         },
         "portrait": {
-          "x": 0.08,
-          "y": -0.23
+          "x": 0.15,
+          "y": 0.47
         }
       },
       "guideImage": "guide.png",
       "guideSize": {
         "landscape": {
-          "width": 0.08
+          "width": 0.06
         },
         "portrait": {
           "width": 0.15
@@ -127,12 +127,12 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.48,
-          "y": 0.32
+          "x": 0.58,
+          "y": 0.49
         },
         "portrait": {
-          "x": 0.44,
-          "y": -0.15
+          "x": 0.78,
+          "y": 0.5
         }
       },
       "swipeDirection": "bounce"
@@ -140,10 +140,10 @@ window.PLAYABLE_CONFIG = {
   ],
   "cta_start_button": {
     "displayTime": 0,
-    "buttonImage": "abyss-voyage-cta-start-button3.png",
+    "buttonImage": "abyss-voyage-cta-start-button3.webp",
     "buttonSize": {
       "landscape": {
-        "width": 0.1,
+        "width": 0.07,
       },
       "portrait": {
         "width": 0.2,
@@ -151,35 +151,35 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.1,
-        "y": 0.9
+        "x": 0.58,
+        "y": 0.05
       },
       "portrait": {
-        "x": 0.12,
-        "y": 1.72
+        "x": 0.79,
+        "y": 0.05
       }
     },
     "url": "https://test.trovo.live/"
   },
   "cta_end_button": {
-    "displayTime": 9.6,
-    "buttonImage": "abyss-voyage-cta-start-button3.png",
+    "displayTime": 11,
+    "buttonImage": "abyss-voyage-cta-start-button3.webp",
     "buttonSize": {
       "landscape": {
-        "width": 0.2,
+        "width": 0.1,
       },
       "portrait": {
-        "width": 0.4,
+        "width": 0.3,
       }
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.4,
-        "y": 0.61
+        "x": 0.45,
+        "y": 0.81
       },
       "portrait": {
-        "x": 0.3,
-        "y": 1.03
+        "x": 0.35,
+        "y": 0.81
       }
     },
     "url": "https://test.trovo.live/"
