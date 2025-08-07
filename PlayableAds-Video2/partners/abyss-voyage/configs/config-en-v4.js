@@ -28,19 +28,19 @@ window.PLAYABLE_CONFIG = {
           "y": 0.81
         }
       },
-      "guideImage": "guide.png",
+      "guideImage": "abyss-voyage-guide.webp",
       "guideSize": {
         "landscape": {
-          "width": 0.06
+          "width": 0.03
         },
         "portrait": {
-          "width": 0.15
+          "width": 0.1
         }
       },
       "guidePosition": {
         "landscape": {
           "x": 0.5,
-          "y": 0.81
+          "y": 0.83
         },
         "portrait": {
           "x": 0.5,
@@ -72,19 +72,19 @@ window.PLAYABLE_CONFIG = {
           "y": 0.58
         }
       },
-      "guideImage": "guide.png",
+      "guideImage": "abyss-voyage-guide.webp",
       "guideSize": {
         "landscape": {
-          "width": 0.06
+          "width": 0.03
         },
         "portrait": {
-          "width": 0.15
+          "width": 0.1
         }
       },
       "guidePosition": {
         "landscape": {
           "x": 0.5,
-          "y": 0.58
+          "y": 0.6
         },
         "portrait": {
           "x": 0.51,
@@ -116,13 +116,13 @@ window.PLAYABLE_CONFIG = {
           "y": 0.47
         }
       },
-      "guideImage": "guide.png",
+      "guideImage": "abyss-voyage-guide.webp",
       "guideSize": {
         "landscape": {
-          "width": 0.06
+          "width": 0.03
         },
         "portrait": {
-          "width": 0.15
+          "width": 0.1
         }
       },
       "guidePosition": {
@@ -131,7 +131,7 @@ window.PLAYABLE_CONFIG = {
           "y": 0.49
         },
         "portrait": {
-          "x": 0.78,
+          "x": 0.8,
           "y": 0.5
         }
       },
