@@ -138,7 +138,7 @@ window.PLAYABLE_CONFIG = {
       "swipeDirection": "bounce"
     },
     {
-      "time": 2.8,
+      "time": 2.7,
       "duration": 0,
       "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
@@ -294,7 +294,7 @@ window.PLAYABLE_CONFIG = {
     "url": "https://test.trovo.live/"
   },
   "cta_end_button": {
-    "displayTime": 11.5,
+    "displayTime": 10.8,
     "buttonImage": "abyss-voyage-cta-start-button3.webp",
     "buttonSize": {
       "landscape": {
