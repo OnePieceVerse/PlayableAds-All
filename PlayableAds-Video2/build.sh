@@ -2,10 +2,11 @@
 # set -e
 ENV='dev'
 # ENV='prod'
-PARTNER_NAME="abyss-voyage"
+PARTNER_NAME="honor-of-kings"
+# PARTNER_NAME="abyss-voyage"
 # PARTNER_NAME="golden-spatula"
 LANG="en"
-VERSION="v6"
+VERSION="v1"
 MEDIA='applovin'
 
 # 生成图片、视频的base64编码

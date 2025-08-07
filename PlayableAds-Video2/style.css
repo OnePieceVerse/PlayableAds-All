@@ -213,14 +213,12 @@ html, body {
 
 .guide-layer {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  opacity: 1;
-  transition: opacity 0.1s;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 30; /* 高于 click-layer 的 20 */
+  pointer-events: auto;
 }
 
 .guide-layer.rotating {
@@ -494,4 +492,209 @@ html, body {
   0% { transform: translateY(0);}
   50% { transform: translateY(-10px);}
   100% { transform: translateY(0);}
+}
+
+/* 声音波纹控制样式 - 水平滑动条版本 */
+.sound-wave-container {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: auto;
+}
+
+.wave-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 水平滑动轨道 */
+.slider-track {
+  height: 45px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 25px;
+  position: relative;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  overflow: hidden;
+  backdrop-filter: blur(4px);
+}
+
+/* 滑动进度条 */
+.slider-progress {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 193, 7, 0.4) 100%);
+  transition: width 0.1s;
+}
+
+/* 起始和结束标记 */
+.slider-start-marker,
+.slider-end-marker {
+  position: absolute;
+  width: 3px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 1.5px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.slider-start-marker {
+  left: 6px;
+}
+
+.slider-end-marker {
+  right: 6px;
+}
+
+.sound-ball {
+  width: 42px;
+  height: 42px;
+  background: radial-gradient(circle at 30% 30%, #64b5f6 0%, #1976d2 80%, #0d47a1 100%);
+  border-radius: 50%;
+  position: absolute;
+  box-shadow: 0 2px 10px rgba(25, 118, 210, 0.5);
+  z-index: 5;
+  transition: transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1), left 0.1s;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.sound-ball::before {
+  content: '';
+  position: absolute;
+  top: 20%;
+  left: 20%;
+  width: 14px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  filter: blur(1px);
+}
+
+.sound-ball.active {
+  box-shadow: 0 4px 15px rgba(25, 118, 210, 0.7);
+  background: radial-gradient(circle at 30% 30%, #29b6f6 0%, #0d47a1 100%);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.sound-ball.success {
+  background: radial-gradient(circle at 30% 30%, #ffee58 0%, #ffa726 100%);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+  animation: ballPulse 0.8s ease-out;
+}
+
+/* 成功状态指示器 */
+.success-indicator {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(76, 175, 80, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.success-indicator.active {
+  opacity: 1;
+  background: rgba(76, 175, 80, 0.8);
+}
+
+.success-indicator::before {
+  content: '';
+  width: 12px;
+  height: 6px;
+  border-left: 2px solid white;
+  border-bottom: 2px solid white;
+  transform: rotate(-45deg) translate(1px, -2px);
+}
+
+/* 计时器样式 */
+.hold-timer {
+  position: absolute;
+  top: -25px;
+  right: 0;
+  font-size: 14px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2px 8px;
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.hold-timer.active {
+  opacity: 1;
+}
+
+@keyframes ballPulse {
+  0% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.2); }
+  100% { transform: translateY(-50%) scale(1); }
+}
+
+.sound-label {
+  color: #fff;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  padding: 4px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(4px);
+  opacity: 0.9;
+  transition: opacity 0.5s ease;
+}
+
+.sound-tip {
+  color: #fff;
+  font-size: 0.9rem;
+  margin-top: 10px;
+  min-height: 1.2em;
+  text-align: center;
+  background: rgba(244, 67, 54, 0.7);
+  border-radius: 8px;
+  padding: 3px 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s;
+  backdrop-filter: blur(4px);
+}
+
+/* 媒体查询适配 */
+@media (max-height: 600px) {
+  .sound-wave-container {
+    height: 220px;
+  }
+  
+  .wave-container {
+    height: 150px;
+  }
+  
+  .sound-label {
+    margin-bottom: 10px;
+  }
 }
