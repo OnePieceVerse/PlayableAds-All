@@ -2,12 +2,12 @@
 # set -e
 ENV='dev'
 # ENV='prod'
-PARTNER_NAME="honor-of-kings"
-# PARTNER_NAME="abyss-voyage"
+# PARTNER_NAME="honor-of-kings"
+PARTNER_NAME="abyss-voyage"
 # PARTNER_NAME="golden-spatula"
 LANG="en"
-VERSION="v1"
-MEDIA='applovin'
+VERSION="v6"
+PLATFORM_NAME='facebook'
 
 # 生成图片、视频的base64编码
 PARTNER_PATH="partners/${PARTNER_NAME}"
@@ -38,7 +38,7 @@ if [ "$ENV" == "dev" ]; then
 fi
 
 # 生成html文件
-DIST="${PARTNER_PATH}/platforms/${MEDIA}"
+DIST="${PARTNER_PATH}/platforms/${PLATFORM_NAME}"
 TARGET="${DIST}/index-${LANG}-${VERSION}.html"
 tmpfile=$(mktemp)
 mkdir -p $DIST
@@ -103,7 +103,12 @@ awk '
   partner_lang_file="$PARTNER_LANG_FILE" \
   main_js_file="main.js" \
   index.html > $tmpfile
-  
+
+if [ "$PLATFORM_NAME" == "facebook" ]; then
+    sed -i '' "s|window.location.href = config.cta_start_button.url;|FbPlayableAd.onCTAClick();|g" "$tmpfile"
+elif [ "$PLATFORM_NAME" == "applovin" ]; then
+    sed -i '' "s|window.location.href = config.cta_start_button.url;|window.mraid.open();|g" "$tmpfile"
+fi
 mv $tmpfile $TARGET
 # npx html-minifier --collapse-whitespace --remove-comments --minify-css true --minify-js true $tmpfile -o $TARGET
 

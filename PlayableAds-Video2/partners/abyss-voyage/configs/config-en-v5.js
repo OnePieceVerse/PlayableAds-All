@@ -182,7 +182,7 @@ window.PLAYABLE_CONFIG = {
       "swipeDirection": "bounce"
     },
     {
-      "time": 4.5,
+      "time": 4.4,
       "duration": 0,
       "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
