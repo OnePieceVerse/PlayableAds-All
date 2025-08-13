@@ -364,7 +364,7 @@
 <body>
     <div class="container">
         <div class="video-container">
-            <video id="video" preload="auto" playsinline webkit-playsinline poster="honor-of-kings-v1.mp4">
+            <video id="video" preload="metadata" playsinline webkit-playsinline muted>
                 <source src="honor-of-kings-v1.mp4" type="video/mp4">
                 您的浏览器不支持视频播放。
             </video>
@@ -498,6 +498,8 @@
                 this.ctaStart.classList.add('show');
                 this.ctaEnd.classList.remove('show');
                 this.holdButton.style.display = 'none';
+                // 取消静音并播放
+                this.video.muted = false;
                 this.video.play().then(() => {
                     this.currentPauseIndex = 0;
                 }).catch(error => {
@@ -634,9 +636,9 @@
             // 视频元数据加载完成后更新比例
             video.addEventListener('loadedmetadata', updateVideoRatio);
             
-            // Safari兼容：确保视频首帧显示
-            video.addEventListener('loadeddata', () => {
-                // 视频数据加载完成，显示首帧
+            // Safari兼容：确保视频首帧显示但不自动播放
+            video.addEventListener('loadedmetadata', () => {
+                // 只设置到首帧，不播放
                 video.currentTime = 0;
             });
             
