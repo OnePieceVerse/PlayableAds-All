@@ -255,9 +255,14 @@
         .cta-button.show {
             display: inline-block;
             animation: ctaPulse 1.6s ease-in-out infinite;
+            -webkit-animation: ctaPulse 1.6s ease-in-out infinite;
             will-change: transform, box-shadow;
+            -webkit-transform: translateZ(0); /* 启用硬件加速 */
         }
-        .cta-button.cta-end.show { animation: ctaPulseCenter 1.6s ease-in-out infinite; }
+        .cta-button.cta-end.show { 
+            animation: ctaPulseCenter 1.6s ease-in-out infinite; 
+            -webkit-animation: ctaPulseCenter 1.6s ease-in-out infinite;
+        }
         .cta-button.show:hover { transform: scale(1.06); box-shadow: 0 10px 22px rgba(0,0,0,0.28); }
         .cta-button.cta-end.show:hover { transform: translateX(-50%) scale(1.06); }
 
@@ -268,15 +273,25 @@
             100% { transform: translateY(0) scale(1); opacity: 0.96; }
         }
         @keyframes ctaPulse {
-            0% { transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
-            50% { transform: scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
-            100% { transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            0% { transform: scale(1); -webkit-transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            50% { transform: scale(1.06); -webkit-transform: scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
+            100% { transform: scale(1); -webkit-transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+        }
+        @-webkit-keyframes ctaPulse {
+            0% { -webkit-transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            50% { -webkit-transform: scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
+            100% { -webkit-transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
         }
         /* 中心CTA动画，保持translateX(-50%)不丢失 */
         @keyframes ctaPulseCenter {
-            0% { transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
-            50% { transform: translateX(-50%) scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
-            100% { transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            0% { transform: translateX(-50%) scale(1); -webkit-transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            50% { transform: translateX(-50%) scale(1.06); -webkit-transform: translateX(-50%) scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
+            100% { transform: translateX(-50%) scale(1); -webkit-transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+        }
+        @-webkit-keyframes ctaPulseCenter {
+            0% { -webkit-transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            50% { -webkit-transform: translateX(-50%) scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
+            100% { -webkit-transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
         }
 
         /* Help 文案动画（街机风格弹跳+发光） */
@@ -340,14 +355,21 @@
             background: transparent;
             box-shadow: none;
             animation: simplePulse 1.6s ease-in-out infinite;
+            -webkit-animation: simplePulse 1.6s ease-in-out infinite;
+            -webkit-transform: translateZ(0); /* 启用硬件加速 */
         }
         .overlay .instruction::before,
         .overlay .instruction::after { content: none !important; }
 
         @keyframes simplePulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.06); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); -webkit-transform: scale(1); }
+            50% { transform: scale(1.06); -webkit-transform: scale(1.06); }
+            100% { transform: scale(1); -webkit-transform: scale(1); }
+        }
+        @-webkit-keyframes simplePulse {
+            0% { -webkit-transform: scale(1); }
+            50% { -webkit-transform: scale(1.06); }
+            100% { -webkit-transform: scale(1); }
         }
         @keyframes idleRipple {
             0% { transform: scale(0.85); opacity: 0.7; }
