@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playable Ads H5 - Video3</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .hold-button {
+            position: absolute;
+            left: 50%;
+            bottom: 20%;
+            transform: translateX(-50%);
+            width: 82px;
+            height: 82px;
+            border-radius: 50%;
+            border: none;
+            outline: none;
+            background: rgba(255,255,255,0.06);
+            backdrop-filter: blur(6px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 0 0 2px rgba(255,255,255,0.18);
+            color: #fff;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.35);
+            display: none; /* 初始隐藏 */
+            -webkit-tap-highlight-color: transparent;
+            align-items: center;
+            justify-content: center;
+            overflow: visible; /* 允许光环溢出按钮 */
+        }
+        .hold-button .label { pointer-events: none; position: relative; z-index: 2; display: inline-block; transform: translateY(0); }
+.hold-button .pulse {
+            position: absolute;
+            inset: 0; /* 默认在按钮范围内 */
+            border-radius: 50%;
+            /* background: radial-gradient(closest-side, rgba(0,255,170,0.55), transparent 70%); */
+            background: radial-gradient(closest-side, rgba(243,217,161,0.55), transparent 70%);
+            z-index: 2; /* 在文字之上但低于外部波纹 */
+            will-change: transform, opacity;
+            filter: drop-shadow(0 0 8px rgba(0,255,170,0.55));
+            pointer-events: none;
+        }
+        /* 未长按：按钮内的提示波纹（不溢出） */
+        .hold-button:not(.holding) .pulse {
+            animation: idleRipple 1.2s ease-out infinite;
+        }
+        .hold-button.holding .pulse { animation: none; }
+        /* 按下后使用外部ripple实现外扩 */
+        .hold-button.holding { box-shadow: 0 14px 34px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(0,255,170,0.75); }
+        @keyframes pulse { from { transform: scale(0.9); opacity: 0.9; } to { transform: scale(1.15); opacity: 0; } }
+
+        /* 波纹特效：按住时生成多层同心圆扩散 */
+        .hold-button .ripple {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid rgba(0,255,170,0.95);
+            transform: scale(0.45);
+            opacity: 0.85;
+            animation: rippleWave 800ms ease-out forwards;
+            pointer-events: none;
+            filter: drop-shadow(0 0 6px rgba(0,255,170,0.6));
+        }
+        @keyframes rippleWave {
+            to { transform: scale(2.3); opacity: 0; }
+        }
+
+        /* 按钮范围内的墨水波纹（更清晰） */
+        .hold-button .ripple-in {
+            position: absolute;
+            inset: 0; /* 限定在按钮范围内 */
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,255,170,0.35) 0%, rgba(0,255,170,0.18) 35%, rgba(0,255,170,0) 60%);
+            animation: rippleIn 900ms ease-out forwards;
+            z-index: 2; /* 在文字上方、外部光环下方 */
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+        @keyframes rippleIn {
+            from { transform: scale(0.4); opacity: 0.9; }
+            to { transform: scale(1.15); opacity: 0; }
+        }
+
+        .cta-button { position: absolute; display: none; border: none; border-radius: 12px; font-weight: 700; letter-spacing: .5px; }
+.cta-button.show { display: inline-block; }
+
+/* CTA Start：右上角较小按钮 */
+.cta-button.cta-start { right: 16px; top: 10px; padding: 10px 14px; font-size: 14px; color: #0d0d0d; background: #f3d9a1; box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+.cta-button.cta-start.show { animation: ctaPulse 1.6s ease-in-out infinite; }
+
+/* CTA End：居中较大按钮 */
+.cta-button.cta-end { left: 50%; top: 58%; transform: translateX(-50%); padding: 14px 22px; font-size: 18px; color: #071013; background: #fbffb7; box-shadow: 0 10px 24px rgba(0,0,0,0.3); }
+.cta-button.cta-end.show { animation: ctaPulseCenter 1.6s ease-in-out infinite; }
+
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border: 3px solid white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .play-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 20px solid white;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 5px;
+        }
+
+        .instruction {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .sub-instruction {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        /* 初始提示动画与强化样式 */
+        /* 首屏Tap样式：柔和游戏风 */
+        .overlay .instruction {
+            position: relative;
+            font-size: clamp(18px, 4.8vw, 30px);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding: 10px 18px;
+            border-radius: 18px;
+            color: #ffffff;
+            /* background: rgba(0, 0, 0, 0.35); */
+            /* backdrop-filter: blur(8px); */
+            /* border: 1.5px solid rgba(255, 255, 255, 0.35); */
+            /* box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28); */
+            /* text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); */
+            animation: subtleFloat 1s ease-in-out infinite;
+        }
+        
+        
+        @keyframes subtleFloat {
+            0% { transform: translateY(0) scale(1); opacity: 0.96; }
+            50% { transform: translateY(-2px) scale(1.02); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 0.96; }
+        }
+        .overlay .sub-instruction {
+            margin-top: 6px;
+            opacity: 0.9;
+            animation: breathe 2.4s ease-in-out infinite;
+            animation-delay: .3s;
+        }
+
+        /* CTA按钮呼吸动画与发光 */
+        .cta-button.show {
+            display: inline-block;
+            animation: ctaPulse 1.6s ease-in-out infinite;
+            will-change: transform, box-shadow;
+        }
+        .cta-button.cta-end.show { animation: ctaPulseCenter 1.6s ease-in-out infinite; }
+        .cta-button.show:hover { transform: scale(1.06); box-shadow: 0 10px 22px rgba(0,0,0,0.28); }
+        .cta-button.cta-end.show:hover { transform: translateX(-50%) scale(1.06); }
+
+        /* 关键帧：与hold-button的pulse共存 */
+        @keyframes breathe {
+            0% { transform: translateY(0) scale(1); opacity: 0.96; }
+            50% { transform: translateY(-2px) scale(1.03); opacity: 1; }
+            100% { transform: translateY(0) scale(1); opacity: 0.96; }
+        }
+        @keyframes ctaPulse {
+            0% { transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            50% { transform: scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
+            100% { transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+        }
+        /* 中心CTA动画，保持translateX(-50%)不丢失 */
+        @keyframes ctaPulseCenter {
+            0% { transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            50% { transform: translateX(-50%) scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
+            100% { transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+        }
+
+        /* Help 文案动画（街机风格弹跳+发光） */
+        @keyframes helpPulse {
+            0% { transform: translateX(-50%) scale(1); filter: drop-shadow(0 0 0 rgba(255,91,110,0)); }
+            50% { transform: translateX(-50%) scale(1.06); filter: drop-shadow(0 0 12px rgba(255,91,110,0.7)); }
+            100% { transform: translateX(-50%) scale(1); filter: drop-shadow(0 0 0 rgba(255,91,110,0)); }
+        }
+
+        /* 用户偏好减少动画时禁用动画 */
+        @media (prefers-reduced-motion: reduce) {
+            .overlay .instruction,
+            .overlay .sub-instruction,
+            .cta-button.show,
+            .hold-button .pulse { animation: none !important; }
+        }
+
+        /* 帮助提示 */
+        .help-overlay {
+            position: absolute;
+            left: 0%;
+            top: 24%;
+            transform: translateX(-50%);
+            z-index: 5;
+            color: #fff;
+            font-size: clamp(27px, 4.6vw, 26px);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 8px 14px;
+            /* border-radius: 18px; */
+            /* background: rgba(0, 0, 0, 0.35); */
+            /* backdrop-filter: blur(8px); */
+            /* border: 1.5px solid rgba(255, 255, 255, 0.35); */
+            /* box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28); */
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+            display: none;
+            animation: subtleFloat 1s ease-in-out infinite;
+        }
+
+
+        @media (max-width: 768px) {
+            .video-container {
+                width: 100%;
+            }
+            
+            .instruction {
+                font-size: 16px;
+            }
+            
+            .sub-instruction {
+                font-size: 12px;
+            }
+        }
+        /* 覆盖（最简版）：仅文字+放大缩小动画，无背景 */
+        .overlay .instruction {
+            font-size: clamp(32px, 7.2vw, 48px);
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            /* padding: 0; */
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            animation: simplePulse 1.6s ease-in-out infinite;
+        }
+        .overlay .instruction::before,
+        .overlay .instruction::after { content: none !important; }
+
+        @keyframes simplePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+            100% { transform: scale(1); }
+        }
+        @keyframes idleRipple {
+            0% { transform: scale(0.92); opacity: 0.8; }
+            60% { transform: scale(1.04); opacity: 1; }
+            100% { transform: scale(0.92); opacity: 0.8; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-container">
+            <video id="video" preload="metadata" playsinline webkit-playsinline>
+                <source src="honor-of-kings-v1.mp4" type="video/mp4">
+                您的浏览器不支持视频播放。
+            </video>
+            
+            <!-- 初始播放提示 -->
+            <div class="overlay" id="initialOverlay">
+                <div class="instruction">Tap to continue</div>
+            </div>
+            
+            <!-- 长按按钮 -->
+            <button class="hold-button" id="holdButton" aria-label="hold button" type="button">
+                <span class="pulse"></span>
+                <span class="label">PRESS</span>
+            </button>
+
+            <!-- CTA 按钮 -->
+            <button class="cta-button cta-start" id="ctaStart" type="button">INSTALL</button>
+            <button class="cta-button cta-end" id="ctaEnd" type="button">INSTALL</button>
+
+            <!-- Help 提示 -->
+            <div class="help-overlay" id="helpOverlay">Press to help her!</div>
+        </div>
+    </div>
+
+    <script>
+        class PlayableAdsVideo {
+            constructor() {
+                this.video = document.getElementById('video');
+                this.initialOverlay = document.getElementById('initialOverlay');
+                this.pauseOverlay = null;
+                this.holdButton = document.getElementById('holdButton');
+                this.ctaStart = document.getElementById('ctaStart');
+                this.ctaEnd = document.getElementById('ctaEnd');
+                this.helpOverlay = null;
+                
+                // 暂停时间点（秒）
+                this.pauseTimePoints = [2];
+                this.currentPauseIndex = 0;
+                this.endTime = 11.5;
+                this.ctaEndTime = 16.5;
+                // 交互状态
+                this.isLongPressing = false;
+                this.longPressStartTime = 0;
+                this.longPressDuration = 0;
+                
+                this.init();
+            }
+            
+            init() {
+                this.bindEvents();
+                this.helpOverlay = document.getElementById('helpOverlay');
+            }
+            
+            bindEvents() {
+                // 点击初始提示区域
+                this.initialOverlay.addEventListener('click', () => {
+                    this.startVideo();
+                });
+                // 触摸立即开始（移动端）
+                this.initialOverlay.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.startVideo();
+                }, { passive: false });
+
+                // 长按按钮事件
+                const createRipple = (delay = 0) => {
+                    setTimeout(() => {
+                        const outer = document.createElement('span');
+                        outer.className = 'ripple';
+                        const inner = document.createElement('span');
+                        inner.className = 'ripple-in';
+                        this.holdButton.appendChild(outer);
+                        this.holdButton.appendChild(inner);
+                        setTimeout(() => outer.remove(), 900);
+                        setTimeout(() => inner.remove(), 900);
+                    }, delay);
+                };
+                let rippleInterval = null;
+                const startHold = (e) => {
+                    e.preventDefault();
+                    this.startLongPress();
+                    this.holdButton.classList.add('holding');
+                    // 起手连发3个错峰波纹
+                    createRipple(0);
+                    createRipple(150);
+                    createRipple(300);
+                    // 长按期间以固定频率继续生成
+                    if (!rippleInterval) {
+                        rippleInterval = setInterval(() => createRipple(0), 350);
+                    }
+                };
+                const endHold = (e) => {
+                    e.preventDefault();
+                    this.endLongPress();
+                    this.holdButton.classList.remove('holding');
+                    if (rippleInterval) {
+                        clearInterval(rippleInterval);
+                        rippleInterval = null;
+                    }
+                };
+                this.holdButton.addEventListener('mousedown', startHold);
+                this.holdButton.addEventListener('mouseup', endHold);
+                this.holdButton.addEventListener('mouseleave', endHold);
+                this.holdButton.addEventListener('touchstart', startHold, { passive: false });
+                this.holdButton.addEventListener('touchend', endHold, { passive: false });
+                
+                // 视频时间更新
+                this.video.addEventListener('timeupdate', () => {
+                    this.checkPauseTimePoints();
+                    this.toggleCtas();
+                });
+
+                // CTA点击跳转
+                const targetUrl = 'https://apps.apple.com/us/app/honor-of-kings/id1619254071';
+                this.ctaStart.addEventListener('click', () => { window.location.href = targetUrl; });
+                this.ctaEnd.addEventListener('click', () => { window.location.href = targetUrl; });
+                
+                // 视频结束
+                this.video.addEventListener('ended', () => {
+                    this.videoEnded();
+                });
+                
+
+            }
+            
+            startVideo() {
+                this.initialOverlay.classList.add('hidden');
+                this.ctaStart.classList.add('show');
+                this.ctaEnd.classList.remove('show');
+                this.holdButton.style.display = 'none';
+                this.video.play().then(() => {
+                    this.currentPauseIndex = 0;
+                }).catch(error => {
+                    console.error('视频播放失败:', error);
+                });
+            }
+            
+            toggleCtas() {
+                const t = this.video.currentTime;
+                if (typeof this.endTime === 'number' && t >= this.endTime) {
+                    this.holdButton.style.display = 'none';
+                    this.ctaStart.classList.remove('show');
+                }
+                if (typeof this.ctaEndTime === 'number' && t >= this.ctaEndTime) {
+                    this.ctaEnd.classList.add('show');
+                }
+            }
+            
+            checkPauseTimePoints() {
+                const currentTime = this.video.currentTime;
+                if (typeof this.endTime === 'number' && currentTime >= this.endTime) {
+                    this.holdButton.style.display = 'none';
+                    this.ctaStart.classList.remove('show');
+                }
+                if (typeof this.ctaEndTime === 'number' && currentTime >= this.ctaEndTime) {
+                    // endTime 到达：显示结束CTA，隐藏开始CTA和长按按钮
+                    this.ctaEnd.classList.add('show');
+                    return;
+                }
+                // 在endTime之前保持显示ctaStart
+                this.ctaStart.classList.add('show');
+                this.ctaEnd.classList.remove('show');
+                if (this.currentPauseIndex >= this.pauseTimePoints.length) return;
+                const pauseTime = this.pauseTimePoints[this.currentPauseIndex];
+                if (currentTime >= pauseTime) {
+                    // 到达首个交互点：暂停并显示长按按钮与Help提示
+                    this.pauseVideo();
+                    this.holdButton.style.display = 'inline-flex';
+                    if (this.helpOverlay) this.helpOverlay.style.display = 'block';
+                    this.ctaStart.classList.remove('show');
+                    this.currentPauseIndex++;
+                }
+            }
+            
+            pauseVideo() {
+                this.video.pause();
+            }
+            
+            resumeVideo() {
+                this.video.play();
+            }
+            
+            videoEnded() {
+                // this.initialOverlay.classList.remove('hidden');
+                // this.currentPauseIndex = 0;
+                // this.video.currentTime = 0;
+                // this.interactionHint.classList.remove('show');
+            }
+            
+            handleTouchStart(e) {
+                // 覆盖层可见时不阻止默认行为，交给点击事件隐藏覆盖层
+                if (!this.initialOverlay.classList.contains('hidden')) {
+                    return;
+                }
+                e.preventDefault();
+                this.startLongPress();
+            }
+            
+            handleTouchEnd(e) {
+                if (!this.initialOverlay.classList.contains('hidden')) {
+                    return;
+                }
+                e.preventDefault();
+                this.endLongPress();
+            }
+            
+            handleMouseDown(e) {
+                if (!this.initialOverlay.classList.contains('hidden')) {
+                    return;
+                }
+                e.preventDefault();
+                this.startLongPress();
+            }
+            
+            handleMouseUp(e) {
+                e.preventDefault();
+                this.endLongPress();
+            }
+            
+            handleMouseLeave(e) {
+                e.preventDefault();
+                this.endLongPress();
+            }
+            
+            startLongPress() {
+                if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
+                    this.video.play();
+                    return;
+                }
+                if (this.video.paused) {
+                    this.resumeVideo();
+                }
+                if (this.helpOverlay) this.helpOverlay.style.display = 'none';
+                this.isLongPressing = true;
+            }
+            
+            endLongPress() {
+                if (!this.isLongPressing) {
+                    if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
+                        this.video.play();
+                    }
+                    return;
+                }
+                this.isLongPressing = false;
+                if (!(typeof this.endTime === 'number' && this.video.currentTime >= this.endTime)) {
+                    this.video.pause();
+                }
+            }
+        }
+        
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            new PlayableAdsVideo();
+        });
+    </script>
+</body>
+</html> 

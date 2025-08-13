@@ -281,6 +281,7 @@ echo "构建目录: ${BUILD_DIR}/"
 mkdir -p ${PLATFORM_DIR}
 mv ${BUILD_DIR}/* ${PLATFORM_DIR}
 mv ${PLATFORM_NAME}_${PARTNER_NAME}_${VERSION}.zip ${PLATFORM_DIR}
+rm -rf ${BUILD_DIR}
 
 # 显示构建结果
 echo ""
