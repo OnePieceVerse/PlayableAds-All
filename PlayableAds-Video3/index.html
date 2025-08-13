@@ -364,7 +364,7 @@
 <body>
     <div class="container">
         <div class="video-container">
-            <video id="video" preload="metadata" playsinline webkit-playsinline>
+            <video id="video" preload="auto" playsinline webkit-playsinline poster="honor-of-kings-v1.mp4">
                 <source src="honor-of-kings-v1.mp4" type="video/mp4">
                 您的浏览器不支持视频播放。
             </video>
@@ -633,6 +633,12 @@
             
             // 视频元数据加载完成后更新比例
             video.addEventListener('loadedmetadata', updateVideoRatio);
+            
+            // Safari兼容：确保视频首帧显示
+            video.addEventListener('loadeddata', () => {
+                // 视频数据加载完成，显示首帧
+                video.currentTime = 0;
+            });
             
             // 初始化应用
             new PlayableAdsVideo();
