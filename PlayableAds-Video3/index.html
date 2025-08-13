@@ -11,9 +11,14 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --video-ratio: 16/9; /* 视频宽高比，根据实际视频调整 */
+            --video-ratio-inverse: 9/16; /* 视频高宽比 */
+        }
+
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
             height: 100vh;
             overflow: hidden;
             display: flex;
@@ -29,12 +34,15 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+            background: black;
         }
 
         .video-container {
             position: relative;
             width: 100%;
-            height: 100%;
+            height: calc(100vw * var(--video-ratio-inverse));
+            max-height: 100vh;
+            max-width: calc(100vh * var(--video-ratio));
             overflow: hidden;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -42,13 +50,26 @@
             touch-action: none;
         }
 
+        /* 交互元素容器，与视频重叠 */
+        .interaction-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .interaction-layer > * {
+            pointer-events: auto;
+        }
+
         .hold-button {
             position: absolute;
             left: 50%;
             bottom: 20%;
             transform: translateX(-50%);
-            width: 82px;
-            height: 82px;
+            width: 22%;
+            height: 12%;
             border-radius: 50%;
             border: none;
             outline: none;
@@ -56,7 +77,7 @@
             backdrop-filter: blur(6px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 0 0 2px rgba(255,255,255,0.18);
             color: #fff;
-            font-size: 16px;
+            font-size: 4vw;
             letter-spacing: 2px;
             text-shadow: 0 1px 2px rgba(0,0,0,0.35);
             display: none; /* 初始隐藏 */
@@ -64,14 +85,14 @@
             align-items: center;
             justify-content: center;
             overflow: visible; /* 允许光环溢出按钮 */
+            animation: buttonPulse 1.2s ease-in-out infinite;
         }
         .hold-button .label { pointer-events: none; position: relative; z-index: 2; display: inline-block; transform: translateY(0); }
 .hold-button .pulse {
             position: absolute;
             inset: 0; /* 默认在按钮范围内 */
             border-radius: 50%;
-            /* background: radial-gradient(closest-side, rgba(0,255,170,0.55), transparent 70%); */
-            background: radial-gradient(closest-side, rgba(243,217,161,0.55), transparent 70%);
+            background: radial-gradient(closest-side, rgba(0,255,170,0.55), transparent 110%);
             z-index: 2; /* 在文字之上但低于外部波纹 */
             will-change: transform, opacity;
             filter: drop-shadow(0 0 8px rgba(0,255,170,0.55));
@@ -81,7 +102,7 @@
         .hold-button:not(.holding) .pulse {
             animation: idleRipple 1.2s ease-out infinite;
         }
-        .hold-button.holding .pulse { animation: none; }
+        .hold-button.holding .pulse { animation: idleRipple 1.2s ease-out infinite; }
         /* 按下后使用外部ripple实现外扩 */
         .hold-button.holding { box-shadow: 0 14px 34px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(0,255,170,0.75); }
         @keyframes pulse { from { transform: scale(0.9); opacity: 0.9; } to { transform: scale(1.15); opacity: 0; } }
@@ -122,11 +143,11 @@
 .cta-button.show { display: inline-block; }
 
 /* CTA Start：右上角较小按钮 */
-.cta-button.cta-start { right: 16px; top: 10px; padding: 10px 14px; font-size: 14px; color: #0d0d0d; background: #f3d9a1; box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+.cta-button.cta-start { right: 2%; top: 2%; padding: 10px 14px; font-size: 4vw; color: #a1740f; background: #f3d9a1; box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
 .cta-button.cta-start.show { animation: ctaPulse 1.6s ease-in-out infinite; }
 
 /* CTA End：居中较大按钮 */
-.cta-button.cta-end { left: 50%; top: 58%; transform: translateX(-50%); padding: 14px 22px; font-size: 18px; color: #071013; background: #fbffb7; box-shadow: 0 10px 24px rgba(0,0,0,0.3); }
+.cta-button.cta-end { left: 50%; top: 58%; transform: translateX(-50%); padding: 14px 22px; font-size: 5vw; color: #a1740f; background: #fbffb7; box-shadow: 0 10px 24px rgba(0,0,0,0.3); }
 .cta-button.cta-end.show { animation: ctaPulseCenter 1.6s ease-in-out infinite; }
 
 
@@ -281,7 +302,7 @@
             transform: translateX(-50%);
             z-index: 5;
             color: #fff;
-            font-size: clamp(27px, 4.6vw, 26px);
+            font-size: 6vw;
             font-weight: 700;
             letter-spacing: 0.5px;
             padding: 8px 14px;
@@ -329,9 +350,14 @@
             100% { transform: scale(1); }
         }
         @keyframes idleRipple {
-            0% { transform: scale(0.92); opacity: 0.8; }
-            60% { transform: scale(1.04); opacity: 1; }
-            100% { transform: scale(0.92); opacity: 0.8; }
+            0% { transform: scale(0.85); opacity: 0.7; }
+            60% { transform: scale(1.12); opacity: 1; }
+            100% { transform: scale(0.85); opacity: 0.7; }
+        }
+        @keyframes buttonPulse {
+            0% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.15); }
+            100% { transform: translateX(-50%) scale(1); }
         }
     </style>
 </head>
@@ -343,23 +369,26 @@
                 您的浏览器不支持视频播放。
             </video>
             
-            <!-- 初始播放提示 -->
-            <div class="overlay" id="initialOverlay">
-                <div class="instruction">Tap to continue</div>
+            <!-- 交互元素层 -->
+            <div class="interaction-layer">
+                <!-- 初始播放提示 -->
+                <div class="overlay" id="initialOverlay">
+                    <div class="instruction">TAP TO CONTINUE</div>
+                </div>
+                
+                <!-- 长按按钮 -->
+                <button class="hold-button" id="holdButton" aria-label="hold button" type="button">
+                    <span class="pulse"></span>
+                    <span class="label">PRESS</span>
+                </button>
+
+                <!-- CTA 按钮 -->
+                <button class="cta-button cta-start" id="ctaStart" type="button">INSTALL</button>
+                <button class="cta-button cta-end" id="ctaEnd" type="button">INSTALL</button>
+
+                <!-- Help 提示 -->
+                <div class="help-overlay" id="helpOverlay">PRESS TO HELP HER!</div>
             </div>
-            
-            <!-- 长按按钮 -->
-            <button class="hold-button" id="holdButton" aria-label="hold button" type="button">
-                <span class="pulse"></span>
-                <span class="label">PRESS</span>
-            </button>
-
-            <!-- CTA 按钮 -->
-            <button class="cta-button cta-start" id="ctaStart" type="button">INSTALL</button>
-            <button class="cta-button cta-end" id="ctaEnd" type="button">INSTALL</button>
-
-            <!-- Help 提示 -->
-            <div class="help-overlay" id="helpOverlay">Press to help her!</div>
         </div>
     </div>
 
@@ -591,6 +620,21 @@
         
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
+            // 动态计算视频宽高比
+            const video = document.getElementById('video');
+            const updateVideoRatio = () => {
+                if (video.videoWidth && video.videoHeight) {
+                    const ratio = video.videoWidth / video.videoHeight;
+                    const ratioInverse = video.videoHeight / video.videoWidth;
+                    document.documentElement.style.setProperty('--video-ratio', ratio);
+                    document.documentElement.style.setProperty('--video-ratio-inverse', ratioInverse);
+                }
+            };
+            
+            // 视频元数据加载完成后更新比例
+            video.addEventListener('loadedmetadata', updateVideoRatio);
+            
+            // 初始化应用
             new PlayableAdsVideo();
         });
     </script>
