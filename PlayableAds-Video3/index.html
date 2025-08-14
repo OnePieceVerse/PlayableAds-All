@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,8 +13,10 @@
         }
 
         :root {
-            --video-ratio: 16/9; /* 视频宽高比，根据实际视频调整 */
-            --video-ratio-inverse: 9/16; /* 视频高宽比 */
+            --video-ratio: 16/9;
+            /* 视频宽高比，根据实际视频调整 */
+            --video-ratio-inverse: 9/16;
+            /* 视频高宽比 */
         }
 
         body {
@@ -58,8 +61,10 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
+            container-type: inline-size; /* 启用容器查询 */
         }
-        .interaction-layer > * {
+
+        .interaction-layer>* {
             pointer-events: auto;
         }
 
@@ -73,85 +78,160 @@
             border-radius: 50%;
             border: none;
             outline: none;
-            background: rgba(255,255,255,0.06);
+            background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(6px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.25), inset 0 0 0 2px rgba(255,255,255,0.18);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), inset 0 0 0 2px rgba(255, 255, 255, 0.18);
             color: #fff;
-            font-size: 4vw;
+            /* font-size: 4vw; */
             letter-spacing: 2px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.35);
-            display: none; /* 初始隐藏 */
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+            display: none;
+            /* 初始隐藏 */
             -webkit-tap-highlight-color: transparent;
             align-items: center;
             justify-content: center;
-            overflow: visible; /* 允许光环溢出按钮 */
+            overflow: visible;
+            /* 允许光环溢出按钮 */
             animation: buttonPulse 1.2s ease-in-out infinite;
         }
-        .hold-button .label { pointer-events: none; position: relative; z-index: 2; display: inline-block; transform: translateY(0); }
-.hold-button .pulse {
+
+        .hold-button .label {
+            pointer-events: none;
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            transform: translateY(0);
+        }
+
+        .hold-button .pulse {
             position: absolute;
-            inset: 0; /* 默认在按钮范围内 */
+            inset: 0;
+            /* 默认在按钮范围内 */
             border-radius: 50%;
-            background: radial-gradient(closest-side, rgba(0,255,170,0.55), transparent 95%);
-            z-index: 2; /* 在文字之上但低于外部波纹 */
+            background: radial-gradient(closest-side, rgba(0, 255, 170, 0.55), transparent 95%);
+            z-index: 2;
+            /* 在文字之上但低于外部波纹 */
             will-change: transform, opacity;
-            filter: drop-shadow(0 0 8px rgba(0,255,170,0.55));
+            filter: drop-shadow(0 0 8px rgba(0, 255, 170, 0.55));
             pointer-events: none;
         }
+
         /* 未长按：按钮内的提示波纹（不溢出） */
         .hold-button:not(.holding) .pulse {
             animation: idleRipple 1.2s ease-out infinite;
         }
-        .hold-button.holding .pulse { animation: idleRipple 1.2s ease-out infinite; }
+
+        .hold-button.holding .pulse {
+            animation: idleRipple 1.2s ease-out infinite;
+        }
+
         /* 按下后使用外部ripple实现外扩 */
-        .hold-button.holding { box-shadow: 0 14px 34px rgba(0,0,0,0.35), inset 0 0 0 2px rgba(0,255,170,0.75); }
-        @keyframes pulse { from { transform: scale(0.9); opacity: 0.9; } to { transform: scale(1.15); opacity: 0; } }
+        .hold-button.holding {
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35), inset 0 0 0 2px rgba(0, 255, 170, 0.75);
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(0.9);
+                opacity: 0.9;
+            }
+
+            to {
+                transform: scale(1.15);
+                opacity: 0;
+            }
+        }
 
         /* 波纹特效：按住时生成多层同心圆扩散 */
         .hold-button .ripple {
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            border: 3px solid rgba(0,255,170,0.95);
+            border: 3px solid rgba(0, 255, 170, 0.95);
             transform: scale(0.45);
             opacity: 0.85;
             animation: rippleWave 800ms ease-out forwards;
             pointer-events: none;
-            filter: drop-shadow(0 0 6px rgba(0,255,170,0.6));
+            filter: drop-shadow(0 0 6px rgba(0, 255, 170, 0.6));
         }
+
         @keyframes rippleWave {
-            to { transform: scale(2.3); opacity: 0; }
+            to {
+                transform: scale(2.3);
+                opacity: 0;
+            }
         }
 
         /* 按钮范围内的墨水波纹（更清晰） */
         .hold-button .ripple-in {
             position: absolute;
-            inset: 0; /* 限定在按钮范围内 */
+            inset: 0;
+            /* 限定在按钮范围内 */
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(0,255,170,0.35) 0%, rgba(0,255,170,0.18) 35%, rgba(0,255,170,0) 60%);
+            background: radial-gradient(circle, rgba(0, 255, 170, 0.35) 0%, rgba(0, 255, 170, 0.18) 35%, rgba(0, 255, 170, 0) 60%);
             animation: rippleIn 900ms ease-out forwards;
-            z-index: 2; /* 在文字上方、外部光环下方 */
+            z-index: 2;
+            /* 在文字上方、外部光环下方 */
             mix-blend-mode: screen;
             pointer-events: none;
         }
+
         @keyframes rippleIn {
-            from { transform: scale(0.4); opacity: 0.9; }
-            to { transform: scale(1.15); opacity: 0; }
+            from {
+                transform: scale(0.4);
+                opacity: 0.9;
+            }
+
+            to {
+                transform: scale(1.15);
+                opacity: 0;
+            }
         }
 
-        .cta-button { position: absolute; display: none; border: none; border-radius: 12px; font-weight: 700; letter-spacing: .5px; }
-.cta-button.show { display: inline-block; }
+        .cta-button {
+            position: absolute;
+            display: none;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
 
-/* CTA Start：右上角较小按钮 */
-.cta-button.cta-start { right: 2%; top: 2%; padding: 10px 14px; font-size: 4vw; color: #a1740f; background: #f3d9a1; box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
-.cta-button.cta-start.show { animation: ctaPulse 1.6s ease-in-out infinite; }
+        .cta-button.show {
+            display: inline-block;
+        }
 
-/* CTA End：居中较大按钮 */
-.cta-button.cta-end { left: 50%; top: 58%; transform: translateX(-50%); padding: 14px 22px; font-size: 5vw; color: #a1740f; background: #fbffb7; box-shadow: 0 10px 24px rgba(0,0,0,0.3); }
-.cta-button.cta-end.show { 
-    /* 移除CSS动画，使用JavaScript控制 */
-    transition: transform 0.1s ease-out;
-}
+        /* CTA Start：右上角较小按钮 */
+        .cta-button.cta-start {
+            right: 2%;
+            top: 2%;
+            padding: 10px 14px;
+            /* font-size: 4vw; */
+            color: #a1740f;
+            background: #f3d9a1;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .cta-button.cta-start.show {
+            animation: ctaPulse 1.6s ease-in-out infinite;
+        }
+
+        /* CTA End：居中较大按钮 */
+        .cta-button.cta-end {
+            left: 50%;
+            top: 58%;
+            transform: translateX(-50%);
+            padding: 14px 22px;
+            /* font-size: 5vw; */
+            color: #a1740f;
+            background: #fbffb7;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button.cta-end.show {
+            /* 移除CSS动画，使用JavaScript控制 */
+            transition: transform 0.1s ease-out;
+        }
 
 
         video {
@@ -167,7 +247,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.7);
+            background: rgba(0, 0, 0, 0.7);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -185,7 +265,7 @@
         .play-button {
             width: 80px;
             height: 80px;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border: 3px solid white;
             border-radius: 50%;
             display: flex;
@@ -197,7 +277,7 @@
         }
 
         .play-button:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
             transform: scale(1.1);
         }
 
@@ -240,18 +320,45 @@
             /* text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); */
             animation: subtleFloat 1s ease-in-out infinite;
         }
-        
-        
+
+
         @keyframes subtleFloat {
-            0% { transform: translateY(0) scale(1); -webkit-transform: translateY(0) scale(1); opacity: 0.96; }
-            50% { transform: translateY(-2px) scale(1.02); -webkit-transform: translateY(-2px) scale(1.02); opacity: 1; }
-            100% { transform: translateY(0) scale(1); -webkit-transform: translateY(0) scale(1); opacity: 0.96; }
+            0% {
+                transform: translateY(0) scale(1);
+                -webkit-transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+
+            50% {
+                transform: translateY(-2px) scale(1.02);
+                -webkit-transform: translateY(-2px) scale(1.02);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                -webkit-transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
         }
+
         @-webkit-keyframes subtleFloat {
-            0% { -webkit-transform: translateY(0) scale(1); opacity: 0.96; }
-            50% { -webkit-transform: translateY(-2px) scale(1.02); opacity: 1; }
-            100% { -webkit-transform: translateY(0) scale(1); opacity: 0.96; }
+            0% {
+                -webkit-transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+
+            50% {
+                -webkit-transform: translateY(-2px) scale(1.02);
+                opacity: 1;
+            }
+
+            100% {
+                -webkit-transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
         }
+
         .overlay .sub-instruction {
             margin-top: 6px;
             opacity: 0.9;
@@ -265,54 +372,141 @@
             /* 移除CSS动画，使用JavaScript控制 */
             transition: transform 0.1s ease-out;
         }
-        .cta-button.cta-end.show { 
+
+        .cta-button.cta-end.show {
             /* 移除CSS动画，使用JavaScript控制 */
             transition: transform 0.1s ease-out;
         }
-        .cta-button.show:hover { transform: scale(1.06); box-shadow: 0 10px 22px rgba(0,0,0,0.28); }
-        .cta-button.cta-end.show:hover { transform: translateX(-50%) scale(1.06); }
+
+        .cta-button.show:hover {
+            transform: scale(1.06);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+        }
+
+        .cta-button.cta-end.show:hover {
+            transform: translateX(-50%) scale(1.06);
+        }
 
         /* 关键帧：与hold-button的pulse共存 */
         @keyframes breathe {
-            0% { transform: translateY(0) scale(1); opacity: 0.96; }
-            50% { transform: translateY(-2px) scale(1.03); opacity: 1; }
-            100% { transform: translateY(0) scale(1); opacity: 0.96; }
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+
+            50% {
+                transform: translateY(-2px) scale(1.03);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
         }
+
         @keyframes ctaPulse {
-            0% { transform: scale(1); -webkit-transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
-            50% { transform: scale(1.06); -webkit-transform: scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
-            100% { transform: scale(1); -webkit-transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            0% {
+                transform: scale(1);
+                -webkit-transform: scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+
+            50% {
+                transform: scale(1.06);
+                -webkit-transform: scale(1.06);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+            }
+
+            100% {
+                transform: scale(1);
+                -webkit-transform: scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
         }
+
         @-webkit-keyframes ctaPulse {
-            0% { -webkit-transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
-            50% { -webkit-transform: scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
-            100% { -webkit-transform: scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            0% {
+                -webkit-transform: scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+
+            50% {
+                -webkit-transform: scale(1.06);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+            }
+
+            100% {
+                -webkit-transform: scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
         }
+
         /* 中心CTA动画，保持translateX(-50%)不丢失 */
         @keyframes ctaPulseCenter {
-            0% { transform: translateX(-50%) scale(1); -webkit-transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
-            50% { transform: translateX(-50%) scale(1.06); -webkit-transform: translateX(-50%) scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
-            100% { transform: translateX(-50%) scale(1); -webkit-transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            0% {
+                transform: translateX(-50%) scale(1);
+                -webkit-transform: translateX(-50%) scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.06);
+                -webkit-transform: translateX(-50%) scale(1.06);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+                -webkit-transform: translateX(-50%) scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
         }
+
         @-webkit-keyframes ctaPulseCenter {
-            0% { -webkit-transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
-            50% { -webkit-transform: translateX(-50%) scale(1.06); box-shadow: 0 10px 24px rgba(0,0,0,0.30); }
-            100% { -webkit-transform: translateX(-50%) scale(1); box-shadow: 0 6px 16px rgba(0,0,0,0.25); }
+            0% {
+                -webkit-transform: translateX(-50%) scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+
+            50% {
+                -webkit-transform: translateX(-50%) scale(1.06);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+            }
+
+            100% {
+                -webkit-transform: translateX(-50%) scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
         }
 
         /* Help 文案动画（街机风格弹跳+发光） */
         @keyframes helpPulse {
-            0% { transform: translateX(-50%) scale(1); filter: drop-shadow(0 0 0 rgba(255,91,110,0)); }
-            50% { transform: translateX(-50%) scale(1.06); filter: drop-shadow(0 0 12px rgba(255,91,110,0.7)); }
-            100% { transform: translateX(-50%) scale(1); filter: drop-shadow(0 0 0 rgba(255,91,110,0)); }
+            0% {
+                transform: translateX(-50%) scale(1);
+                filter: drop-shadow(0 0 0 rgba(255, 91, 110, 0));
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.06);
+                filter: drop-shadow(0 0 12px rgba(255, 91, 110, 0.7));
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+                filter: drop-shadow(0 0 0 rgba(255, 91, 110, 0));
+            }
         }
 
         /* 用户偏好减少动画时禁用动画 */
         @media (prefers-reduced-motion: reduce) {
+
             .overlay .instruction,
             .overlay .sub-instruction,
             .cta-button.show,
-            .hold-button .pulse { animation: none !important; }
+            .hold-button .pulse {
+                animation: none !important;
+            }
         }
 
         /* 帮助提示 */
@@ -323,7 +517,7 @@
             transform: translateX(-50%);
             z-index: 5;
             color: #fff;
-            font-size: 6vw;
+            /* font-size: 6vw; */
             font-weight: 700;
             letter-spacing: 0.5px;
             padding: 8px 14px;
@@ -343,18 +537,19 @@
             .video-container {
                 width: 100%;
             }
-            
+
             .instruction {
                 font-size: 16px;
             }
-            
+
             .sub-instruction {
                 font-size: 12px;
             }
         }
+
         /* 覆盖（最简版）：仅文字+放大缩小动画，无背景 */
         .overlay .instruction {
-            font-size: clamp(32px, 7.2vw, 48px);
+            /* font-size: clamp(32px, 7.2vw, 48px); */
             font-weight: 900;
             letter-spacing: 0.8px;
             /* padding: 0; */
@@ -364,46 +559,110 @@
             /* 移除CSS动画，使用JavaScript控制 */
             transition: transform 0.1s ease-out;
         }
+
         .overlay .instruction::before,
-        .overlay .instruction::after { content: none !important; }
+        .overlay .instruction::after {
+            content: none !important;
+        }
 
         @keyframes simplePulse {
-            0% { transform: scale(1); -webkit-transform: scale(1); }
-            50% { transform: scale(1.06); -webkit-transform: scale(1.06); }
-            100% { transform: scale(1); -webkit-transform: scale(1); }
+            0% {
+                transform: scale(1);
+                -webkit-transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.06);
+                -webkit-transform: scale(1.06);
+            }
+
+            100% {
+                transform: scale(1);
+                -webkit-transform: scale(1);
+            }
         }
+
         @-webkit-keyframes simplePulse {
-            0% { -webkit-transform: scale(1); }
-            50% { -webkit-transform: scale(1.06); }
-            100% { -webkit-transform: scale(1); }
+            0% {
+                -webkit-transform: scale(1);
+            }
+
+            50% {
+                -webkit-transform: scale(1.06);
+            }
+
+            100% {
+                -webkit-transform: scale(1);
+            }
         }
+
         @keyframes idleRipple {
-            0% { transform: scale(0.85); opacity: 0.7; }
-            60% { transform: scale(1.12); opacity: 1; }
-            100% { transform: scale(0.85); opacity: 0.7; }
+            0% {
+                transform: scale(0.85);
+                opacity: 0.7;
+            }
+
+            60% {
+                transform: scale(1.12);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.85);
+                opacity: 0.7;
+            }
         }
+
         @keyframes buttonPulse {
-            0% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.15); }
-            100% { transform: translateX(-50%) scale(1); }
+            0% {
+                transform: translateX(-50%) scale(1);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.15);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        /* 基于interaction-layer大小的字体调整, 单位vw是屏幕宽度百分比， rem是根元素字体大小 */
+        @container (min-width: 600px) {
+            .overlay .instruction {
+                font-size: 2rem !important;
+            }
+            .help-overlay {
+                font-size: 2rem !important;
+            }
+            .hold-button .label {
+                font-size: 2rem !important;
+            }
+            .cta-button.cta-start {
+                font-size: 2rem !important;
+            }
+            .cta-button.cta-end {
+                font-size: 2rem !important;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="video-container">
             <video id="video" preload="metadata" playsinline webkit-playsinline muted>
                 <source src="honor-of-kings-v1.mp4" type="video/mp4">
-                您的浏览器不支持视频播放。
+                Your browser does not support the video tag.
             </video>
-            
+
             <!-- 交互元素层 -->
             <div class="interaction-layer">
                 <!-- 初始播放提示 -->
                 <div class="overlay" id="initialOverlay">
                     <div class="instruction">TAP TO CONTINUE</div>
                 </div>
-                
+
                 <!-- 长按按钮 -->
                 <button class="hold-button" id="holdButton" aria-label="hold button" type="button">
                     <span class="pulse"></span>
@@ -430,7 +689,7 @@
                 this.ctaStart = document.getElementById('ctaStart');
                 this.ctaEnd = document.getElementById('ctaEnd');
                 this.helpOverlay = null;
-                
+
                 // 暂停时间点（秒）
                 this.pauseTimePoints = [2];
                 this.currentPauseIndex = 0;
@@ -440,15 +699,15 @@
                 this.isLongPressing = false;
                 this.longPressStartTime = 0;
                 this.longPressDuration = 0;
-                
+
                 this.init();
             }
-            
+
             init() {
                 this.bindEvents();
                 this.helpOverlay = document.getElementById('helpOverlay');
             }
-            
+
             bindEvents() {
                 // 点击初始提示区域
                 this.initialOverlay.addEventListener('click', () => {
@@ -501,7 +760,7 @@
                 this.holdButton.addEventListener('mouseleave', endHold);
                 this.holdButton.addEventListener('touchstart', startHold, { passive: false });
                 this.holdButton.addEventListener('touchend', endHold, { passive: false });
-                
+
                 // 视频时间更新
                 this.video.addEventListener('timeupdate', () => {
                     this.checkPauseTimePoints();
@@ -512,15 +771,15 @@
                 const targetUrl = 'https://apps.apple.com/us/app/honor-of-kings/id1619254071';
                 this.ctaStart.addEventListener('click', () => { window.location.href = targetUrl; });
                 this.ctaEnd.addEventListener('click', () => { window.location.href = targetUrl; });
-                
+
                 // 视频结束
                 this.video.addEventListener('ended', () => {
                     this.videoEnded();
                 });
-                
+
 
             }
-            
+
             startVideo() {
                 this.initialOverlay.classList.add('hidden');
                 this.ctaStart.classList.add('show');
@@ -534,7 +793,7 @@
                     console.error('视频播放失败:', error);
                 });
             }
-            
+
             toggleCtas() {
                 const t = this.video.currentTime;
                 if (typeof this.endTime === 'number' && t >= this.endTime) {
@@ -545,7 +804,7 @@
                     this.ctaEnd.classList.add('show');
                 }
             }
-            
+
             checkPauseTimePoints() {
                 const currentTime = this.video.currentTime;
                 if (typeof this.endTime === 'number' && currentTime >= this.endTime) {
@@ -571,22 +830,22 @@
                     this.currentPauseIndex++;
                 }
             }
-            
+
             pauseVideo() {
                 this.video.pause();
             }
-            
+
             resumeVideo() {
                 this.video.play();
             }
-            
+
             videoEnded() {
                 // this.initialOverlay.classList.remove('hidden');
                 // this.currentPauseIndex = 0;
                 // this.video.currentTime = 0;
                 // this.interactionHint.classList.remove('show');
             }
-            
+
             handleTouchStart(e) {
                 // 覆盖层可见时不阻止默认行为，交给点击事件隐藏覆盖层
                 if (!this.initialOverlay.classList.contains('hidden')) {
@@ -595,7 +854,7 @@
                 e.preventDefault();
                 this.startLongPress();
             }
-            
+
             handleTouchEnd(e) {
                 if (!this.initialOverlay.classList.contains('hidden')) {
                     return;
@@ -603,7 +862,7 @@
                 e.preventDefault();
                 this.endLongPress();
             }
-            
+
             handleMouseDown(e) {
                 if (!this.initialOverlay.classList.contains('hidden')) {
                     return;
@@ -611,17 +870,17 @@
                 e.preventDefault();
                 this.startLongPress();
             }
-            
+
             handleMouseUp(e) {
                 e.preventDefault();
                 this.endLongPress();
             }
-            
+
             handleMouseLeave(e) {
                 e.preventDefault();
                 this.endLongPress();
             }
-            
+
             startLongPress() {
                 if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
                     this.video.play();
@@ -633,7 +892,7 @@
                 if (this.helpOverlay) this.helpOverlay.style.display = 'none';
                 this.isLongPressing = true;
             }
-            
+
             endLongPress() {
                 if (!this.isLongPressing) {
                     if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
@@ -647,7 +906,7 @@
                 }
             }
         }
-        
+
         // 页面加载完成后初始化
         document.addEventListener('DOMContentLoaded', () => {
             // 动态计算视频宽高比
@@ -660,10 +919,10 @@
                     document.documentElement.style.setProperty('--video-ratio-inverse', ratioInverse);
                 }
             };
-            
+
             // 视频元数据加载完成后更新比例
             video.addEventListener('loadedmetadata', updateVideoRatio);
-            
+
             // Safari兼容：确保视频首帧显示但不自动播放
             video.addEventListener('loadedmetadata', () => {
                 // 只设置到首帧，不播放
@@ -682,12 +941,12 @@
                 elements.forEach(el => {
                     let scale = 1;
                     let direction = 1;
-                    
+
                     setInterval(() => {
                         scale += 0.02 * direction;
                         if (scale >= 1.06) direction = -1;
                         if (scale <= 1) direction = 1;
-                        
+
                         el.style.transform = `scale(${scale})`;
                         if (el.classList.contains('cta-end')) {
                             el.style.transform = `translateX(-50%) scale(${scale})`;
@@ -699,16 +958,16 @@
             // 动态检测新显示的元素并添加动画
             const addAnimationToElement = (element) => {
                 if (!element || element.dataset.animated) return;
-                
+
                 element.dataset.animated = 'true';
                 let scale = 1;
                 let direction = 1;
-                
+
                 setInterval(() => {
                     scale += 0.02 * direction;
                     if (scale >= 1.06) direction = -1;
                     if (scale <= 1) direction = 1;
-                    
+
                     if (element.classList.contains('cta-end')) {
                         element.style.transform = `translateX(-50%) scale(${scale})`;
                     } else {
@@ -727,7 +986,7 @@
                             }
                         }
                     });
-                    
+
                     mutation.target.classList.forEach((className) => {
                         if (className === 'show' && mutation.target.classList.contains('cta-button')) {
                             addAnimationToElement(mutation.target);
@@ -746,10 +1005,11 @@
 
             // 延迟启动动画，确保元素已渲染
             setTimeout(animateElements, 1000);
-            
+
             // 初始化应用
             new PlayableAdsVideo();
         });
     </script>
 </body>
-</html> 
+
+</html>
