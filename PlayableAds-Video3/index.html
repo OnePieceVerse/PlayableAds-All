@@ -696,6 +696,54 @@
                 });
             };
 
+            // 动态检测新显示的元素并添加动画
+            const addAnimationToElement = (element) => {
+                if (!element || element.dataset.animated) return;
+                
+                element.dataset.animated = 'true';
+                let scale = 1;
+                let direction = 1;
+                
+                setInterval(() => {
+                    scale += 0.02 * direction;
+                    if (scale >= 1.06) direction = -1;
+                    if (scale <= 1) direction = 1;
+                    
+                    if (element.classList.contains('cta-end')) {
+                        element.style.transform = `translateX(-50%) scale(${scale})`;
+                    } else {
+                        element.style.transform = `scale(${scale})`;
+                    }
+                }, 50);
+            };
+
+            // 监听DOM变化，为新显示的元素添加动画
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === 1) { // 元素节点
+                            if (node.classList && node.classList.contains('cta-button') && node.classList.contains('show')) {
+                                addAnimationToElement(node);
+                            }
+                        }
+                    });
+                    
+                    mutation.target.classList.forEach((className) => {
+                        if (className === 'show' && mutation.target.classList.contains('cta-button')) {
+                            addAnimationToElement(mutation.target);
+                        }
+                    });
+                });
+            });
+
+            // 开始观察
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class']
+            });
+
             // 延迟启动动画，确保元素已渲染
             setTimeout(animateElements, 1000);
             
