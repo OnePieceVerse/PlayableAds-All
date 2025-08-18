@@ -6,7 +6,7 @@ ENV='dev'
 PARTNER_NAME="abyss-voyage"
 # PARTNER_NAME="golden-spatula"
 LANG="en"
-VERSION="v6"
+VERSION="v7"
 PLATFORM_NAME='facebook'
 
 # 生成图片、视频的base64编码
