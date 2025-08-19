@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honor of Kings - Playable Ads H5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --video-ratio: 16/9;
+            /* 视频宽高比，根据实际视频调整 */
+            --video-ratio-inverse: 9/16;
+            /* 视频高宽比 */
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            /* background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); */
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: black;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: calc(100vw * var(--video-ratio-inverse));
+            max-height: 100vh;
+            max-width: calc(100vh * var(--video-ratio));
+            overflow: hidden;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: none;
+        }
+
+        /* 交互元素容器，与视频重叠 */
+        .interaction-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            container-type: inline-size; /* 启用容器查询 */
+            z-index: 10; /* 确保交互层在视频上方 */
+        }
+
+        .interaction-layer>* {
+            pointer-events: auto;
+        }
+
+        /* 添加内部发光效果 */
+        .hold-button {
+            position: absolute;
+            left: 50%;
+            bottom: 20%;
+            transform: translateX(-50%);
+            width: 24%;
+            height: 14%;
+            border-radius: 50%;
+            /* border: 3px solid rgba(255, 255, 255, 0.6); */
+            border: 3px solid rgba(242, 173, 12, 0.6);
+            outline: none;
+            background: radial-gradient(circle at center, rgba(237, 210, 128, 0.95) 0%, rgba(237, 210, 128, 0.9) 70%);
+            /* background: radial-gradient(circle at center, rgba(242, 173, 12, 0.95) 0%, rgba(242, 173, 12, 0.9) 70%); */
+            /* box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 
+                        inset 0 0 0 2px rgba(255, 255, 255, 0.5),
+                        inset 0 0 10px rgba(255, 255, 255, 0.4),
+                        0 5px 4px rgba(0, 0, 0, 0.1),
+                        0 10px 8px rgba(0, 0, 0, 0.1),
+                        0 20px 16px rgba(0, 0, 0, 0.1); */
+            /* color: #ffffff; */
+            /* color: #a1740f; */
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: none;
+            display: none; /* 初始隐藏，通过JavaScript控制显示 */
+            -webkit-tap-highlight-color: transparent;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            /* 允许光环溢出按钮 */
+            /* animation: buttonPulse 1.2s ease-in-out infinite; */
+            animation: buttonPulse 1.2s ease-in-out infinite;
+            backdrop-filter: blur(1px);
+            z-index: 100; /* 确保按钮在最上层 */
+            transition: transform 0.15s ease-out, background-color 0.15s ease-out, box-shadow 0.15s ease-out;
+        }
+
+        /* 添加水晶高光效果 */
+        .hold-button::before {
+            content: '';
+            position: absolute;
+            top: 5%;
+            left: 15%;
+            width: 70%;
+            height: 40%;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 100%);
+            border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+            z-index: 3; /* 确保高光在SVG图标之上 */
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        /* 添加光晕效果 */
+        .hold-button::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            /* background: radial-gradient(circle, rgba(140, 200, 255, 0.3) 0%, rgba(140, 200, 255, 0) 70%); */
+            background: radial-gradient(circle, rgba(237, 212, 128, 0.3) 0%, rgba(237, 212, 128, 0) 70%);
+            z-index: 0; /* 确保光晕在按钮之下 */
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        /* 按下时的内部发光效果 */
+        .hold-button.holding {
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35), 
+                        inset 0 0 0 2px rgba(255, 255, 255, 0.75),
+                        inset 0 0 15px rgba(255, 255, 255, 0.5),
+                        0 3px 3px rgba(0, 0, 0, 0.1),
+                        0 6px 6px rgba(0, 0, 0, 0.1),
+                        0 12px 10px rgba(0, 0, 0, 0.1);
+            /* background: radial-gradient(circle at center, rgba(120, 190, 255, 0.95) 0%, rgba(60, 140, 255, 0.9) 70%);             */
+            background: radial-gradient(circle at center, rgba(220, 155, 35, 0.95) 0%, rgba(224, 160, 40, 0.9) 70%);
+            transform: translateX(-50%) scale(0.95);
+            /* border: 3px solid rgba(255, 255, 255, 0.7);s */
+            border: 3px solid rgba(226, 168, 41, 0.7);
+        }
+
+        .hold-button.holding::before {
+            opacity: 0.4;
+            top: 8%;
+            height: 35%;
+        }
+
+        .hold-button .label {
+            pointer-events: none;
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            transform: translateY(0);
+            font-size: 1.2em;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .hold-button .pulse {
+            position: absolute;
+            inset: 0;
+            /* 默认在按钮范围内 */
+            border-radius: 50%;
+            background: radial-gradient(closest-side, rgba(255, 255, 255, 0.6), transparent 95%);
+            z-index: 1;
+            /* 在文字之下 */
+            will-change: transform, opacity;
+            filter: drop-shadow(0 0 8px rgba(243, 217, 161, 0.7));
+            pointer-events: none;
+        }
+
+        /* 未长按：按钮内的提示波纹（不溢出） */
+        .hold-button:not(.holding) .pulse {
+            animation: idleRipple 1.2s ease-out infinite;
+        }
+
+        .hold-button.holding .pulse {
+            animation: idleRipple 1.2s ease-out infinite;
+        }
+
+        /* 按下后使用外部ripple实现外扩 */
+        .hold-button.holding {
+            box-shadow: 0 14px 34px rgba(0, 0, 0, 0.35), 
+                        inset 0 0 0 2px rgba(255, 255, 255, 0.75),
+                        inset 0 0 15px rgba(255, 255, 255, 0.5);
+            background: rgba(80, 160, 255, 0.9);
+            transform: translateX(-50%) scale(0.95);
+        }
+
+        @keyframes pulse {
+            from {
+                transform: scale(0.9);
+                opacity: 0.9;
+            }
+
+            to {
+                transform: scale(1.15);
+                opacity: 0;
+            }
+        }
+
+        /* 波纹特效：按住时生成多层同心圆扩散 */
+        .hold-button .ripple {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 4px solid rgba(210, 152, 26, 0.9);
+            transform: scale(0.45);
+            opacity: 0.9;
+            animation: rippleWave 1200ms ease-out forwards;
+            pointer-events: none;
+            filter: drop-shadow(0 0 8px rgba(210, 152, 26, 0.8));
+        }
+
+        @keyframes rippleWave {
+            to {
+                transform: scale(3.2);
+                opacity: 0;
+                border-color: rgba(210, 152, 26, 0);
+            }
+        }
+
+        /* 按钮范围内的墨水波纹（更清晰） */
+        .hold-button .ripple-in {
+            position: absolute;
+            inset: 0;
+            /* 限定在按钮范围内 */
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(210, 152, 26, 0.8) 0%, rgba(210, 152, 26, 0.5) 35%, rgba(210, 152, 26, 0) 70%);
+            animation: rippleIn 900ms ease-out forwards;
+            z-index: 1;
+            /* 在文字下方 */
+            mix-blend-mode: screen;
+            pointer-events: none;
+        }
+
+        @keyframes rippleIn {
+            from {
+                transform: scale(0.4);
+                opacity: 0.95;
+            }
+
+            to {
+                transform: scale(1.4);
+                opacity: 0;
+            }
+        }
+
+        .cta-button {
+            position: absolute;
+            display: none;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .cta-button.show {
+            display: inline-block;
+        }
+
+        /* CTA Start：右上角较小按钮 */
+        .cta-button.cta-start {
+            right: 2%;
+            top: 2%;
+            padding: 10px 14px;
+            /* font-size: 4vw; */
+            color: #a1740f;
+            background: #f3d9a1;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+
+        .cta-button.cta-start.show {
+            animation: ctaPulse 1.6s ease-in-out infinite;
+        }
+
+        /* CTA End：居中较大按钮 */
+        .cta-button.cta-end {
+            left: 50%;
+            top: 58%;
+            transform: translateX(-50%);
+            padding: 14px 22px;
+            /* font-size: 5vw; */
+            color: #a1740f;
+            background: #fbffb7;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button.cta-end.show {
+            /* 移除CSS动画，使用JavaScript控制 */
+            transition: transform 0.1s ease-out;
+        }
+
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 3px solid white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .play-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+
+        .play-button::after {
+            content: '';
+            width: 0;
+            height: 0;
+            border-left: 20px solid white;
+            border-top: 12px solid transparent;
+            border-bottom: 12px solid transparent;
+            margin-left: 5px;
+        }
+
+        .instruction {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .sub-instruction {
+            font-size: 14px;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+
+        /* 初始提示动画与强化样式 */
+        /* 首屏Tap样式：柔和游戏风 */
+        .overlay .instruction {
+            position: relative;
+            font-size: clamp(18px, 4.8vw, 30px);
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            padding: 10px 18px;
+            border-radius: 18px;
+            color: #ffffff;
+            /* background: rgba(0, 0, 0, 0.35); */
+            /* backdrop-filter: blur(8px); */
+            /* border: 1.5px solid rgba(255, 255, 255, 0.35); */
+            /* box-shadow: 0 8px 22px rgba(0, 0, 0, 0.28); */
+            /* text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45); */
+            animation: subtleFloat 1s ease-in-out infinite;
+        }
+
+
+        @keyframes subtleFloat {
+            0% {
+                transform: translateY(0) scale(1);
+                -webkit-transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+
+            50% {
+                transform: translateY(-2px) scale(1.02);
+                -webkit-transform: translateY(-2px) scale(1.02);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                -webkit-transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+        }
+
+        @-webkit-keyframes subtleFloat {
+            0% {
+                -webkit-transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+
+            50% {
+                -webkit-transform: translateY(-2px) scale(1.02);
+                opacity: 1;
+            }
+
+            100% {
+                -webkit-transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+        }
+
+        .overlay .sub-instruction {
+            margin-top: 6px;
+            opacity: 0.9;
+            animation: breathe 2.4s ease-in-out infinite;
+            animation-delay: .3s;
+        }
+
+        /* CTA按钮呼吸动画与发光 */
+        .cta-button.show {
+            display: inline-block;
+            /* 移除CSS动画，使用JavaScript控制 */
+            transition: transform 0.1s ease-out;
+        }
+
+        .cta-button.cta-end.show {
+            /* 移除CSS动画，使用JavaScript控制 */
+            transition: transform 0.1s ease-out;
+        }
+
+        .cta-button.show:hover {
+            transform: scale(1.06);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28);
+        }
+
+        .cta-button.cta-end.show:hover {
+            transform: translateX(-50%) scale(1.06);
+        }
+
+        /* 关键帧：与hold-button的pulse共存 */
+        @keyframes breathe {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+
+            50% {
+                transform: translateY(-2px) scale(1.03);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 0.96;
+            }
+        }
+
+        @keyframes ctaPulse {
+            0% {
+                transform: scale(1);
+                -webkit-transform: scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+
+            50% {
+                transform: scale(1.06);
+                -webkit-transform: scale(1.06);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+            }
+
+            100% {
+                transform: scale(1);
+                -webkit-transform: scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        @-webkit-keyframes ctaPulse {
+            0% {
+                -webkit-transform: scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+
+            50% {
+                -webkit-transform: scale(1.06);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+            }
+
+            100% {
+                -webkit-transform: scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        /* 中心CTA动画，保持translateX(-50%)不丢失 */
+        @keyframes ctaPulseCenter {
+            0% {
+                transform: translateX(-50%) scale(1);
+                -webkit-transform: translateX(-50%) scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.06);
+                -webkit-transform: translateX(-50%) scale(1.06);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+                -webkit-transform: translateX(-50%) scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        @-webkit-keyframes ctaPulseCenter {
+            0% {
+                -webkit-transform: translateX(-50%) scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+
+            50% {
+                -webkit-transform: translateX(-50%) scale(1.06);
+                box-shadow: 0 10px 24px rgba(0, 0, 0, 0.30);
+            }
+
+            100% {
+                -webkit-transform: translateX(-50%) scale(1);
+                box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+            }
+        }
+
+        /* Help 文案动画（街机风格弹跳+发光） */
+        @keyframes helpPulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+                filter: drop-shadow(0 0 0 rgba(255, 91, 110, 0));
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.06);
+                filter: drop-shadow(0 0 12px rgba(255, 91, 110, 0.7));
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+                filter: drop-shadow(0 0 0 rgba(255, 91, 110, 0));
+            }
+        }
+
+        /* 用户偏好减少动画时禁用动画 */
+        @media (prefers-reduced-motion: reduce) {
+
+            .overlay .instruction,
+            .overlay .sub-instruction,
+            .cta-button.show,
+            .hold-button .pulse {
+                animation: none !important;
+            }
+        }
+
+        /* 帮助提示 */
+        .help-overlay {
+            position: absolute;
+            left: 13%;
+            top: 58%;
+            transform: translateX(-50%);
+            z-index: 5;
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            padding: 8px 14px;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.45);
+            display: none;
+            transition: transform 0.1s ease-out;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            white-space: nowrap;
+        }
+
+
+        @media (max-width: 768px) {
+            .video-container {
+                width: 100%;
+            }
+
+            .instruction {
+                font-size: 16px;
+            }
+
+            .sub-instruction {
+                font-size: 12px;
+            }
+        }
+
+        /* 覆盖（最简版）：仅文字+放大缩小动画，无背景 */
+        .overlay .instruction {
+            /* font-size: clamp(32px, 7.2vw, 48px); */
+            font-weight: 900;
+            letter-spacing: 0.8px;
+            /* padding: 0; */
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            /* 移除CSS动画，使用JavaScript控制 */
+            transition: transform 0.1s ease-out;
+        }
+
+        .overlay .instruction::before,
+        .overlay .instruction::after {
+            content: none !important;
+        }
+
+        @keyframes simplePulse {
+            0% {
+                transform: scale(1);
+                -webkit-transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.06);
+                -webkit-transform: scale(1.06);
+            }
+
+            100% {
+                transform: scale(1);
+                -webkit-transform: scale(1);
+            }
+        }
+
+        @-webkit-keyframes simplePulse {
+            0% {
+                -webkit-transform: scale(1);
+            }
+
+            50% {
+                -webkit-transform: scale(1.06);
+            }
+
+            100% {
+                -webkit-transform: scale(1);
+            }
+        }
+
+        @keyframes idleRipple {
+            0% {
+                transform: scale(0.85);
+                opacity: 0.7;
+            }
+
+            60% {
+                transform: scale(1.12);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.85);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes buttonPulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 
+                            inset 0 0 0 2px rgba(255, 255, 255, 0.5),
+                            inset 0 0 10px rgba(255, 255, 255, 0.4),
+                            0 5px 4px rgba(0, 0, 0, 0.1),
+                            0 10px 8px rgba(0, 0, 0, 0.1),
+                            0 20px 16px rgba(0, 0, 0, 0.1);
+                filter: brightness(1);
+            }
+
+            50% {
+                transform: translateX(-50%) scale(1.1);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35), 
+                            inset 0 0 0 3px rgba(255, 255, 255, 0.7),
+                            inset 0 0 15px rgba(255, 255, 255, 0.5),
+                            0 8px 6px rgba(0, 0, 0, 0.15),
+                            0 15px 12px rgba(0, 0, 0, 0.15),
+                            0 25px 20px rgba(0, 0, 0, 0.15);
+                filter: brightness(1.1);
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 
+                            inset 0 0 0 2px rgba(255, 255, 255, 0.5),
+                            inset 0 0 10px rgba(255, 255, 255, 0.4),
+                            0 5px 4px rgba(0, 0, 0, 0.1),
+                            0 10px 8px rgba(0, 0, 0, 0.1),
+                            0 20px 16px rgba(0, 0, 0, 0.1);
+                filter: brightness(1);
+            }
+        }
+
+        /* 添加光晕效果 */
+        .hold-button::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(140, 200, 255, 0.3) 0%, rgba(140, 200, 255, 0) 70%);
+            z-index: -1;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        /* 添加底部阴影，增强立体感 */
+        /* .hold-button {
+            position: absolute;
+            left: 50%;
+            bottom: 20%;
+            transform: translateX(-50%);
+            width: 24%;
+            height: 14%;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            outline: none;
+            background: radial-gradient(circle at center, rgba(140, 200, 255, 0.95) 0%, rgba(80, 160, 255, 0.9) 70%);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25), 
+                        inset 0 0 0 2px rgba(255, 255, 255, 0.5),
+                        inset 0 0 10px rgba(255, 255, 255, 0.4),
+                        0 5px 4px rgba(0, 0, 0, 0.1),
+                        0 10px 8px rgba(0, 0, 0, 0.1),
+                        0 20px 16px rgba(0, 0, 0, 0.1);
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: none;
+            display: none;
+            -webkit-tap-highlight-color: transparent;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            animation: buttonPulse 1.2s ease-in-out infinite;
+            backdrop-filter: blur(1px);
+            position: relative;
+        } */
+
+        /* 添加按钮按下和释放的过渡效果 */
+        /* .hold-button {
+            transition: transform 0.15s ease-out, background-color 0.15s ease-out, box-shadow 0.15s ease-out;
+        } */
+        
+        .hold-button:active {
+            transform: translateX(-50%) scale(0.92);
+            /* background: radial-gradient(circle at center, rgba(223, 187, 121, 0.95) 0%, rgba(203, 167, 101, 0.9) 70%); */
+            /* box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4), inset 0 0 0 2px rgba(255, 255, 255, 0.8); */
+            border: 3px solid rgba(243, 217, 161, 0.7);
+        }
+        
+        /* 提醒文本闪烁动画 */
+        @keyframes reminderFlash {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.7; transform: translateX(-50%) scale(1.1); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1); }
+        }
+
+        /* 基于interaction-layer大小的字体调整, 单位vw是屏幕宽度百分比， rem是根元素字体大小 */
+        @container (min-width: 600px) {
+            .overlay .instruction {
+                font-size: 2rem !important;
+            }
+            .help-overlay {
+                font-size: 2rem !important;
+            }
+            .hold-button .label {
+                font-size: 2rem !important;
+            }
+            .cta-button.cta-start {
+                font-size: 2rem !important;
+            }
+            .cta-button.cta-end {
+                font-size: 2rem !important;
+            }
+        }
+
+        /* 美化SVG图标 */
+        .hold-button .icon {
+            width: 55%;
+            height: 55%;
+            fill: #a17410;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2; /* 确保图标在按钮内容之上但在高光之下 */
+            pointer-events: none;
+            animation: iconPulse 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+            opacity: 0.95;
+        }
+
+        /* SVG图标动画 */
+        @keyframes iconPulse {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
+            50% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
+        }
+
+        @keyframes iconBounce {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
+            20% { transform: translate(-50%, -50%) scale(1.35); opacity: 1; }
+            40% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.95; }
+            60% { transform: translate(-50%, -50%) scale(1.15); opacity: 1; }
+            80% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.95; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.95; }
+        }
+
+        .hold-button .icon.remind {
+            animation: iconBounce 0.8s ease-in-out;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+        }
+
+        .hold-button.holding .icon {
+            fill: #a17410;
+            transform: translate(-50%, -50%) scale(0.9);
+            filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.2));
+        }
+
+        /* 隐藏文本标签 */
+        .hold-button .label {
+            display: none;
+        }
+
+        /* 确保按钮显示在正确的位置 */
+        /* .hold-button {
+            position: absolute;
+            left: 50%;
+            bottom: 20%;
+            transform: translateX(-50%);
+            width: 24%;
+            height: 14%;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.6);
+            outline: none;
+            background: radial-gradient(circle at center, rgba(225, 191, 21, 0.95) 0%, rgba(228, 182, 28, 0.9) 70%);
+            color: #ffffff;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: none;
+            display: none; 
+            -webkit-tap-highlight-color: transparent;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
+            animation: buttonPulse 1.2s ease-in-out infinite;
+            backdrop-filter: blur(1px);
+            z-index: 100;
+        } */
+
+        /* 移除可能导致冲突的按钮动画 */
+        @media (prefers-reduced-motion: reduce) {
+            .hold-button {
+                animation: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="video-container">
+            <video id="video" preload="metadata" playsinline webkit-playsinline muted>
+                <source src="honor-of-kings-v1.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <!-- 交互元素层 -->
+            <div class="interaction-layer">
+                <!-- 初始播放提示 -->
+                <div class="overlay" id="initialOverlay">
+                    <div class="instruction">TAP TO CONTINUE</div>
+                </div>
+
+                <!-- 长按按钮 -->
+                <button class="hold-button" id="holdButton" aria-label="hold button" type="button">
+                    <span class="pulse"></span>
+                    <span class="label">HOLD</span>
+                    <svg class="icon" style="vertical-align: middle; overflow: hidden;" viewBox="0 0 1229 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><path d="M788.48 215.04l-66.56 0c-8.47872 0-15.36-3.04128-15.36-11.52l0-66.56c0-8.48896 6.88128-15.36 15.36-15.36s15.36 6.87104 15.36 15.36L737.28 184.32l51.2 0c8.47872 0 15.36 6.87104 15.36 15.36S796.95872 215.04 788.48 215.04z"></path><path d="M834.37568 469.76c-4.16768 0-14.7456 1.4336-25.62048 4.8128-2.77504-36.99712-33.78176-66.2528-71.4752-66.2528-16.96768 0-32.58368 5.92896-44.87168 15.8208-9.08288-27.72992-33.09568-46.5408-62.83264-46.5408-19.69152 0-37.21216 8.09984-49.70496 21.32992l-3.15392-88.2176c12.46208-8.94976 23.27552-19.97824 32.17408-32.47104 25.07776 35.2768 66.18112 58.40896 112.66048 58.40896 76.22656 0 138.24-62.01344 138.24-138.24s-62.01344-138.24-138.24-138.24c-46.46912 0-87.56224 23.12192-112.64 58.37824-25.07776-35.25632-66.17088-58.37824-112.64-58.37824-76.22656 0-138.24 62.01344-138.24 138.24 0 53.00224 30.08512 98.93888 73.99424 122.10176l4.62848 216.40192c-8.27392 4.49536-20.82816 12.71808-36.89472 27.31008-55.59296 50.52416-73.78944 172.72832-11.008 267.3152 69.888 105.28768 151.77728 150.23104 273.83808 150.23104 129.32096 0 172.58496-64.90112 205.824-131.3792 31.96928-63.93856 32.33792-308.79744 32.33792-319.1808C900.7616 498.46272 869.74464 469.76 834.37568 469.76zM721.5616 90.88c59.2896 0 107.52 48.2304 107.52 107.52s-48.2304 107.52-107.52 107.52c-41.85088 0-78.10048-24.09472-95.85664-59.0848-7.40352-14.57152-11.66336-31.00672-11.66336-48.4352 0-17.38752 4.23936-33.76128 11.60192-48.31232C643.36896 115.02592 679.65952 90.88 721.5616 90.88zM840.93952 836.63872c-31.29344 62.58688-66.304 114.40128-178.33984 114.40128-111.98464 0-183.90016-39.54688-248.23808-136.4992-37.48864-56.48384-53.76-173.21984 6.07232-227.60448 6.46144-5.86752 12.16512-10.46528 16.9984-14.03904l2.29376 107.10016c0.18432 8.47872 6.79936 15.43168 15.68768 15.03232 8.47872-0.18432 15.2064-7.19872 15.03232-15.68768l-10.07616-470.70208c0-27.12576 16.85504-46.08 41.00096-46.08s41.00096 18.95424 41.0112 46.63296l10.24 286.72c0.27648 7.87456 6.48192 14.26432 14.336 14.77632 7.61856 0.48128 14.83776-4.99712 16.15872-12.76928l7.77216-46.08c0.14336-0.84992 0.21504-1.69984 0.21504-2.56 0-23.3472 16.54784-40.96 38.49216-40.96 24.75008 0 36.02432 21.22752 36.02432 40.96l0 30.72c0 8.48896 6.88128 15.36 15.36 15.36s15.36-6.87104 15.36-15.36c0-22.58944 18.37056-40.96 40.96-40.96s40.96 18.37056 40.96 40.96l0 66.56c0 8.47872 6.88128 15.36 15.36 15.36s15.36-6.88128 15.36-15.36l0-39.1168c6.144-2.99008 18.18624-6.97344 25.41568-6.97344 18.3296 0 35.65568 14.92992 35.65568 30.72C870.0416 599.97184 864.79872 788.92032 840.93952 836.63872z"></path></svg>
+                </button>
+
+                <!-- CTA 按钮 -->
+                <button class="cta-button cta-start" id="ctaStart" type="button">INSTALL</button>
+                <button class="cta-button cta-end" id="ctaEnd" type="button">INSTALL</button>
+
+                <!-- Help 提示 -->
+                <div class="help-overlay" id="helpOverlay">HOLD TO HELP HER!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class PlayableAdsVideo {
+            constructor() {
+                this.video = document.getElementById('video');
+                this.initialOverlay = document.getElementById('initialOverlay');
+                this.pauseOverlay = null;
+                this.holdButton = document.getElementById('holdButton');
+                this.ctaStart = document.getElementById('ctaStart');
+                this.ctaEnd = document.getElementById('ctaEnd');
+                this.helpOverlay = null;
+
+                // 暂停时间点（秒）- 确保值是正确的
+                this.pauseTimePoints = [2]; // 在2秒时显示hold按钮
+                this.currentPauseIndex = 0;
+                this.endTime = 11.5;
+                this.ctaEndTime = 16.5;
+                
+                // 交互状态
+                this.isLongPressing = false;
+                this.longPressStartTime = 0;
+                this.longPressDuration = 0;
+
+                this.init();
+            }
+
+            init() {
+                this.bindEvents();
+                this.helpOverlay = document.getElementById('helpOverlay');
+            }
+
+            bindEvents() {
+                // 点击初始提示区域
+                this.initialOverlay.addEventListener('click', () => {
+                    this.startVideo();
+                });
+                // 触摸立即开始（移动端）
+                this.initialOverlay.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    this.startVideo();
+                }, { passive: false });
+
+                // 视频加载完成后设置初始状态
+                this.video.addEventListener('loadeddata', () => {
+                    // 确保按钮初始隐藏
+                    this.holdButton.style.display = 'none';
+                    // 重置暂停点索引
+                    this.currentPauseIndex = 0;
+                });
+
+                // 长按按钮事件
+                const createRipple = (delay = 0) => {
+                    setTimeout(() => {
+                        // 创建外部波纹
+                        const outer = document.createElement('span');
+                        outer.className = 'ripple';
+                        
+                        // 随机化波纹的起始大小，使效果更自然
+                        const randomScale = 0.4 + Math.random() * 0.2; // 0.4-0.6之间的随机值
+                        outer.style.transform = `scale(${randomScale})`;
+                        
+                        // 创建内部波纹
+                        const inner = document.createElement('span');
+                        inner.className = 'ripple-in';
+                        
+                        // 添加到按钮
+                        this.holdButton.appendChild(outer);
+                        this.holdButton.appendChild(inner);
+                        
+                        // 设置波纹的移除时间，与动画时长匹配
+                        setTimeout(() => outer.remove(), 1200);
+                        setTimeout(() => inner.remove(), 900);
+                    }, delay);
+                };
+                let rippleInterval = null;
+                const startHold = (e) => {
+                    e.preventDefault();
+                    this.startLongPress();
+                    this.holdButton.classList.add('holding');
+                    
+                    // 改变按钮颜色 - 使用渐变
+                    this.holdButton.style.background = 'radial-gradient(circle at center, rgba(223, 187, 121, 0.95) 0%, rgba(203, 167, 101, 0.9) 70%)';
+                    
+                    // 起手连发5个错峰波纹，增加波纹数量
+                    createRipple(0);
+                    createRipple(100);
+                    createRipple(200);
+                    createRipple(300);
+                    createRipple(400);
+                    
+                    // 长按期间以更高频率继续生成
+                    if (!rippleInterval) {
+                        rippleInterval = setInterval(() => createRipple(0), 250);
+                    }
+                };
+                const endHold = (e) => {
+                    e.preventDefault();
+                    this.endLongPress();
+                    this.holdButton.classList.remove('holding');
+                    
+                    // 恢复按钮颜色 - 使用渐变
+                    this.holdButton.style.background = 'radial-gradient(circle at center, rgba(243, 217, 161, 0.95) 0%, rgba(223, 187, 121, 0.9) 70%)';
+                    
+                    if (rippleInterval) {
+                        clearInterval(rippleInterval);
+                        rippleInterval = null;
+                    }
+                };
+                this.holdButton.addEventListener('mousedown', startHold);
+                this.holdButton.addEventListener('mouseup', endHold);
+                this.holdButton.addEventListener('mouseleave', endHold);
+                this.holdButton.addEventListener('touchstart', startHold, { passive: false });
+                this.holdButton.addEventListener('touchend', endHold, { passive: false });
+
+                // 视频时间更新
+                this.video.addEventListener('timeupdate', () => {
+                    this.checkPauseTimePoints();
+                    this.toggleCtas();
+                });
+
+                // CTA点击跳转
+                const targetUrl = 'https://apps.apple.com/us/app/honor-of-kings/id1619254071';
+                this.ctaStart.addEventListener('click', () => { window.location.href = targetUrl; });
+                this.ctaEnd.addEventListener('click', () => { window.location.href = targetUrl; });
+
+                // 视频结束
+                this.video.addEventListener('ended', () => {
+                    this.videoEnded();
+                });
+
+
+            }
+
+            startVideo() {
+                // 隐藏初始覆盖层
+                this.initialOverlay.classList.add('hidden');
+                
+                // 显示CTA开始按钮
+                this.ctaStart.classList.add('show');
+                this.ctaEnd.classList.remove('show');
+                
+                // 隐藏hold按钮，确保它只在暂停点显示
+                this.holdButton.style.display = 'none';
+                
+                // 重置暂停点索引，确保每次播放都能正确显示按钮
+                this.currentPauseIndex = 0;
+                
+                // 取消静音并播放视频
+                this.video.muted = false;
+                this.video.play().then(() => {
+                }).catch(error => {
+                    console.error('视频播放失败:', error);
+                });
+            }
+
+            toggleCtas() {
+                const t = this.video.currentTime;
+                if (typeof this.endTime === 'number' && t >= this.endTime) {
+                    this.holdButton.style.display = 'none';
+                    this.ctaStart.classList.remove('show');
+                }
+                if (typeof this.ctaEndTime === 'number' && t >= this.ctaEndTime) {
+                    this.ctaEnd.classList.add('show');
+                }
+            }
+
+            checkPauseTimePoints() {
+                const currentTime = this.video.currentTime;
+                
+                // 检查是否已经到达结束时间
+                if (typeof this.endTime === 'number' && currentTime >= this.endTime) {
+                    this.holdButton.style.display = 'none';
+                    this.ctaStart.classList.remove('show');
+                    return; // 提前返回，避免后续逻辑
+                }
+                
+                // 检查是否已经到达CTA结束时间
+                if (typeof this.ctaEndTime === 'number' && currentTime >= this.ctaEndTime) {
+                    // endTime 到达：显示结束CTA，隐藏开始CTA和长按按钮
+                    this.ctaEnd.classList.add('show');
+                    return; // 提前返回，避免后续逻辑
+                }
+                
+                // 在endTime之前保持显示ctaStart
+                this.ctaStart.classList.add('show');
+                this.ctaEnd.classList.remove('show');
+                
+                // 检查是否已经处理完所有暂停点
+                if (this.currentPauseIndex >= this.pauseTimePoints.length) {
+                    return; // 已经处理完所有暂停点，不需要再检查
+                }
+                
+                // 获取当前需要检查的暂停点
+                const pauseTime = this.pauseTimePoints[this.currentPauseIndex];
+                
+                // 检查是否到达暂停点
+                if (currentTime >= pauseTime) {
+                    // 到达暂停点：暂停视频并显示长按按钮，显示帮助提示
+                    this.pauseVideo();
+                    
+                    // 显示按钮，使用flex布局
+                    this.holdButton.style.display = 'inline-flex';
+                    
+                    // 显示帮助提示，隐藏开始CTA
+                    if (this.helpOverlay) this.helpOverlay.style.display = 'block';
+                    this.ctaStart.classList.remove('show');
+                    
+                    // 增加暂停点索引，下次检查下一个暂停点
+                    this.currentPauseIndex++;
+                }
+            }
+
+            pauseVideo() {
+                this.video.pause();
+                
+                // 检查是否是在暂停点暂停的视频
+                const currentPauseIndex = this.currentPauseIndex - 1; // 因为在checkPauseTimePoints中已经增加了索引
+                if (currentPauseIndex >= 0 && currentPauseIndex < this.pauseTimePoints.length) {
+                    const pauseTime = this.pauseTimePoints[currentPauseIndex];
+                    // 如果当前时间接近暂停点，显示按钮
+                    if (Math.abs(this.video.currentTime - pauseTime) < 0.5) {
+                        this.holdButton.style.display = 'inline-flex';
+                    }
+                }
+            }
+
+            resumeVideo() {
+                this.video.play();
+            }
+
+            videoEnded() {
+            }
+
+            handleTouchStart(e) {
+                // 覆盖层可见时不阻止默认行为，交给点击事件隐藏覆盖层
+                if (!this.initialOverlay.classList.contains('hidden')) {
+                    return;
+                }
+                e.preventDefault();
+                this.startLongPress();
+            }
+
+            handleTouchEnd(e) {
+                if (!this.initialOverlay.classList.contains('hidden')) {
+                    return;
+                }
+                e.preventDefault();
+                this.endLongPress();
+            }
+
+            handleMouseDown(e) {
+                if (!this.initialOverlay.classList.contains('hidden')) {
+                    return;
+                }
+                e.preventDefault();
+                this.startLongPress();
+            }
+
+            handleMouseUp(e) {
+                e.preventDefault();
+                this.endLongPress();
+            }
+
+            handleMouseLeave(e) {
+                e.preventDefault();
+                this.endLongPress();
+            }
+
+            startLongPress() {
+                if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
+                    this.video.play();
+                    return;
+                }
+                if (this.video.paused) {
+                    this.resumeVideo();
+                }
+                
+                // 移除SVG动画类
+                const iconElement = this.holdButton.querySelector('.icon');
+                if (iconElement) {
+                    iconElement.classList.remove('remind');
+                }
+                
+                // 隐藏帮助提示
+                if (this.helpOverlay) {
+                    this.helpOverlay.style.display = 'none';
+                }
+                this.isLongPressing = true;
+            }
+
+            endLongPress() {
+                if (!this.isLongPressing) {
+                    if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
+                        this.video.play();
+                    }
+                    return;
+                }
+                this.isLongPressing = false;
+                if (!(typeof this.endTime === 'number' && this.video.currentTime >= this.endTime)) {
+                    this.video.pause();
+                    
+                    // 使用SVG图标动画提示用户需要长按
+                    this.showSvgReminder();
+                }
+            }
+            
+            // 添加SVG图标动画提示
+            showSvgReminder() {
+                const iconElement = this.holdButton.querySelector('.icon');
+                if (iconElement) {
+                    // 添加提醒动画类
+                    iconElement.classList.add('remind');
+                    
+                    // 动画结束后移除类
+                    setTimeout(() => {
+                        iconElement.classList.remove('remind');
+                    }, 800);
+                    
+                    // 连续提示3次
+                    setTimeout(() => {
+                        iconElement.classList.add('remind');
+                        setTimeout(() => {
+                            iconElement.classList.remove('remind');
+                        }, 800);
+                    }, 1200);
+                    
+                    setTimeout(() => {
+                        iconElement.classList.add('remind');
+                        setTimeout(() => {
+                            iconElement.classList.remove('remind');
+                        }, 800);
+                    }, 2400);
+                }
+                
+                // 隐藏文字提示
+                if (this.helpOverlay) {
+                    this.helpOverlay.style.display = 'none';
+                }
+            }
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 动态计算视频宽高比
+            const video = document.getElementById('video');
+            const updateVideoRatio = () => {
+                if (video.videoWidth && video.videoHeight) {
+                    const ratio = video.videoWidth / video.videoHeight;
+                    const ratioInverse = video.videoHeight / video.videoWidth;
+                    document.documentElement.style.setProperty('--video-ratio', ratio);
+                    document.documentElement.style.setProperty('--video-ratio-inverse', ratioInverse);
+                }
+            };
+
+            // 视频元数据加载完成后更新比例
+            video.addEventListener('loadedmetadata', updateVideoRatio);
+
+            // Safari兼容：确保视频首帧显示但不自动播放
+            video.addEventListener('loadedmetadata', () => {
+                // 只设置到首帧，不播放
+                video.currentTime = 0;
+                
+                // 测试按钮显示
+                // setTimeout(() => {
+                //     const holdButton = document.getElementById('holdButton');
+                //     if (holdButton) {
+                //         holdButton.style.display = 'inline-flex';
+                //     }
+                // }, 1000);
+            });
+
+            // 手动动画控制（Safari兼容）
+            const animateElements = () => {
+                const elements = [
+                    document.querySelector('.overlay .instruction'),
+                    document.querySelector('.cta-button.cta-start.show'),
+                    document.querySelector('.cta-button.cta-end.show'),
+                    document.querySelector('.help-overlay')
+                ].filter(el => el);
+
+                elements.forEach(el => {
+                    let scale = 1;
+                    let direction = 1;
+
+                    setInterval(() => {
+                        scale += 0.02 * direction;
+                        if (scale >= 1.06) direction = -1;
+                        if (scale <= 1) direction = 1;
+
+                        el.style.transform = `scale(${scale})`;
+                        if (el.classList.contains('cta-end')) {
+                            el.style.transform = `translateX(-50%) scale(${scale})`;
+                        }
+                    }, 50);
+                });
+            };
+
+            // 动态检测新显示的元素并添加动画
+            const addAnimationToElement = (element) => {
+                if (!element || element.dataset.animated) return;
+
+                element.dataset.animated = 'true';
+                let scale = 1;
+                let direction = 1;
+
+                setInterval(() => {
+                    scale += 0.02 * direction;
+                    if (scale >= 1.06) direction = -1;
+                    if (scale <= 1) direction = 1;
+
+                    if (element.classList.contains('cta-end')) {
+                        element.style.transform = `translateX(-50%) scale(${scale})`;
+                    } else {
+                        element.style.transform = `scale(${scale})`;
+                    }
+                }, 50);
+            };
+
+            // 监听DOM变化，为新显示的元素添加动画
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeType === 1) { // 元素节点
+                            if (node.classList && node.classList.contains('cta-button') && node.classList.contains('show')) {
+                                addAnimationToElement(node);
+                            }
+                        }
+                    });
+
+                    mutation.target.classList.forEach((className) => {
+                        if (className === 'show' && mutation.target.classList.contains('cta-button')) {
+                            addAnimationToElement(mutation.target);
+                        }
+                    });
+                });
+            });
+
+            // 开始观察
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['class']
+            });
+
+            // 延迟启动动画，确保元素已渲染
+            setTimeout(animateElements, 1000);
+
+            // 初始化应用
+            new PlayableAdsVideo();
+
+            // 移除强制显示按钮的测试代码
+        });
+    </script>
+</body>
+
+</html>
