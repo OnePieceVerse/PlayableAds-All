@@ -1,6 +1,19 @@
 {
     "games": [
         {
+            "id": "HOK-Flappy-Ball",
+            "url": "HOK-Flappy-Ball/index.html",
+            "image": "assets/works/games/HOKFlappyBall.png",
+            "title": {
+                "zh": "HOK Flappy Ball",
+                "en": "HOK Flappy Ball"
+            },
+            "description": {
+                "zh": "HOK Flappy Ball",
+                "en": "HOK Flappy Ball"
+            }
+        },
+        {
             "id": "BlockShot",
             "url": "PlayableAds-Templates/BlockShot/index.html",
             "image": "assets/works/games/BlockShot.png",
