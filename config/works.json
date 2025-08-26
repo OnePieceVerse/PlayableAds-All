@@ -32,7 +32,7 @@
             "image": "assets/works/games/MultiPlayerRacing2.png",
             "title": {
                 "zh": "金铲铲之战-多人竞速游戏",
-                "en": "TFT - Multiplayer Racing Game"
+                "en": "Golden Spatula - Multiplayer Racing Game"
             },
             "description": {
                 "zh": "紧张刺激的沉浸式多人竞速体验",
@@ -134,6 +134,151 @@
     "videos": [
         {
             "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video3/index2.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/hok-hold.png",
+            "title": {
+                "zh": "Honner of Kings 躲避障碍 v2",
+                "en": "Honner of Kings Avoid Obstacles v2"
+            },
+            "description": {
+                "zh": "可试玩游戏的割草游戏视频体验，躲避障碍",
+                "en": "Playable game experience, avoid obstacles"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video3/index.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/hok-hold.png",
+            "title": {
+                "zh": "Honner of Kings 躲避障碍 v1",
+                "en": "Honner of Kings Avoid Obstacles v1"
+            },
+            "description": {
+                "zh": "可试玩游戏的割草游戏视频体验，躲避障碍",
+                "en": "Playable game experience, avoid obstacles"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/index-en-v7.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/av-sail.png",
+            "title": {
+                "zh": "Abyss Voyage 航行",
+                "en": "Abyss Voyage Sail"
+            },
+            "description": {
+                "zh": "可试玩游戏的割草游戏视频体验，航行",
+                "en": "Playable game experience, sail"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-en-v3-index.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/av-equip-shatter.png",
+            "title": {
+                "zh": "Abyss Voyage 升级装备",
+                "en": "Abyss Voyage Upgrade Equipments"
+            },
+            "description": {
+                "zh": "可试玩游戏的割草游戏视频体验，升级装备",
+                "en": "Playable game experience"
+            }
+        },
+        
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-en-v2-index.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/av-upgrade-skill.png",
+            "title": {
+                "zh": "Abyss Voyage 升级技能",
+                "en": "Abyss Voyage Upgrade Skill"
+            },
+            "description": {
+                "zh": "可试玩游戏的割草游戏视频体验，升级技能",
+                "en": "Playable game experience"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-en-v1-index.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/av-skill-buff.png",
+            "title": {
+                "zh": "Abyss Voyage 选择技能和祝福",
+                "en": "Abyss Voyage Choose Skill and Blessing"
+            },
+            "description": {
+                "zh": "可试玩游戏的割草游戏视频体验，技能和祝福",
+                "en": "Playable game experience, choose skill and blessing"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video2/partners/golden-spatula/platforms/applovin/index-en-v3.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/jcc-three-star.png",
+            "title": {
+                "zh": "金铲铲之战之合成三星英雄",
+                "en": "Golden Spatula - Interactive Video"
+            },
+            "description": {
+                "zh": "可试玩游戏的视频体验，合成三星英雄",
+                "en": "Playable game experience, three-star hero"
+            }
+        }, 
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video2/partners/golden-spatula/platforms/applovin/index-en-v2.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/jcc-start-v2.png",
+            "title": {
+                "zh": "金铲铲之战之开始游戏v2",
+                "en": "Golden Spatula - Interactive Video v2"
+            },
+            "description": {
+                "zh": "可试玩游戏的视频体验，开始游戏",
+                "en": "Playable game experience, start game"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
+            "url": "PlayableAds-Video2/partners/golden-spatula/platforms/applovin/index-en-v1.html",
+            "params": {
+                "config": ""
+            },
+            "image": "assets/works/videos/jcc-start-v1.png",
+            "title": {
+                "zh": "金铲铲之战之开始游戏v1",
+                "en": "Golden Spatula - Interactive Video v1"
+            },
+            "description": {
+                "zh": "可试玩游戏的视频体验，开始游戏",
+                "en": "Playable game experience, start game"
+            }
+        },
+        {
+            "id": "interactiveVideoHorizontal",
             "url": "PlayableAds-Video/index.html",
             "params": {
                 "config": "config_升级_v1.json"
@@ -141,7 +286,7 @@
             "image": "assets/works/videos/jcc-upgrade-v1.png",
             "title": {
                 "zh": "金铲铲之战之升级（竖屏）",
-                "en": "TFT - Interactive Video (Vertical)"
+                "en": "Golden Spatula - Interactive Video (Vertical)"
             },
             "description": {
                 "zh": "可试玩游戏的视频体验，竖屏模式",
@@ -157,7 +302,7 @@
             "image": "assets/works/videos/jcc-upgrade-v2.png",
             "title": {
                 "zh": "金铲铲之战之升级（竖屏v2）",
-                "en": "TFT - Interactive Video (Vertical v2)"
+                "en": "Golden Spatula - Interactive Video (Vertical v2)"
             },
             "description": {
                 "zh": "可试玩游戏的视频体验，竖屏模式，首页有上下Banner",
@@ -173,7 +318,7 @@
             "image": "assets/works/videos/jcc-upgrade-v2.png",
             "title": {
                 "zh": "金铲铲之战之升级（竖屏V2+横屏）",
-                "en": "TFT - Interactive Video (Vertical v2 + Horizontal)"
+                "en": "Golden Spatula - Interactive Video (Vertical v2 + Horizontal)"
             },
             "description": {
                 "zh": "可试玩游戏的视频体验，先竖屏后横屏，首页有上下Banner",
@@ -189,7 +334,7 @@
             "image": "assets/works/videos/jcc-upgrade-star.png",
             "title": {
                 "zh": "金铲铲之战之升星（竖屏）",
-                "en": "TFT - Interactive Video (Vertical)"
+                "en": "Golden Spatula - Interactive Video (Vertical)"
             },
             "description": {
                 "zh": "可试玩游戏的视频体验，竖屏模式",
@@ -205,7 +350,7 @@
             "image": "assets/works/videos/jcc-partner.png",
             "title": {
                 "zh": "金铲铲之战之羁绊（横屏）",
-                "en": "TFT - Interactive Video (Horizontal)"
+                "en": "Golden Spatula - Interactive Video (Horizontal)"
             },
             "description": {
                 "zh": "可试玩游戏的视频体验，横屏模式",
@@ -224,7 +369,7 @@
             "image": "assets/works/images/jcc.png",
             "title": {
                 "zh": "金铲铲之战-互动图片",
-                "en": "TFT - Interactive Image"
+                "en": "Golden Spatula - Interactive Image"
             },
             "description": {
                 "zh": "可点击探索的互动图片",
