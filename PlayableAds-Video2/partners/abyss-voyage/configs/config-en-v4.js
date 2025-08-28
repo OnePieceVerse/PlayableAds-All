@@ -20,12 +20,12 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.38,
-          "y": 0.79
+          "x": 0.43,
+          "y": 0.8
         },
         "portrait": {
-          "x": 0.28,
-          "y": 0.81
+          "x": 0.47,
+          "y": 0.82
         }
       },
       "guideImage": "abyss-voyage-guide.webp",
@@ -39,18 +39,18 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.5,
-          "y": 0.83
+          "x": 0.59,
+          "y": 0.84
         },
         "portrait": {
-          "x": 0.5,
-          "y": 0.82
+          "x": 0.85,
+          "y": 0.84
         }
       },
       "swipeDirection": "slide-bounce"
     },
     {
-      "time": 2,
+      "time": 0.25,
       "duration": 0,
       "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
@@ -64,12 +64,12 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.35,
-          "y": 0.55
+          "x": 0.37,
+          "y": 0.67
         },
         "portrait": {
-          "x": 0.1,
-          "y": 0.58
+          "x": 0,
+          "y": 0.67
         }
       },
       "guideImage": "abyss-voyage-guide.webp",
@@ -83,18 +83,18 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.5,
-          "y": 0.6
+          "x": 0.47,
+          "y": 0.7
         },
         "portrait": {
-          "x": 0.51,
-          "y": 0.6
+          "x": 0.4,
+          "y": 0.7
         }
       },
       "swipeDirection": "bounce"
     },
     {
-      "time": 5,
+      "time": 1.9,
       "duration": 0,
       "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
@@ -108,12 +108,12 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.45,
-          "y": 0.46
+          "x": 0.38,
+          "y": 0.67
         },
         "portrait": {
-          "x": 0.15,
-          "y": 0.47
+          "x": 0,
+          "y": 0.67
         }
       },
       "guideImage": "abyss-voyage-guide.webp",
@@ -127,12 +127,144 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.58,
-          "y": 0.49
+          "x": 0.48,
+          "y": 0.7
+        },
+        "portrait": {
+          "x": 0.4,
+          "y": 0.7
+        }
+      },
+      "swipeDirection": "bounce"
+    },
+    {
+      "time": 2.5,
+      "duration": 0,
+      "buttonImage": "start-button-v1-transparent.png",
+      "buttonEffect": "scale",
+      "buttonSize": {
+        "landscape": {
+          "width": 0.2
+        },
+        "portrait": {
+          "width": 0.8
+        }
+      },
+      "buttonPosition": {
+        "landscape": {
+          "x": 0.38,
+          "y": 0.67
+        },
+        "portrait": {
+          "x": 0,
+          "y": 0.67
+        }
+      },
+      "guideImage": "abyss-voyage-guide.webp",
+      "guideSize": {
+        "landscape": {
+          "width": 0.03
+        },
+        "portrait": {
+          "width": 0.1
+        }
+      },
+      "guidePosition": {
+        "landscape": {
+          "x": 0.48,
+          "y": 0.7
+        },
+        "portrait": {
+          "x": 0.4,
+          "y": 0.7
+        }
+      },
+      "swipeDirection": "bounce"
+    },
+    {
+      "time": 3.5,
+      "duration": 0,
+      "buttonImage": "start-button-v1-transparent.png",
+      "buttonEffect": "scale",
+      "buttonSize": {
+        "landscape": {
+          "width": 0.2
+        },
+        "portrait": {
+          "width": 0.8
+        }
+      },
+      "buttonPosition": {
+        "landscape": {
+          "x": 0.42,
+          "y": 0.67
+        },
+        "portrait": {
+          "x": 0.1,
+          "y": 0.67
+        }
+      },
+      "guideImage": "abyss-voyage-guide.webp",
+      "guideSize": {
+        "landscape": {
+          "width": 0.03
+        },
+        "portrait": {
+          "width": 0.1
+        }
+      },
+      "guidePosition": {
+        "landscape": {
+          "x": 0.57,
+          "y": 0.7
         },
         "portrait": {
           "x": 0.8,
-          "y": 0.5
+          "y": 0.7
+        }
+      },
+      "swipeDirection": "bounce"
+    },
+    {
+      "time": 5.5,
+      "duration": 0,
+      "buttonImage": "start-button-v1-transparent.png",
+      "buttonEffect": "scale",
+      "buttonSize": {
+        "landscape": {
+          "width": 0.2
+        },
+        "portrait": {
+          "width": 0.8
+        }
+      },
+      "buttonPosition": {
+        "landscape": {
+          "x": 0.4,
+          "y": 0.83
+        },
+        "portrait": {
+          "x": 0.1,
+          "y": 0.83
+        }
+      },
+      "guideImage": "abyss-voyage-guide.webp",
+      "guideSize": {
+        "landscape": {
+          "width": 0.03
+        },
+        "portrait": {
+          "width": 0.1
+        }
+      },
+      "guidePosition": {
+        "landscape": {
+          "x": 0.53,
+          "y": 0.86
+        },
+        "portrait": {
+          "x": 0.59,
+          "y": 0.86
         }
       },
       "swipeDirection": "bounce"
@@ -162,7 +294,7 @@ window.PLAYABLE_CONFIG = {
     "url": "https://test.trovo.live/"
   },
   "cta_end_button": {
-    "displayTime": 11,
+    "displayTime": 10.3,
     "buttonImage": "abyss-voyage-cta-start-button3.webp",
     "buttonSize": {
       "landscape": {
@@ -175,11 +307,11 @@ window.PLAYABLE_CONFIG = {
     "buttonPosition": {
       "landscape": {
         "x": 0.45,
-        "y": 0.81
+        "y": 0.74
       },
       "portrait": {
         "x": 0.35,
-        "y": 0.81
+        "y": 0.75
       }
     },
     "url": "https://test.trovo.live/"
