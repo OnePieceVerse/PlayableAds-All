@@ -166,7 +166,7 @@
         },
         {
             "id": "interactiveVideoHorizontal",
-            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/index-en-v7.html",
+            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-facebook-en-v4.html",
             "params": {
                 "config": ""
             },
@@ -182,7 +182,7 @@
         },
         {
             "id": "interactiveVideoHorizontal",
-            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-en-v3-index.html",
+            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-facebook-en-v3.html",
             "params": {
                 "config": ""
             },
@@ -199,7 +199,7 @@
         
         {
             "id": "interactiveVideoHorizontal",
-            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-en-v2-index.html",
+            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-facebook-en-v2.html",
             "params": {
                 "config": ""
             },
@@ -215,7 +215,7 @@
         },
         {
             "id": "interactiveVideoHorizontal",
-            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-en-v1-index.html",
+            "url": "PlayableAds-Video2/partners/abyss-voyage/platforms/facebook/abyss-voyage-facebook-en-v1.html",
             "params": {
                 "config": ""
             },
