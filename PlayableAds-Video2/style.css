@@ -22,10 +22,25 @@ html, body {
   justify-content: center;
 }
 
+.video-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  /* 确保内容区域正确显示 */
+  overflow: hidden;
+}
+
 .ad-video {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;   /* 由 cover 改为 contain，保证内容完整显示 */
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;   /* 保证内容完整显示 */
   background: #000;
   transition: transform 1s ease;
 }
@@ -35,8 +50,10 @@ html, body {
   transform: rotate(90deg);
   transform-origin: center;
   object-fit: contain;
-  width: 100vh;
-  height: 100vw;
+  width: auto;
+  height: auto;
+  max-width: 100vh;
+  max-height: 100vw;
 }
 
 /* 点击提示层 */
@@ -213,20 +230,16 @@ html, body {
 
 .guide-layer {
   position: absolute;
-  /* left: 0;
   top: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 30;*/ /* 高于 click-layer 的 20 */
-  /* pointer-events: auto; */ 
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 0;
   width: 100%;
   height: 100%;
   pointer-events: none;
   opacity: 1;
   transition: opacity 0.1s;
+  z-index: 30;
+  /* 确保guide-layer覆盖整个video-container */
+  overflow: visible;
 }
 
 .guide-layer.rotating {
@@ -235,17 +248,20 @@ html, body {
 
 /* 竖屏模式下的旋转 */
 .guide-layer.rotated {
-  transform: translate(-50%, -50%) rotate(90deg);
-  width: calc(100vh * var(--video-ratio));
-  height: calc(100vw * var(--video-ratio-inverse));
+  transform: rotate(90deg);
+  transform-origin: center;
 }
 
+/* 移除媒体查询中对guide-layer尺寸的设置，使其完全跟随视频尺寸 */
 /* 横屏模式 */
 @media (orientation: landscape) {
+  .video-container.rotated {
+    transform: rotate(90deg);
+  }
+  
   .guide-layer {
-    width: calc(100vh * var(--video-ratio));
+    width: 100%;
     height: 100%;
-    max-width: 100%;
   }
 }
 
@@ -253,8 +269,7 @@ html, body {
 @media (orientation: portrait) {
   .guide-layer {
     width: 100%;
-    /* height: calc(100vw * var(--video-ratio-inverse)); */
-    max-height: 100%;
+    height: 100%;
   }
 }
 

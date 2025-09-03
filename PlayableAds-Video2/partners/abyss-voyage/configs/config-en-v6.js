@@ -1,7 +1,7 @@
 window.PLAYABLE_CONFIG = {
   "lang": "en",
   "type": "portrait",
-  "videoUrl": "abyss-voyage-v5.mp4",
+  "videoUrl": "abyss-voyage-v6.mp4",
   "rotateTime": -1,
   "volume": 1,
   "interactionPoints": [
@@ -20,7 +20,7 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.4,
+          "x": 0.18,
           "y": 0.79
         },
         "portrait": {
@@ -31,7 +31,7 @@ window.PLAYABLE_CONFIG = {
       "guideImage": "abyss-voyage-guide.webp",
       "guideSize": {
         "landscape": {
-          "width": 0.03
+          "width": 0.05
         },
         "portrait": {
           "width": 0.1
@@ -39,7 +39,7 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.54,
+          "x": 0.62,
           "y": 0.82
         },
         "portrait": {
@@ -50,7 +50,7 @@ window.PLAYABLE_CONFIG = {
       "swipeDirection": "slide-bounce"
     },
     {
-      "time": 5.9,
+      "time": 3.5,
       "duration": 0,
       "buttonImage": "start-button-v1-transparent.png",
       "buttonEffect": "scale",
@@ -68,8 +68,8 @@ window.PLAYABLE_CONFIG = {
           "y": 0.41
         },
         "portrait": {
-          "x": 0.04,
-          "y": 0.41
+          "x": 0.12,
+          "y": 0.52
         }
       },
       "guideImage": "abyss-voyage-guide.webp",
@@ -87,8 +87,8 @@ window.PLAYABLE_CONFIG = {
           "y": 0.44
         },
         "portrait": {
-          "x": 0.2,
-          "y": 0.43
+          "x": 0.48,
+          "y": 0.54
         }
       },
       "swipeDirection": "bounce"
@@ -118,7 +118,7 @@ window.PLAYABLE_CONFIG = {
     "url": "https://test.trovo.live/"
   },
   "cta_end_button": {
-    "displayTime": 9,
+    "displayTime": 7,
     "buttonImage": "start-button-v1-transparent.png",
     "buttonSize": {
       "landscape": {
