@@ -652,7 +652,7 @@
     <div class="container">
         <div class="video-container">
             <video id="video" preload="metadata" playsinline webkit-playsinline muted>
-                <source src="honor-of-kings-v1.mp4" type="video/mp4">
+                <source src="javascript:videoBase64" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
 
@@ -678,288 +678,271 @@
             </div>
         </div>
     </div>
+</body>
 
-    <script>
-        class PlayableAdsVideo {
-            constructor() {
-                this.video = document.getElementById('video');
-                this.initialOverlay = document.getElementById('initialOverlay');
-                this.pauseOverlay = null;
-                this.holdButton = document.getElementById('holdButton');
-                this.ctaStart = document.getElementById('ctaStart');
-                this.ctaEnd = document.getElementById('ctaEnd');
-                this.helpOverlay = null;
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelector('#video source').src = videoBase64;
+        document.getElementById('video').load();
+    });
+    class PlayableAdsVideo {
+        constructor() {
+            this.video = document.getElementById('video');
+            this.initialOverlay = document.getElementById('initialOverlay');
+            this.pauseOverlay = null;
+            this.holdButton = document.getElementById('holdButton');
+            this.ctaStart = document.getElementById('ctaStart');
+            this.ctaEnd = document.getElementById('ctaEnd');
+            this.helpOverlay = null;
 
-                // 暂停时间点（秒）
-                this.pauseTimePoints = [2];
+            // 暂停时间点（秒）
+            this.pauseTimePoints = [2];
+            this.currentPauseIndex = 0;
+            this.endTime = 11.5;
+            this.ctaEndTime = 16.5;
+            // 交互状态
+            this.isLongPressing = false;
+            this.longPressStartTime = 0;
+            this.longPressDuration = 0;
+
+            this.init();
+        }
+
+        init() {
+            this.bindEvents();
+            this.helpOverlay = document.getElementById('helpOverlay');
+        }
+
+        bindEvents() {
+            // 点击初始提示区域
+            this.initialOverlay.addEventListener('click', () => {
+                this.startVideo();
+            });
+            // 触摸立即开始（移动端）
+            this.initialOverlay.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                this.startVideo();
+            }, { passive: false });
+
+            // 长按按钮事件
+            const createRipple = (delay = 0) => {
+                setTimeout(() => {
+                    const outer = document.createElement('span');
+                    outer.className = 'ripple';
+                    const inner = document.createElement('span');
+                    inner.className = 'ripple-in';
+                    this.holdButton.appendChild(outer);
+                    this.holdButton.appendChild(inner);
+                    setTimeout(() => outer.remove(), 900);
+                    setTimeout(() => inner.remove(), 900);
+                }, delay);
+            };
+            let rippleInterval = null;
+            const startHold = (e) => {
+                e.preventDefault();
+                this.startLongPress();
+                this.holdButton.classList.add('holding');
+                // 起手连发3个错峰波纹
+                createRipple(0);
+                createRipple(150);
+                createRipple(300);
+                // 长按期间以固定频率继续生成
+                if (!rippleInterval) {
+                    rippleInterval = setInterval(() => createRipple(0), 350);
+                }
+            };
+            const endHold = (e) => {
+                e.preventDefault();
+                this.endLongPress();
+                this.holdButton.classList.remove('holding');
+                if (rippleInterval) {
+                    clearInterval(rippleInterval);
+                    rippleInterval = null;
+                }
+            };
+            this.holdButton.addEventListener('mousedown', startHold);
+            this.holdButton.addEventListener('mouseup', endHold);
+            this.holdButton.addEventListener('mouseleave', endHold);
+            this.holdButton.addEventListener('touchstart', startHold, { passive: false });
+            this.holdButton.addEventListener('touchend', endHold, { passive: false });
+
+            // 视频时间更新
+            this.video.addEventListener('timeupdate', () => {
+                this.checkPauseTimePoints();
+                this.toggleCtas();
+            });
+
+            // CTA点击跳转
+            this.ctaStart.addEventListener('click', () => { window.location.href = '#'; });
+            this.ctaEnd.addEventListener('click', () => { window.location.href = '#'; });
+
+            // 视频结束
+            this.video.addEventListener('ended', () => {
+                this.videoEnded();
+            });
+
+
+        }
+
+        startVideo() {
+            this.initialOverlay.classList.add('hidden');
+            this.ctaStart.classList.add('show');
+            this.ctaEnd.classList.remove('show');
+            this.holdButton.style.display = 'none';
+            // 取消静音并播放
+            this.video.muted = false;
+            this.video.play().then(() => {
                 this.currentPauseIndex = 0;
-                this.endTime = 11.5;
-                this.ctaEndTime = 16.5;
-                // 交互状态
-                this.isLongPressing = false;
-                this.longPressStartTime = 0;
-                this.longPressDuration = 0;
+            }).catch(error => {
+                console.error('视频播放失败:', error);
+            });
+        }
 
-                this.init();
-            }
-
-            init() {
-                this.bindEvents();
-                this.helpOverlay = document.getElementById('helpOverlay');
-            }
-
-            bindEvents() {
-                // 点击初始提示区域
-                this.initialOverlay.addEventListener('click', () => {
-                    this.startVideo();
-                });
-                // 触摸立即开始（移动端）
-                this.initialOverlay.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    this.startVideo();
-                }, { passive: false });
-
-                // 长按按钮事件
-                const createRipple = (delay = 0) => {
-                    setTimeout(() => {
-                        const outer = document.createElement('span');
-                        outer.className = 'ripple';
-                        const inner = document.createElement('span');
-                        inner.className = 'ripple-in';
-                        this.holdButton.appendChild(outer);
-                        this.holdButton.appendChild(inner);
-                        setTimeout(() => outer.remove(), 900);
-                        setTimeout(() => inner.remove(), 900);
-                    }, delay);
-                };
-                let rippleInterval = null;
-                const startHold = (e) => {
-                    e.preventDefault();
-                    this.startLongPress();
-                    this.holdButton.classList.add('holding');
-                    // 起手连发3个错峰波纹
-                    createRipple(0);
-                    createRipple(150);
-                    createRipple(300);
-                    // 长按期间以固定频率继续生成
-                    if (!rippleInterval) {
-                        rippleInterval = setInterval(() => createRipple(0), 350);
-                    }
-                };
-                const endHold = (e) => {
-                    e.preventDefault();
-                    this.endLongPress();
-                    this.holdButton.classList.remove('holding');
-                    if (rippleInterval) {
-                        clearInterval(rippleInterval);
-                        rippleInterval = null;
-                    }
-                };
-                this.holdButton.addEventListener('mousedown', startHold);
-                this.holdButton.addEventListener('mouseup', endHold);
-                this.holdButton.addEventListener('mouseleave', endHold);
-                this.holdButton.addEventListener('touchstart', startHold, { passive: false });
-                this.holdButton.addEventListener('touchend', endHold, { passive: false });
-
-                // 视频时间更新
-                this.video.addEventListener('timeupdate', () => {
-                    this.checkPauseTimePoints();
-                    this.toggleCtas();
-                });
-
-                // CTA点击跳转
-                const targetUrl = 'https://apps.apple.com/us/app/honor-of-kings/id1619254071';
-                this.ctaStart.addEventListener('click', () => { window.location.href = targetUrl; });
-                this.ctaEnd.addEventListener('click', () => { window.location.href = targetUrl; });
-
-                // 视频结束
-                this.video.addEventListener('ended', () => {
-                    this.videoEnded();
-                });
-
-
-            }
-
-            startVideo() {
-                this.initialOverlay.classList.add('hidden');
-                this.ctaStart.classList.add('show');
-                this.ctaEnd.classList.remove('show');
+        toggleCtas() {
+            const t = this.video.currentTime;
+            if (typeof this.endTime === 'number' && t >= this.endTime) {
                 this.holdButton.style.display = 'none';
-                // 取消静音并播放
-                this.video.muted = false;
-                this.video.play().then(() => {
-                    this.currentPauseIndex = 0;
-                }).catch(error => {
-                    console.error('视频播放失败:', error);
-                });
+                this.ctaStart.classList.remove('show');
             }
-
-            toggleCtas() {
-                const t = this.video.currentTime;
-                if (typeof this.endTime === 'number' && t >= this.endTime) {
-                    this.holdButton.style.display = 'none';
-                    this.ctaStart.classList.remove('show');
-                }
-                if (typeof this.ctaEndTime === 'number' && t >= this.ctaEndTime) {
-                    this.ctaEnd.classList.add('show');
-                }
-            }
-
-            checkPauseTimePoints() {
-                const currentTime = this.video.currentTime;
-                if (typeof this.endTime === 'number' && currentTime >= this.endTime) {
-                    this.holdButton.style.display = 'none';
-                    this.ctaStart.classList.remove('show');
-                }
-                if (typeof this.ctaEndTime === 'number' && currentTime >= this.ctaEndTime) {
-                    // endTime 到达：显示结束CTA，隐藏开始CTA和长按按钮
-                    this.ctaEnd.classList.add('show');
-                    return;
-                }
-                // 在endTime之前保持显示ctaStart
-                this.ctaStart.classList.add('show');
-                this.ctaEnd.classList.remove('show');
-                if (this.currentPauseIndex >= this.pauseTimePoints.length) return;
-                const pauseTime = this.pauseTimePoints[this.currentPauseIndex];
-                if (currentTime >= pauseTime) {
-                    // 到达首个交互点：暂停并显示长按按钮与Help提示
-                    this.pauseVideo();
-                    this.holdButton.style.display = 'inline-flex';
-                    if (this.helpOverlay) this.helpOverlay.style.display = 'block';
-                    this.ctaStart.classList.remove('show');
-                    this.currentPauseIndex++;
-                }
-            }
-
-            pauseVideo() {
-                this.video.pause();
-            }
-
-            resumeVideo() {
-                this.video.play();
-            }
-
-            videoEnded() {
-                // this.initialOverlay.classList.remove('hidden');
-                // this.currentPauseIndex = 0;
-                // this.video.currentTime = 0;
-                // this.interactionHint.classList.remove('show');
-            }
-
-            handleTouchStart(e) {
-                // 覆盖层可见时不阻止默认行为，交给点击事件隐藏覆盖层
-                if (!this.initialOverlay.classList.contains('hidden')) {
-                    return;
-                }
-                e.preventDefault();
-                this.startLongPress();
-            }
-
-            handleTouchEnd(e) {
-                if (!this.initialOverlay.classList.contains('hidden')) {
-                    return;
-                }
-                e.preventDefault();
-                this.endLongPress();
-            }
-
-            handleMouseDown(e) {
-                if (!this.initialOverlay.classList.contains('hidden')) {
-                    return;
-                }
-                e.preventDefault();
-                this.startLongPress();
-            }
-
-            handleMouseUp(e) {
-                e.preventDefault();
-                this.endLongPress();
-            }
-
-            handleMouseLeave(e) {
-                e.preventDefault();
-                this.endLongPress();
-            }
-
-            startLongPress() {
-                if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
-                    this.video.play();
-                    return;
-                }
-                if (this.video.paused) {
-                    this.resumeVideo();
-                }
-                if (this.helpOverlay) this.helpOverlay.style.display = 'none';
-                this.isLongPressing = true;
-            }
-
-            endLongPress() {
-                if (!this.isLongPressing) {
-                    if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
-                        this.video.play();
-                    }
-                    return;
-                }
-                this.isLongPressing = false;
-                if (!(typeof this.endTime === 'number' && this.video.currentTime >= this.endTime)) {
-                    this.video.pause();
-                }
+            if (typeof this.ctaEndTime === 'number' && t >= this.ctaEndTime) {
+                this.ctaEnd.classList.add('show');
             }
         }
 
-        // 页面加载完成后初始化
-        document.addEventListener('DOMContentLoaded', () => {
-            // 动态计算视频宽高比
-            const video = document.getElementById('video');
-            const updateVideoRatio = () => {
-                if (video.videoWidth && video.videoHeight) {
-                    const ratio = video.videoWidth / video.videoHeight;
-                    const ratioInverse = video.videoHeight / video.videoWidth;
-                    document.documentElement.style.setProperty('--video-ratio', ratio);
-                    document.documentElement.style.setProperty('--video-ratio-inverse', ratioInverse);
+        checkPauseTimePoints() {
+            const currentTime = this.video.currentTime;
+            if (typeof this.endTime === 'number' && currentTime >= this.endTime) {
+                this.holdButton.style.display = 'none';
+                this.ctaStart.classList.remove('show');
+            }
+            if (typeof this.ctaEndTime === 'number' && currentTime >= this.ctaEndTime) {
+                // endTime 到达：显示结束CTA，隐藏开始CTA和长按按钮
+                this.ctaEnd.classList.add('show');
+                return;
+            }
+            // 在endTime之前保持显示ctaStart
+            this.ctaStart.classList.add('show');
+            this.ctaEnd.classList.remove('show');
+            if (this.currentPauseIndex >= this.pauseTimePoints.length) return;
+            const pauseTime = this.pauseTimePoints[this.currentPauseIndex];
+            if (currentTime >= pauseTime) {
+                // 到达首个交互点：暂停并显示长按按钮与Help提示
+                this.pauseVideo();
+                this.holdButton.style.display = 'inline-flex';
+                if (this.helpOverlay) this.helpOverlay.style.display = 'block';
+                this.ctaStart.classList.remove('show');
+                this.currentPauseIndex++;
+            }
+        }
+
+        pauseVideo() {
+            this.video.pause();
+        }
+
+        resumeVideo() {
+            this.video.play();
+        }
+
+        videoEnded() {
+            // this.initialOverlay.classList.remove('hidden');
+            // this.currentPauseIndex = 0;
+            // this.video.currentTime = 0;
+            // this.interactionHint.classList.remove('show');
+        }
+
+        handleTouchStart(e) {
+            // 覆盖层可见时不阻止默认行为，交给点击事件隐藏覆盖层
+            if (!this.initialOverlay.classList.contains('hidden')) {
+                return;
+            }
+            e.preventDefault();
+            this.startLongPress();
+        }
+
+        handleTouchEnd(e) {
+            if (!this.initialOverlay.classList.contains('hidden')) {
+                return;
+            }
+            e.preventDefault();
+            this.endLongPress();
+        }
+
+        handleMouseDown(e) {
+            if (!this.initialOverlay.classList.contains('hidden')) {
+                return;
+            }
+            e.preventDefault();
+            this.startLongPress();
+        }
+
+        handleMouseUp(e) {
+            e.preventDefault();
+            this.endLongPress();
+        }
+
+        handleMouseLeave(e) {
+            e.preventDefault();
+            this.endLongPress();
+        }
+
+        startLongPress() {
+            if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
+                this.video.play();
+                return;
+            }
+            if (this.video.paused) {
+                this.resumeVideo();
+            }
+            if (this.helpOverlay) this.helpOverlay.style.display = 'none';
+            this.isLongPressing = true;
+        }
+
+        endLongPress() {
+            if (!this.isLongPressing) {
+                if (typeof this.endTime === 'number' && this.video.currentTime >= this.endTime) {
+                    this.video.play();
                 }
-            };
+                return;
+            }
+            this.isLongPressing = false;
+            if (!(typeof this.endTime === 'number' && this.video.currentTime >= this.endTime)) {
+                this.video.pause();
+            }
+        }
+    }
 
-            // 视频元数据加载完成后更新比例
-            video.addEventListener('loadedmetadata', updateVideoRatio);
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', () => {
+        // 动态计算视频宽高比
+        const video = document.getElementById('video');
+        const updateVideoRatio = () => {
+            if (video.videoWidth && video.videoHeight) {
+                const ratio = video.videoWidth / video.videoHeight;
+                const ratioInverse = video.videoHeight / video.videoWidth;
+                document.documentElement.style.setProperty('--video-ratio', ratio);
+                document.documentElement.style.setProperty('--video-ratio-inverse', ratioInverse);
+            }
+        };
 
-            // Safari兼容：确保视频首帧显示但不自动播放
-            video.addEventListener('loadedmetadata', () => {
-                // 只设置到首帧，不播放
-                video.currentTime = 0;
-            });
+        // 视频元数据加载完成后更新比例
+        video.addEventListener('loadedmetadata', updateVideoRatio);
 
-            // 手动动画控制（Safari兼容）
-            const animateElements = () => {
-                const elements = [
-                    document.querySelector('.overlay .instruction'),
-                    document.querySelector('.cta-button.cta-start.show'),
-                    document.querySelector('.cta-button.cta-end.show'),
-                    document.querySelector('.help-overlay')
-                ].filter(el => el);
+        // Safari兼容：确保视频首帧显示但不自动播放
+        video.addEventListener('loadedmetadata', () => {
+            // 只设置到首帧，不播放
+            video.currentTime = 0;
+        });
 
-                elements.forEach(el => {
-                    let scale = 1;
-                    let direction = 1;
+        // 手动动画控制（Safari兼容）
+        const animateElements = () => {
+            const elements = [
+                document.querySelector('.overlay .instruction'),
+                document.querySelector('.cta-button.cta-start.show'),
+                document.querySelector('.cta-button.cta-end.show'),
+                document.querySelector('.help-overlay')
+            ].filter(el => el);
 
-                    setInterval(() => {
-                        scale += 0.02 * direction;
-                        if (scale >= 1.06) direction = -1;
-                        if (scale <= 1) direction = 1;
-
-                        el.style.transform = `scale(${scale})`;
-                        if (el.classList.contains('cta-end')) {
-                            el.style.transform = `translateX(-50%) scale(${scale})`;
-                        }
-                    }, 50);
-                });
-            };
-
-            // 动态检测新显示的元素并添加动画
-            const addAnimationToElement = (element) => {
-                if (!element || element.dataset.animated) return;
-
-                element.dataset.animated = 'true';
+            elements.forEach(el => {
                 let scale = 1;
                 let direction = 1;
 
@@ -968,48 +951,67 @@
                     if (scale >= 1.06) direction = -1;
                     if (scale <= 1) direction = 1;
 
-                    if (element.classList.contains('cta-end')) {
-                        element.style.transform = `translateX(-50%) scale(${scale})`;
-                    } else {
-                        element.style.transform = `scale(${scale})`;
+                    el.style.transform = `scale(${scale})`;
+                    if (el.classList.contains('cta-end')) {
+                        el.style.transform = `translateX(-50%) scale(${scale})`;
                     }
                 }, 50);
-            };
+            });
+        };
 
-            // 监听DOM变化，为新显示的元素添加动画
-            const observer = new MutationObserver((mutations) => {
-                mutations.forEach((mutation) => {
-                    mutation.addedNodes.forEach((node) => {
-                        if (node.nodeType === 1) { // 元素节点
-                            if (node.classList && node.classList.contains('cta-button') && node.classList.contains('show')) {
-                                addAnimationToElement(node);
-                            }
-                        }
-                    });
+        // 动态检测新显示的元素并添加动画
+        const addAnimationToElement = (element) => {
+            if (!element || element.dataset.animated) return;
 
-                    mutation.target.classList.forEach((className) => {
-                        if (className === 'show' && mutation.target.classList.contains('cta-button')) {
-                            addAnimationToElement(mutation.target);
+            element.dataset.animated = 'true';
+            let scale = 1;
+            let direction = 1;
+
+            setInterval(() => {
+                scale += 0.02 * direction;
+                if (scale >= 1.06) direction = -1;
+                if (scale <= 1) direction = 1;
+
+                if (element.classList.contains('cta-end')) {
+                    element.style.transform = `translateX(-50%) scale(${scale})`;
+                } else {
+                    element.style.transform = `scale(${scale})`;
+                }
+            }, 50);
+        };
+
+        // 监听DOM变化，为新显示的元素添加动画
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                mutation.addedNodes.forEach((node) => {
+                    if (node.nodeType === 1) { // 元素节点
+                        if (node.classList && node.classList.contains('cta-button') && node.classList.contains('show')) {
+                            addAnimationToElement(node);
                         }
-                    });
+                    }
+                });
+
+                mutation.target.classList.forEach((className) => {
+                    if (className === 'show' && mutation.target.classList.contains('cta-button')) {
+                        addAnimationToElement(mutation.target);
+                    }
                 });
             });
-
-            // 开始观察
-            observer.observe(document.body, {
-                childList: true,
-                subtree: true,
-                attributes: true,
-                attributeFilter: ['class']
-            });
-
-            // 延迟启动动画，确保元素已渲染
-            setTimeout(animateElements, 1000);
-
-            // 初始化应用
-            new PlayableAdsVideo();
         });
-    </script>
-</body>
 
+        // 开始观察
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            attributes: true,
+            attributeFilter: ['class']
+        });
+
+        // 延迟启动动画，确保元素已渲染
+        setTimeout(animateElements, 1000);
+
+        // 初始化应用
+        new PlayableAdsVideo();
+    });
+</script>
 </html>
