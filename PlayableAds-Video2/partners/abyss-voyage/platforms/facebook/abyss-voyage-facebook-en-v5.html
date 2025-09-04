@@ -833,7 +833,7 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.4,
+          "x": 0.2,
           "y": 0.79
         },
         "portrait": {
@@ -852,7 +852,7 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.54,
+          "x": 0.62,
           "y": 0.82
         },
         "portrait": {
@@ -869,7 +869,7 @@ window.PLAYABLE_CONFIG = {
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
-          "width": 0.2
+          "width": 0.8
         },
         "portrait": {
           "width": 0.8
@@ -877,7 +877,7 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.35,
+          "x": 0,
           "y": 0.41
         },
         "portrait": {
@@ -888,7 +888,7 @@ window.PLAYABLE_CONFIG = {
       "guideImage": "abyss-voyage-guide.webp",
       "guideSize": {
         "landscape": {
-          "width": 0.03
+          "width": 0.1
         },
         "portrait": {
           "width": 0.1
@@ -896,7 +896,7 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.4,
+          "x": 0.16,
           "y": 0.44
         },
         "portrait": {
@@ -920,7 +920,7 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.58,
+        "x": 0.79,
         "y": 0.05
       },
       "portrait": {
@@ -935,7 +935,7 @@ window.PLAYABLE_CONFIG = {
     "buttonImage": "start-button-v1-transparent.png",
     "buttonSize": {
       "landscape": {
-        "width": 0.3,
+        "width": 0.8,
       },
       "portrait": {
         "width": 0.8,
@@ -943,7 +943,7 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.35,
+        "x": 0.11,
         "y": 0.76
       },
       "portrait": {
@@ -1015,34 +1015,184 @@ function isDisplayStartScreen() {
   return config.start_screen && config.start_screen.enable;
 }
 
-// 显示开始屏幕
-function showStartScreen() {
-  // 清除现有内容
-  guideLayer.innerHTML = '';
+// 创建引导元素
+function createGuideElements(point) {
+  // 获取当前屏幕方向的配置
+  const orientation = isPortrait ? 'portrait' : 'landscape';
+
+  // 清除现有引导元素，但保留CTA按钮
+  const existingGuides = guideLayer.querySelectorAll('.button-image, .guide-image');
+  existingGuides.forEach(el => el.remove());
+
+  // 创建按钮
+  const buttonImage = document.createElement('img');
+  buttonImage.src = images ? images[point.buttonImage] : point.buttonImage;
+  buttonImage.className = 'button-image';
+
+  // 使用对应方向的按钮尺寸和位置
+  let buttonSize = point.buttonSize[orientation];
+  let buttonPosition = point.buttonPosition[orientation];
+  // 为了适配横屏视频，竖屏时，没有首页图片时，CTA按钮的位置
+  if (isPortrait && isLandscapeVideo() && !hasStarted && isDisplayStartScreen() === false) {
+    buttonSize = point.buttonSize['landscape'];
+    buttonPosition = point.buttonPosition['landscape'];
+  }
+  setButtonSizeAndPosition(buttonImage, buttonSize, buttonPosition);
+
+  if (point.buttonEffect === 'scale') {
+    buttonImage.classList.add('scale-animation');
+  }
+
+  // 添加按钮点击事件
+  buttonImage.addEventListener('click', (e) => {
+    // 只移除引导元素，保留CTA按钮
+    const guides = guideLayer.querySelectorAll('.button-image, .guide-image');
+    guides.forEach(el => el.remove());
+    if (video.currentTime < point.time + point.duration) {
+      console.log('button click video.currentTime', video.currentTime, point.time, point.duration);
+      video.currentTime = point.time + point.duration;
+    }
+    // 确保取消静音
+    video.muted = false;
+    playVideo();
+  });
+
+  // 创建引导图片
+  const guideImage = document.createElement('img');
+  guideImage.src = images ? images[point.guideImage] || point.guideImage : point.guideImage;
+  guideImage.className = 'guide-image';
+
+  // 使用对应方向的引导尺寸和位置
+  let guideSize = point.guideSize[orientation];
+  let guidePosition = point.guidePosition[orientation];
+  // 为了适配横屏视频，竖屏时，没有首页图片时，CTA按钮的位置
+  if (isPortrait && isLandscapeVideo() && !hasStarted && isDisplayStartScreen() === false) {
+    guideSize = point.guideSize['landscape'];
+    guidePosition = point.guidePosition['landscape'];
+  }
+  setButtonSizeAndPosition(guideImage, guideSize, guidePosition);
+
+  // 添加动画
+  const swipeConfig = point.swipeDirection;
+  if (typeof swipeConfig === 'string' && swipeConfig === 'scale') {
+    guideImage.classList.add('scale-animation');
+  } else if (typeof swipeConfig === 'string' && swipeConfig === 'bounce') {
+    guideImage.classList.add('bounce-y');
+  } else if (typeof swipeConfig === 'string' && swipeConfig === 'slide-bounce') {
+    guideImage.classList.add('slide-in-right');
+    // 动画结束后加上 bounce-y
+    guideImage.addEventListener('animationend', function handler(e) {
+      if (e.animationName === 'slideInRight') {
+        guideImage.classList.remove('slide-in-right');
+        guideImage.classList.add('bounce-y');
+        guideImage.removeEventListener('animationend', handler);
+      }
+    });
+  }
+  else if (typeof swipeConfig === 'object' && swipeConfig.type === 'angle') {
+    guideImage.classList.add('angle-animation');
+    const angle = swipeConfig.value * Math.PI / 180;
+    const distance = parseInt(swipeConfig.distance);
+    const moveX = Math.cos(angle) * distance;
+    const moveY = Math.sin(angle) * distance;
+    guideImage.style.setProperty('--move-x', moveX + 'px');
+    guideImage.style.setProperty('--move-y', moveY + 'px');
+  }
+
+  // 添加到引导容器
+  guideLayer.appendChild(buttonImage);
+  guideLayer.appendChild(guideImage);
+
+  // 处理竖屏旋转
+  handleVideoRotation();
+}
+
+// 创建CTA开始按钮，在视频开始时显示
+function createCTAStartButton() {
+  // 如果已经存在CTA按钮，先移除
+  hideCTAStartButton();
 
   // 获取当前屏幕方向的配置
   const orientation = isPortrait ? 'portrait' : 'landscape';
-  const startConfig = config.start_screen[orientation];
+  const ctaConfig = config.cta_start_button;
+  if (!ctaConfig) return;
 
-  // 创建开始屏幕图片
-  const startImage = document.createElement('img');
-  startImage.src = images ? images[startConfig.image] : startConfig.image;
-  startImage.className = 'start-screen-image';
-  // 设置图片尺寸和位置
-  setButtonSizeAndPosition(startImage, startConfig.size, startConfig.position);
+  // 创建按钮
+  const ctaButton = document.createElement('img');
+  ctaButton.className = 'cta-button cta-start-button';
+  ctaButton.src = images ? images[ctaConfig.buttonImage] : ctaConfig.buttonImage;
 
-  // 添加到引导层
-  guideLayer.appendChild(startImage);
-
-  // 显示点击层
-  clickLayer.style.display = 'flex';
-
-  // 如果是竖屏，显示旋转提示
-  if (isPortrait && isLandscapeVideo()) {
-    rotateHighlight.style.display = 'block';
-  } else {
-    rotateHighlight.style.display = 'none';
+  // 设置尺寸和位置
+  let buttonSize = ctaConfig.buttonSize[orientation];
+  let buttonPosition = ctaConfig.buttonPosition[orientation];
+  // 为了适配竖屏时，没有首页图片时，CTA按钮的位置
+  if (isPortrait && isLandscapeVideo() && !hasStarted && isDisplayStartScreen() === false) {
+    buttonSize = ctaConfig.buttonSize['landscape'];
+    buttonPosition = ctaConfig.buttonPosition['landscape'];
   }
+  setButtonSizeAndPosition(ctaButton, buttonSize, buttonPosition);
+
+  ctaButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    ctaClick();
+  });
+
+  guideLayer.appendChild(ctaButton);
+  ctaStartButtonVisible = true;
+}
+
+// 隐藏CTA开始按钮
+function hideCTAStartButton() {
+  const existingCTA = guideLayer.querySelector('.cta-start-button');
+  if (existingCTA) {
+    existingCTA.remove();
+  }
+  ctaStartButtonVisible = false;
+}
+
+// 创建CTA结束按钮，在视频结束时显示
+function createCTAEndButton() {
+  // 如果已经存在CTA按钮，先移除
+  hideCTAEndButton();
+  hideCTAStartButton(); // 出现end按钮时自动隐藏start按钮
+
+  // 获取当前屏幕方向的配置
+  const orientation = isPortrait ? 'portrait' : 'landscape';
+  const ctaConfig = config.cta_end_button;
+  if (!ctaConfig) return;
+
+  // 创建按钮
+  const ctaButton = document.createElement('img');
+  ctaButton.className = 'cta-button cta-end-button scale-bounce';
+  ctaButton.src = images ? images[ctaConfig.buttonImage] : ctaConfig.buttonImage;
+
+  // 设置尺寸和位置
+  const buttonSize = ctaConfig.buttonSize[orientation];
+  const buttonPosition = ctaConfig.buttonPosition[orientation];
+  setButtonSizeAndPosition(ctaButton, buttonSize, buttonPosition);
+
+  ctaButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    ctaClick();
+  });
+
+  guideLayer.appendChild(ctaButton);
+  requestAnimationFrame(() => {
+    ctaButton.classList.add('visible');
+  });
+  ctaEndButtonVisible = true;
+}
+// 隐藏CTA结束按钮
+function hideCTAEndButton() {
+  const existingCTA = guideLayer.querySelector('.cta-end-button');
+  if (existingCTA) {
+    existingCTA.remove();
+  }
+  ctaEndButtonVisible = false;
+}
+
+function ctaClick() {
+  FbPlayableAd.onCTAClick();
 }
 
 // 修改现有的setButtonSizeAndPosition函数
@@ -1150,184 +1300,120 @@ function handleVideoRotation() {
   }
 }
 
-// 创建引导元素
-function createGuideElements(point) {
-  // 获取当前屏幕方向的配置
-  const orientation = isPortrait ? 'portrait' : 'landscape';
-
-  // 清除现有引导元素，但保留CTA按钮
-  const existingGuides = guideLayer.querySelectorAll('.button-image, .guide-image');
-  existingGuides.forEach(el => el.remove());
-
-  // 创建按钮
-  const buttonImage = document.createElement('img');
-  buttonImage.src = images ? images[point.buttonImage] : point.buttonImage;
-  buttonImage.className = 'button-image';
-
-  // 使用对应方向的按钮尺寸和位置
-  let buttonSize = point.buttonSize[orientation];
-  let buttonPosition = point.buttonPosition[orientation];
-  // 为了适配横屏视频，竖屏时，没有首页图片时，CTA按钮的位置
-  if (isPortrait && isLandscapeVideo() && !hasStarted && isDisplayStartScreen() === false) {
-    buttonSize = point.buttonSize['landscape'];
-    buttonPosition = point.buttonPosition['landscape'];
-  }
-  setButtonSizeAndPosition(buttonImage, buttonSize, buttonPosition);
-
-  if (point.buttonEffect === 'scale') {
-    buttonImage.classList.add('scale-animation');
-  }
-
-  // 添加按钮点击事件
-  buttonImage.addEventListener('click', (e) => {
-    // 只移除引导元素，保留CTA按钮
-    const guides = guideLayer.querySelectorAll('.button-image, .guide-image');
-    guides.forEach(el => el.remove());
-    if (video.currentTime < point.time + point.duration) {
-      console.log('button click video.currentTime', video.currentTime, point.time, point.duration);
-      video.currentTime = point.time + point.duration;
-    }
-    // 确保取消静音
-    video.muted = false;
-    playVideo();
-  });
-
-  // 创建引导图片
-  const guideImage = document.createElement('img');
-  guideImage.src = images ? images[point.guideImage] : point.guideImage;
-  guideImage.className = 'guide-image';
-
-  // 使用对应方向的引导尺寸和位置
-  let guideSize = point.guideSize[orientation];
-  let guidePosition = point.guidePosition[orientation];
-  // 为了适配横屏视频，竖屏时，没有首页图片时，CTA按钮的位置
-  if (isPortrait && isLandscapeVideo() && !hasStarted && isDisplayStartScreen() === false) {
-    guideSize = point.guideSize['landscape'];
-    guidePosition = point.guidePosition['landscape'];
-  }
-  setButtonSizeAndPosition(guideImage, guideSize, guidePosition);
-
-  // 添加动画
-  const swipeConfig = point.swipeDirection;
-  if (typeof swipeConfig === 'string' && swipeConfig === 'scale') {
-    guideImage.classList.add('scale-animation');
-  } else if (typeof swipeConfig === 'string' && swipeConfig === 'bounce') {
-    guideImage.classList.add('bounce-y');
-  } else if (typeof swipeConfig === 'string' && swipeConfig === 'slide-bounce') {
-    guideImage.classList.add('slide-in-right');
-    // 动画结束后加上 bounce-y
-    guideImage.addEventListener('animationend', function handler(e) {
-      if (e.animationName === 'slideInRight') {
-        guideImage.classList.remove('slide-in-right');
-        guideImage.classList.add('bounce-y');
-        guideImage.removeEventListener('animationend', handler);
-      }
-    });
-  }
-  else if (typeof swipeConfig === 'object' && swipeConfig.type === 'angle') {
-    guideImage.classList.add('angle-animation');
-    const angle = swipeConfig.value * Math.PI / 180;
-    const distance = parseInt(swipeConfig.distance);
-    const moveX = Math.cos(angle) * distance;
-    const moveY = Math.sin(angle) * distance;
-    guideImage.style.setProperty('--move-x', moveX + 'px');
-    guideImage.style.setProperty('--move-y', moveY + 'px');
-  }
-
-  // 添加到引导容器
-  guideLayer.appendChild(buttonImage);
-  guideLayer.appendChild(guideImage);
-
-  // 处理竖屏旋转
+// 确保在屏幕方向变化时更新旋转状态
+function checkOrientation() {
+  const wasPortrait = isPortrait;
+  isPortrait = window.innerHeight > window.innerWidth;
+  
+  // 处理视频旋转
   handleVideoRotation();
+
+  // 如果方向确实发生了变化
+  if (wasPortrait !== isPortrait) {
+    // 如果还没开始播放，更新开始屏幕
+    if (!hasStarted && isDisplayStartScreen() === true) {
+      showStartScreen();
+      return;
+    }
+
+    // 先隐藏引导元素
+    guideLayer.classList.add('rotating');
+
+    if (!hasStarted && isDisplayStartScreen() === false && currentInteractionPoint) {
+      createGuideElements(currentInteractionPoint);
+    }
+
+    // 等待旋转动画完成后再显示引导元素
+    setTimeout(() => {
+      // 如果视频已结束，显示CTA按钮
+      if (video.ended) {
+        createCTAEndButton();
+      }
+      // 如果视频正在播放且有交互点，显示引导元素
+      else if (hasStarted && currentInteractionPoint) {
+        createGuideElements(currentInteractionPoint);
+      }
+      // 移除旋转中状态
+      guideLayer.classList.remove('rotating');
+    }, 300);
+  }
+
+  if (ctaStartButtonVisible) {
+    createCTAStartButton();
+  }
+  if (ctaEndButtonVisible) {
+    createCTAEndButton();
+  }
 }
 
-function ctaClick() {
-  FbPlayableAd.onCTAClick();
+// 更新视频容器尺寸以匹配视频的实际比例
+function updateVideoContainerSize() {
+  if (!video.videoWidth || !video.videoHeight) return;
+  
+  const videoRatio = video.videoWidth / video.videoHeight;
+  const isPortraitVideo = video.videoHeight > video.videoWidth;
+  
+  // 获取可用空间
+  const containerWidth = window.innerWidth;
+  const containerHeight = window.innerHeight;
+  const containerRatio = containerWidth / containerHeight;
+  
+  // 根据视频和容器的比例关系调整video-container尺寸
+  if (isPortrait) {
+    // 竖屏设备
+    if (isPortraitVideo) {
+      // 竖屏视频在竖屏设备上
+      videoContainer.style.width = '100%';
+      videoContainer.style.height = 'auto';
+    } else {
+      // 横屏视频在竖屏设备上 - 需要旋转
+      if (isLandscapeVideo()) {
+        videoContainer.style.width = 'auto';
+        videoContainer.style.height = '100%';
+      }
+    }
+  } else {
+    // 横屏设备
+    if (isPortraitVideo) {
+      // 竖屏视频在横屏设备上
+      videoContainer.style.width = 'auto';
+      videoContainer.style.height = '100%';
+    } else {
+      // 横屏视频在横屏设备上
+      videoContainer.style.width = '100%';
+      videoContainer.style.height = 'auto';
+    }
+  }
 }
 
-// 创建CTA开始按钮，在视频开始时显示
-function createCTAStartButton() {
-  // 如果已经存在CTA按钮，先移除
-  hideCTAStartButton();
+// 显示开始屏幕
+function showStartScreen() {
+  // 清除现有内容
+  guideLayer.innerHTML = '';
 
   // 获取当前屏幕方向的配置
   const orientation = isPortrait ? 'portrait' : 'landscape';
-  const ctaConfig = config.cta_start_button;
-  if (!ctaConfig) return;
+  const startConfig = config.start_screen[orientation];
 
-  // 创建按钮
-  const ctaButton = document.createElement('img');
-  ctaButton.className = 'cta-button cta-start-button';
-  ctaButton.src = images ? images[ctaConfig.buttonImage] : ctaConfig.buttonImage;
+  // 创建开始屏幕图片
+  const startImage = document.createElement('img');
+  startImage.src = images ? images[startConfig.image] : startConfig.image;
+  startImage.className = 'start-screen-image';
+  // 设置图片尺寸和位置
+  setButtonSizeAndPosition(startImage, startConfig.size, startConfig.position);
 
-  // 设置尺寸和位置
-  let buttonSize = ctaConfig.buttonSize[orientation];
-  let buttonPosition = ctaConfig.buttonPosition[orientation];
-  // 为了适配竖屏时，没有首页图片时，CTA按钮的位置
-  if (isPortrait && isLandscapeVideo() && !hasStarted && isDisplayStartScreen() === false) {
-    buttonSize = ctaConfig.buttonSize['landscape'];
-    buttonPosition = ctaConfig.buttonPosition['landscape'];
+  // 添加到引导层
+  guideLayer.appendChild(startImage);
+
+  // 显示点击层
+  clickLayer.style.display = 'flex';
+
+  // 如果是竖屏，显示旋转提示
+  if (isPortrait && isLandscapeVideo()) {
+    rotateHighlight.style.display = 'block';
+  } else {
+    rotateHighlight.style.display = 'none';
   }
-  setButtonSizeAndPosition(ctaButton, buttonSize, buttonPosition);
-
-  ctaButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    ctaClick();
-  });
-
-  guideLayer.appendChild(ctaButton);
-  ctaStartButtonVisible = true;
-}
-
-// 隐藏CTA开始按钮
-function hideCTAStartButton() {
-  const existingCTA = guideLayer.querySelector('.cta-start-button');
-  if (existingCTA) {
-    existingCTA.remove();
-  }
-  ctaStartButtonVisible = false;
-}
-
-// 创建CTA结束按钮，在视频结束时显示
-function createCTAEndButton() {
-  // 如果已经存在CTA按钮，先移除
-  hideCTAEndButton();
-  hideCTAStartButton(); // 出现end按钮时自动隐藏start按钮
-
-  // 获取当前屏幕方向的配置
-  const orientation = isPortrait ? 'portrait' : 'landscape';
-  const ctaConfig = config.cta_end_button;
-  if (!ctaConfig) return;
-
-  // 创建按钮
-  const ctaButton = document.createElement('img');
-  ctaButton.className = 'cta-button cta-end-button scale-bounce';
-  ctaButton.src = images ? images[ctaConfig.buttonImage] : ctaConfig.buttonImage;
-
-  // 设置尺寸和位置
-  const buttonSize = ctaConfig.buttonSize[orientation];
-  const buttonPosition = ctaConfig.buttonPosition[orientation];
-  setButtonSizeAndPosition(ctaButton, buttonSize, buttonPosition);
-
-  ctaButton.addEventListener('click', (e) => {
-    e.preventDefault();
-    ctaClick();
-  });
-
-  guideLayer.appendChild(ctaButton);
-  requestAnimationFrame(() => {
-    ctaButton.classList.add('visible');
-  });
-  ctaEndButtonVisible = true;
-}
-// 隐藏CTA结束按钮
-function hideCTAEndButton() {
-  const existingCTA = guideLayer.querySelector('.cta-end-button');
-  if (existingCTA) {
-    existingCTA.remove();
-  }
-  ctaEndButtonVisible = false;
 }
 
 // 检查交互点
@@ -1361,6 +1447,38 @@ function checkInteractionPoints() {
   }
 
   lastTime = currentTime;
+}
+
+// 初始化视频
+function initVideo() {
+  // 设置视频源
+  video.src = videoSource;
+  
+  // 设置视频属性
+  video.playsInline = true;
+  // 只有在首次加载时才设置为静音，便于自动播放
+  video.muted = true; // 初始静音以符合大多数浏览器的自动播放政策
+  video.loop = false;
+  video.autoplay = false;
+  
+  // 设置视频音量
+  if (config.volume !== undefined) {
+    video.volume = config.volume;
+  }
+  
+  // 视频加载完成后，更新视频容器尺寸
+  video.addEventListener('loadedmetadata', function() {
+    // 设置视频比例变量
+    const videoRatio = video.videoWidth / video.videoHeight;
+    document.documentElement.style.setProperty('--video-ratio', videoRatio);
+    document.documentElement.style.setProperty('--video-ratio-inverse', 1 / videoRatio);
+    
+    // 调整video-container尺寸以匹配视频的实际比例
+    updateVideoContainerSize();
+    
+    // 处理视频旋转
+    handleVideoRotation();
+  });
 }
 
 // 播放控制
@@ -1448,140 +1566,14 @@ function switchLanguage(newLang) {
   }
 }
 
-// 确保在屏幕方向变化时更新旋转状态
-function checkOrientation() {
-  const wasPortrait = isPortrait;
-  isPortrait = window.innerHeight > window.innerWidth;
-  
-  // 处理视频旋转
-  handleVideoRotation();
-
-  // 如果方向确实发生了变化
-  if (wasPortrait !== isPortrait) {
-    // 如果还没开始播放，更新开始屏幕
-    if (!hasStarted && isDisplayStartScreen() === true) {
-      showStartScreen();
-      return;
-    }
-
-    // 先隐藏引导元素
-    guideLayer.classList.add('rotating');
-
-    if (!hasStarted && isDisplayStartScreen() === false && currentInteractionPoint) {
-      createGuideElements(currentInteractionPoint);
-    }
-
-    // 等待旋转动画完成后再显示引导元素
-    setTimeout(() => {
-      // 如果视频已结束，显示CTA按钮
-      if (video.ended) {
-        createCTAEndButton();
-      }
-      // 如果视频正在播放且有交互点，显示引导元素
-      else if (hasStarted && currentInteractionPoint) {
-        createGuideElements(currentInteractionPoint);
-      }
-      // 移除旋转中状态
-      guideLayer.classList.remove('rotating');
-    }, 300);
-  }
-
-  if (ctaStartButtonVisible) {
-    createCTAStartButton();
-  }
-  if (ctaEndButtonVisible) {
-    createCTAEndButton();
-  }
-}
-
-// 初始化视频
-function initVideo() {
-  // 设置视频源
-  video.src = videoSource;
-  
-  // 设置视频属性
-  video.playsInline = true;
-  // 只有在首次加载时才设置为静音，便于自动播放
-  video.muted = true; // 初始静音以符合大多数浏览器的自动播放政策
-  video.loop = false;
-  video.autoplay = false;
-  
-  // 设置视频音量
-  if (config.volume !== undefined) {
-    video.volume = config.volume;
-  }
-  
-  // 视频加载完成后，更新视频容器尺寸
-  video.addEventListener('loadedmetadata', function() {
-    // 设置视频比例变量
-    const videoRatio = video.videoWidth / video.videoHeight;
-    document.documentElement.style.setProperty('--video-ratio', videoRatio);
-    document.documentElement.style.setProperty('--video-ratio-inverse', 1 / videoRatio);
-    
-    // 调整video-container尺寸以匹配视频的实际比例
-    updateVideoContainerSize();
-    
-    // 处理视频旋转
-    handleVideoRotation();
-  });
-}
-
-// 更新视频容器尺寸以匹配视频的实际比例
-function updateVideoContainerSize() {
-  if (!video.videoWidth || !video.videoHeight) return;
-  
-  const videoRatio = video.videoWidth / video.videoHeight;
-  const isPortraitVideo = video.videoHeight > video.videoWidth;
-  
-  // 获取可用空间
-  const containerWidth = window.innerWidth;
-  const containerHeight = window.innerHeight;
-  const containerRatio = containerWidth / containerHeight;
-  
-  // 根据视频和容器的比例关系调整video-container尺寸
-  if (isPortrait) {
-    // 竖屏设备
-    if (isPortraitVideo) {
-      // 竖屏视频在竖屏设备上
-      videoContainer.style.width = '100%';
-      videoContainer.style.height = 'auto';
-    } else {
-      // 横屏视频在竖屏设备上 - 需要旋转
-      if (isLandscapeVideo()) {
-        videoContainer.style.width = 'auto';
-        videoContainer.style.height = '100%';
-      }
-    }
-  } else {
-    // 横屏设备
-    if (isPortraitVideo) {
-      // 竖屏视频在横屏设备上
-      videoContainer.style.width = 'auto';
-      videoContainer.style.height = '100%';
-    } else {
-      // 横屏视频在横屏设备上
-      videoContainer.style.width = '100%';
-      videoContainer.style.height = 'auto';
-    }
-  }
-}
-
-// 初始化
-checkOrientation();
-updatePageText();
-initVideo();
+// 视频时间更新事件
+video.addEventListener('timeupdate', checkInteractionPoints);
 
 // 添加窗口大小变化事件监听器
 window.addEventListener('resize', function() {
   checkOrientation();
   updateVideoContainerSize();
 });
-
-// 视频时间更新事件
-video.addEventListener('timeupdate', checkInteractionPoints);
-
-// apple设备上需要主动调用一次，否则无法触发timeupdate事件
-checkInteractionPoints();
 
 // 视频结束处理
 video.addEventListener('ended', () => {
@@ -1623,6 +1615,14 @@ video.addEventListener('error', (e) => {
   clickTip.textContent = getText('loading_failed');
   rotateHighlight.style.display = 'none';
 });
+
+// 初始化
+checkOrientation();
+updatePageText();
+initVideo();
+
+// apple设备上需要主动调用一次，否则无法触发timeupdate事件
+checkInteractionPoints();
   </script>
 </body>
 </html>

@@ -20,7 +20,7 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.4,
+          "x": 0.2,
           "y": 0.79
         },
         "portrait": {
@@ -39,7 +39,7 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.54,
+          "x": 0.62,
           "y": 0.82
         },
         "portrait": {
@@ -56,7 +56,7 @@ window.PLAYABLE_CONFIG = {
       "buttonEffect": "scale",
       "buttonSize": {
         "landscape": {
-          "width": 0.2
+          "width": 0.8
         },
         "portrait": {
           "width": 0.8
@@ -64,7 +64,7 @@ window.PLAYABLE_CONFIG = {
       },
       "buttonPosition": {
         "landscape": {
-          "x": 0.35,
+          "x": 0,
           "y": 0.41
         },
         "portrait": {
@@ -75,7 +75,7 @@ window.PLAYABLE_CONFIG = {
       "guideImage": "abyss-voyage-guide.webp",
       "guideSize": {
         "landscape": {
-          "width": 0.03
+          "width": 0.1
         },
         "portrait": {
           "width": 0.1
@@ -83,7 +83,7 @@ window.PLAYABLE_CONFIG = {
       },
       "guidePosition": {
         "landscape": {
-          "x": 0.4,
+          "x": 0.16,
           "y": 0.44
         },
         "portrait": {
@@ -107,7 +107,7 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.58,
+        "x": 0.79,
         "y": 0.05
       },
       "portrait": {
@@ -122,7 +122,7 @@ window.PLAYABLE_CONFIG = {
     "buttonImage": "start-button-v1-transparent.png",
     "buttonSize": {
       "landscape": {
-        "width": 0.3,
+        "width": 0.8,
       },
       "portrait": {
         "width": 0.8,
@@ -130,7 +130,7 @@ window.PLAYABLE_CONFIG = {
     },
     "buttonPosition": {
       "landscape": {
-        "x": 0.35,
+        "x": 0.11,
         "y": 0.76
       },
       "portrait": {

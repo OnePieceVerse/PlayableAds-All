@@ -6,8 +6,8 @@ ENV='dev'
 PARTNER_NAME="abyss-voyage"
 # PARTNER_NAME="golden-spatula"
 LANG="en"
-VERSION="v5"
-PLATFORM_NAME='facebook'
+VERSION="v8"
+PLATFORM_NAME='google'
 DIRECTION='portrait'
 
 # 生成图片、视频的base64编码
