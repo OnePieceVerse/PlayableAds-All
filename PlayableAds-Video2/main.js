@@ -236,7 +236,7 @@ function createGuideElements(point) {
 
   // 创建引导图片
   const guideImage = document.createElement('img');
-  guideImage.src = images ? images[point.guideImage] : point.guideImage;
+  guideImage.src = images ? images[point.guideImage] || point.guideImage : point.guideImage;
   guideImage.className = 'guide-image';
 
   // 使用对应方向的引导尺寸和位置

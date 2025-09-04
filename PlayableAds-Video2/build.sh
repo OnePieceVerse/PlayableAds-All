@@ -7,7 +7,7 @@ PARTNER_NAME="abyss-voyage"
 # PARTNER_NAME="golden-spatula"
 LANG="en"
 VERSION="v5"
-PLATFORM_NAME='google'
+PLATFORM_NAME='facebook'
 DIRECTION='portrait'
 
 # 生成图片、视频的base64编码
