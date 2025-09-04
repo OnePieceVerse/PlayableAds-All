@@ -1602,6 +1602,9 @@ document.addEventListener('click', () => {
   const enableFirstClick = config.enableFirstClick !== false; // 默认为true
   
   if (!hasStarted && enableFirstClick) {
+    // 移除引导元素
+    const guides = guideLayer.querySelectorAll('.button-image, .guide-image');
+    guides.forEach(el => el.remove());
     // 确保取消静音
     video.muted = false;
     playVideo();

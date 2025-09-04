@@ -6,8 +6,8 @@ ENV='dev'
 PARTNER_NAME="abyss-voyage"
 # PARTNER_NAME="golden-spatula"
 LANG="en"
-VERSION="v8"
-PLATFORM_NAME='google'
+VERSION="$1"
+PLATFORM_NAME='facebook'
 DIRECTION='portrait'
 
 # 生成图片、视频的base64编码
@@ -28,7 +28,7 @@ fi
 
 sh base64_assets.sh $PARTNER_PATH $CONFIG_FILE
 
-if [ "$1" == "prod" ]; then
+if [ "$2" == "prod" ]; then
    ENV='prod'
 fi
 
