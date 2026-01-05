@@ -21,14 +21,26 @@
             <div class="container">
                 <h2 data-translate="worksTitle"></h2>
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="showTab('games')" data-translate="gamesTab"></button>
+                    <button class="tab-btn active" onclick="showTab('webgl-games')" data-translate="webglGamesTab"></button>
+                    <button class="tab-btn" onclick="showTab('games')" data-translate="gamesTab"></button>
                     <button class="tab-btn" onclick="showTab('videos')" data-translate="videosTab"></button>
                     <button class="tab-btn" onclick="showTab('images')" data-translate="imagesTab"></button>
                     <button class="tab-btn" onclick="showTab('creative')" data-translate="creativeTab"></button>
                 </div>
 
+                <!-- WebGL游戏作品 -->
+                <div id="webgl-games" class="tab-content active">
+                    <div class="platform-filter-container" id="webgl-platform-filter">
+                        <!-- 平台筛选按钮将动态生成 -->
+                    </div>
+                    <div class="tag-filter-container" id="webgl-tag-filter">
+                        <!-- 标签按钮将动态生成 -->
+                    </div>
+                    <div class="works-grid" id="webgl-games-grid"></div>
+                </div>
+
                 <!-- 互动游戏 -->
-                <div id="games" class="tab-content active">
+                <div id="games" class="tab-content">
                     <div class="works-grid" id="games-grid"></div>
                 </div>
 

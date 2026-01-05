@@ -24,23 +24,25 @@ def verify_signature(payload: bytes, signature: str) -> bool:
     return hmac.compare_digest(f"sha256={digest}", signature)
 
 async def execute_deployment():
-    """替代deploy.sh的Python部署逻辑"""
+    """执行部署流程"""
     try:
         # 1. 拉取最新代码
+        logger.info("Pulling latest code...")
         pull_cmd = ["git", "-C", DIR, "pull", "origin", "main"]
-        subprocess.run(pull_cmd, check=True, capture_output=True, text=True)
+        result = subprocess.run(pull_cmd, check=True, capture_output=True, text=True)
+        logger.info(f"Git pull output: {result.stdout}")
         
-        # # 2. 安装依赖（如requirements.txt）
-        # install_cmd = ["pip", "install", "-r", "/path/to/project/requirements.txt"]
-        # subprocess.run(install_cmd, check=True)
-        
-        # 3. 重启服务（如Nginx或自定义服务）
-        restart_cmd = ["nginx", "-s", "reload"]
-        subprocess.run(restart_cmd, check=True)
+        # 2. 运行部署脚本
+        logger.info("Running deployment script...")
+        deploy_script = f"{DIR}/deploy.sh"
+        deploy_cmd = ["bash", deploy_script]
+        result = subprocess.run(deploy_cmd, check=True, capture_output=True, text=True)
+        logger.info(f"Deployment script output: {result.stdout}")
         
         logger.info("Deployment completed successfully")
     except subprocess.CalledProcessError as e:
-        logger.error(f"Deployment failed: {e.stderr}")
+        error_msg = e.stderr if e.stderr else e.stdout
+        logger.error(f"Deployment failed: {error_msg}")
         raise
 
 @app.post("/webhook")
